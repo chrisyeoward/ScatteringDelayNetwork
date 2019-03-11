@@ -12,6 +12,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Delay.h"
+#include "Point.h"
+#include "Constants.h"
 
 
 //==============================================================================
@@ -58,7 +60,9 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
-	Delay *delay;
+	SDN::Point source = SDN::Point(1,1);
+	SDN::Point mic = SDN::Point(1,4);
+	SDN::Delay *delay;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ScatteringDelayReverbAudioProcessor)
 };

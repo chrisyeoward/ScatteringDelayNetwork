@@ -24,7 +24,10 @@ ScatteringDelayReverbAudioProcessor::ScatteringDelayReverbAudioProcessor()
                        )
 #endif
 {
-	delay = new Delay(44100);
+	DBG(source.distanceTo(mic));
+	DBG(getSampleRate());
+	DBG(getSampleRate() * source.distanceTo(mic));
+	
 }
 
 ScatteringDelayReverbAudioProcessor::~ScatteringDelayReverbAudioProcessor()
@@ -98,6 +101,11 @@ void ScatteringDelayReverbAudioProcessor::prepareToPlay (double sampleRate, int 
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+	DBG(source.distanceTo(mic));
+	DBG(getSampleRate());
+	DBG(getSampleRate() * source.distanceTo(mic));
+	
+	delay = new SDN::Delay(floor((getSampleRate() * source.distanceTo(mic)) / SDN::c));
 }
 
 void ScatteringDelayReverbAudioProcessor::releaseResources()

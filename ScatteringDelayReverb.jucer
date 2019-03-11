@@ -4,6 +4,9 @@
               jucerVersion="5.4.1">
   <MAINGROUP id="WV8Hy2" name="ScatteringDelayReverb">
     <GROUP id="{713028AC-9195-0C15-8647-28424C1F4E23}" name="Source">
+      <FILE id="JICjXo" name="Constants.h" compile="0" resource="0" file="Source/Constants.h"/>
+      <FILE id="jOjeNe" name="Point.cpp" compile="1" resource="0" file="Source/Point.cpp"/>
+      <FILE id="oamexB" name="Point.h" compile="0" resource="0" file="Source/Point.h"/>
       <FILE id="qDunyF" name="Delay.cpp" compile="1" resource="0" file="Source/Delay.cpp"/>
       <FILE id="VLAoZu" name="Delay.h" compile="0" resource="0" file="Source/Delay.h"/>
       <FILE id="RLPxJH" name="ScatteringDelay.cpp" compile="1" resource="0"
