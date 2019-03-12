@@ -11,7 +11,9 @@
 #pragma once
 
 #ifndef DELAY_H_
+#include <math.h>
 #include <string.h>
+#include "Constants.h"
 
 namespace SDN {
 	class Delay
@@ -27,8 +29,11 @@ namespace SDN {
 
 		public:
 			float process(float inputSample);
+			void write(float sample);
+			float read();
 		
 			Delay(int d);
+			Delay(float sampleRate, float d);
 			~Delay() {}
 	};
 }

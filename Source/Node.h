@@ -1,27 +1,25 @@
 /*
   ==============================================================================
 
-    Point.h
-    Created: 11 Mar 2019 8:57:08pm
+    Node.h
+    Created: 11 Mar 2019 10:23:28pm
     Author:  Chris Yeoward
 
   ==============================================================================
 */
 
 #pragma once
-#include "math.h"
+#include "Point.h"
 
 namespace SDN {
-	class Point
-	{
+    class Node {
 		private:
-			float x, y, z;
+			Point position;
 		
 		public:
-			float getX();
-			float getY();
-			float distanceTo(Point point);
-			Point(float x, float y);
-			~Point(){}
+			Point getPosition();
+			Node(Point position);
+			~Node() {}
+		
 	};
 }

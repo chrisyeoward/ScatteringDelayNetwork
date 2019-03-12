@@ -24,9 +24,6 @@ ScatteringDelayReverbAudioProcessor::ScatteringDelayReverbAudioProcessor()
                        )
 #endif
 {
-	DBG(source.distanceTo(mic));
-	DBG(getSampleRate());
-	DBG(getSampleRate() * source.distanceTo(mic));
 	
 }
 
@@ -101,11 +98,16 @@ void ScatteringDelayReverbAudioProcessor::prepareToPlay (double sampleRate, int 
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-	DBG(source.distanceTo(mic));
-	DBG(getSampleRate());
-	DBG(getSampleRate() * source.distanceTo(mic));
+	sourceMicDelay = new SDN::Delay(getSampleRate(), source.distanceTo(mic));
 	
-	delay = new SDN::Delay(floor((getSampleRate() * source.distanceTo(mic)) / SDN::c));
+//	sourceNode1Delay = new SDN::Delay(getSampleRate(), source.distanceTo(node1.getPosition()));
+//	sourceNode2Delay;
+//
+//	node1Node2Delay;
+//	node2Node1Delay;
+//
+//	node1MicDelay;
+//	node2MicDelay;
 }
 
 void ScatteringDelayReverbAudioProcessor::releaseResources()
@@ -170,7 +172,12 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 		for (int i = 0; i < numSamples; ++i)
 		{
 			const float in = channelData[i];
-			const float out = delay->process(in);
+			const float out = sourceMicDelay->process(in);
+			
+			// take input, add to nodes connection for node 1, then node 2
+			// for each node
+			// add take input samples from input connections, i.e. source and other node
+			// for each
 			
 			channelData[i] = out;
 		}
