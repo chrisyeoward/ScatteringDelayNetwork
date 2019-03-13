@@ -10,6 +10,7 @@
 
 #pragma once
 #include "Point.h"
+#include <string.h>
 
 namespace SDN {
     class Node {
@@ -17,6 +18,7 @@ namespace SDN {
 			Point position;
 		
 		public:
+			void scatter(float sourceInput, float* waveVector);
 			Point getPosition();
 			Node(Point position);
 			~Node() {}
