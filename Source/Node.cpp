@@ -12,7 +12,15 @@
 
 namespace SDN {
 	Node::Node(Point position) : position(position)
-	{}
+	{
+		scatteringMatrix = new float[delayOrder*delayOrder];
+		
+		for(int i = 0; i < delayOrder * delayOrder; i++) {
+			scatteringMatrix[i] = 2.0 / (float) delayOrder;
+			
+			if(i % (delayOrder + 1) == 0) scatteringMatrix[i] -= 1.0;
+		}
+	}
 	
 	Point Node::getPosition()
 	{
@@ -20,21 +28,22 @@ namespace SDN {
 	}
 	
 	void Node::scatter(float sourceInput, float *waveVector) {
-		int delayOrder = 2;
-		float absorptionFactor = 0.8;
+	
+		float absorptionFactor = 0.7;
 		
 		float networkInput = sourceInput / delayOrder;
 		
-		float inputs[delayOrder];
-		memcpy(inputs, waveVector, delayOrder * sizeof(float));
+		float tempVector[delayOrder];
+	
+		for(int i = 0; i < delayOrder; i ++) {
+			for(int j = 0; j < delayOrder; j++) {
+				tempVector[i] += scatteringMatrix[delayOrder*i + j] * (networkInput + waveVector[j]);
+			}
+			tempVector[i] *= absorptionFactor;
+		}
 		
-//		float scatteringMatrix[2][2] = {{0,0},{0,0}};
-		//		A = 2/K 1 1T - 1; 1 = [1;1] 1T = [1,1]
-		waveVector[0] = absorptionFactor * (networkInput + inputs[1]);
-		waveVector[1] = absorptionFactor * (networkInput + inputs[0]);
-//		float outs[] = {absorptionFactor * (sourceInput + inputs[1]), absorptionFactor * (sourceInput + inputs[0])};
-//		return *outs;
-		
-//		return 0.0;
+		for(int i = 0; i < delayOrder; i ++) {
+			waveVector[i] = tempVector[i];
+		}
 	}
 }

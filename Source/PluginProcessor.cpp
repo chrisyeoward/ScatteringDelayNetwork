@@ -186,7 +186,6 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 				in += buffer.getReadPointer (channel)[i];
 			}
 			in /= totalNumInputChannels; // sum to mono
-			//			auto in = (leftData[i] + rightData[i]) / 2; // sum to mono
 			
 			in *= 0.5;
 			
@@ -203,14 +202,14 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 			node2.scatter(sourceNode2Delay->read(), node2WaveVector);
 			
 			float node3WaveVector[] = {node1ToNode3Delay->read(), node2ToNode3Delay->read()};
-			node2.scatter(sourceNode2Delay->read(), node3WaveVector);
+			node2.scatter(sourceNode3Delay->read(), node3WaveVector);
 			
 			node1ToNode2Delay->write(node1WaveVector[0]);
 			node1ToNode3Delay->write(node1WaveVector[1]);
-			
+
 			node2ToNode1Delay->write(node2WaveVector[0]);
 			node2ToNode3Delay->write(node2WaveVector[1]);
-			
+
 			node3ToNode1Delay->write(node3WaveVector[0]);
 			node3ToNode2Delay->write(node3WaveVector[1]);
 			

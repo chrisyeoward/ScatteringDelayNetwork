@@ -16,6 +16,8 @@ namespace SDN {
     class Node {
 		private:
 			Point position;
+			float* scatteringMatrix;
+			int delayOrder = 2;
 		
 		public:
 			void scatter(float sourceInput, float* waveVector);
