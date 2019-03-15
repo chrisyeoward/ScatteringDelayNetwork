@@ -13,10 +13,8 @@
       <FILE id="oamexB" name="Point.h" compile="0" resource="0" file="Source/Point.h"/>
       <FILE id="qDunyF" name="Delay.cpp" compile="1" resource="0" file="Source/Delay.cpp"/>
       <FILE id="VLAoZu" name="Delay.h" compile="0" resource="0" file="Source/Delay.h"/>
-      <FILE id="RLPxJH" name="ScatteringDelay.cpp" compile="1" resource="0"
-            file="Source/ScatteringDelay.cpp"/>
-      <FILE id="jbqvgJ" name="ScatteringDelay.h" compile="0" resource="0"
-            file="Source/ScatteringDelay.h"/>
+      <FILE id="RLPxJH" name="Network.cpp" compile="1" resource="0" file="Source/Network.cpp"/>
+      <FILE id="jbqvgJ" name="Network.h" compile="0" resource="0" file="Source/Network.h"/>
       <FILE id="TrsSAY" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="ucYyeo" name="PluginProcessor.h" compile="0" resource="0"

@@ -18,14 +18,11 @@
 namespace SDN {
 	class Delay
 	{
-		
-		//private difference eq member properties
 		private:
 			float* buffer;
 			int bufferLength;
 			int delayInSamples;
 			int readPointer, writePointer;
-		
 
 		public:
 			float process(float inputSample);
