@@ -17,7 +17,7 @@ namespace SDN {
 		
 		for(int i = 0; i < delayOrder * delayOrder; i++) {
 			scatteringMatrix[i] = 2.0 / (float) delayOrder;
-			
+
 			if(i % (delayOrder + 1) == 0) scatteringMatrix[i] -= 1.0;
 		}
 	}
@@ -36,8 +36,9 @@ namespace SDN {
 		float tempVector[delayOrder];
 	
 		for(int i = 0; i < delayOrder; i ++) {
+			tempVector[i] = 0.0;
 			for(int j = 0; j < delayOrder; j++) {
-				tempVector[i] += scatteringMatrix[delayOrder*i + j] * (networkInput + waveVector[j]);
+				tempVector[i] += scatteringMatrix[(delayOrder * i) + j] * (networkInput + waveVector[j]);
 			}
 			tempVector[i] *= absorptionFactor;
 		}
