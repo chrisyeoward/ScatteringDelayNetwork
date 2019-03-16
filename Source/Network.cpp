@@ -9,32 +9,36 @@
 */
 
 #include "Network.h"
+#include <iostream>
+
 
 namespace SDN
 {
 	Network::Network(float sampleRate)
 	{
+		connections = new SDN::Connection[connectionCount];
+		int connection = 0;
+		
+		for(int node = 0; node < delayOrder; node++)
+		{
+			for(int otherNode = node + 1; otherNode < nodeCount; otherNode++)
+			{
+				connections[connection] = SDN::Connection(nodes[node], nodes[otherNode], sampleRate);
+				nodes[node].addTerminal(connections[connection].getStartTerminal());
+				nodes[otherNode].addTerminal(connections[connection].getEndTerminal());
+				connection++;
+			}
+		}
+				
 		sourceMicDelay = new SDN::Delay(sampleRate, source.distanceTo(mic));
 		
-		sourceNode1Delay = new SDN::Delay(sampleRate, source.distanceTo(node1.getPosition()));
-		sourceNode2Delay = new SDN::Delay(sampleRate, source.distanceTo(node2.getPosition()));
-		sourceNode3Delay = new SDN::Delay(sampleRate, source.distanceTo(node3.getPosition()));
-		//
-		auto node1node2Distance = node1.getPosition().distanceTo(node2.getPosition());
-		node1ToNode2Delay = new SDN::Delay(sampleRate, node1node2Distance);
-		node2ToNode1Delay = new SDN::Delay(sampleRate, node1node2Distance);
+		sourceNode1Delay = new SDN::Delay(sampleRate, source.distanceTo(nodes[0].getPosition()));
+		sourceNode2Delay = new SDN::Delay(sampleRate, source.distanceTo(nodes[1].getPosition()));
+		sourceNode3Delay = new SDN::Delay(sampleRate, source.distanceTo(nodes[2].getPosition()));
 		
-		auto node1node3Distance = node1.getPosition().distanceTo(node3.getPosition());
-		node1ToNode3Delay = new SDN::Delay(sampleRate, node1node3Distance);
-		node3ToNode1Delay = new SDN::Delay(sampleRate, node1node3Distance);
-		
-		auto node3node2Distance = node3.getPosition().distanceTo(node2.getPosition());
-		node3ToNode2Delay = new SDN::Delay(sampleRate, node3node2Distance);
-		node2ToNode3Delay = new SDN::Delay(sampleRate, node3node2Distance);
-		//
-		node1MicDelay = new SDN::Delay(sampleRate, mic.distanceTo(node1.getPosition()));
-		node2MicDelay = new SDN::Delay(sampleRate, mic.distanceTo(node2.getPosition()));
-		node3MicDelay = new SDN::Delay(sampleRate, mic.distanceTo(node3.getPosition()));
+		node1MicDelay = new SDN::Delay(sampleRate, mic.distanceTo(nodes[0].getPosition()));
+		node2MicDelay = new SDN::Delay(sampleRate, mic.distanceTo(nodes[1].getPosition()));
+		node3MicDelay = new SDN::Delay(sampleRate, mic.distanceTo(nodes[2].getPosition()));
 	}
 	
 	float Network::scatter(float in)
@@ -47,29 +51,32 @@ namespace SDN
 		sourceNode2Delay->write(in);
 		sourceNode3Delay->write(in);
 		
-		float node1WaveVector[] = {node2ToNode1Delay->read(), node3ToNode1Delay->read()};
-		node1.scatter(sourceNode1Delay->read(), node1WaveVector);
+		for(int node = 0; node < nodeCount; node++)
+		{
+			nodes[node].gatherInputWaveVector();
+		}
 		
-		float node2WaveVector[] = {node1ToNode2Delay->read(), node3ToNode2Delay->read()};
-		node2.scatter(sourceNode2Delay->read(), node2WaveVector);
+		nodes[0].scatter(sourceNode1Delay->read());
+		nodes[1].scatter(sourceNode2Delay->read());
+		nodes[2].scatter(sourceNode3Delay->read());
 		
-		float node3WaveVector[] = {node1ToNode3Delay->read(), node2ToNode3Delay->read()};
-		node2.scatter(sourceNode3Delay->read(), node3WaveVector);
+		for(int node = 0; node < nodeCount; node++)
+		{
+			nodes[node].distributeOutputWaveVector();
+		}
 		
-		node1ToNode2Delay->write(node1WaveVector[0]);
-		node1ToNode3Delay->write(node1WaveVector[1]);
-		
-		node2ToNode1Delay->write(node2WaveVector[0]);
-		node2ToNode3Delay->write(node2WaveVector[1]);
-		
-		node3ToNode1Delay->write(node3WaveVector[0]);
-		node3ToNode2Delay->write(node3WaveVector[1]);
-		
-		node1MicDelay->write(node1WaveVector[0] + node1WaveVector[1]);
-		node2MicDelay->write(node2WaveVector[0] + node2WaveVector[1]);
-		node3MicDelay->write(node3WaveVector[0] + node3WaveVector[1]);
+		node1MicDelay->write(nodes[0].getNodeOutput());
+		node2MicDelay->write(nodes[1].getNodeOutput());
+		node3MicDelay->write(nodes[2].getNodeOutput());
 		
 		auto out = sourceMicDelay->read();
+		
+//		for(int node = 0; node < delayOrder; node++)
+//		{
+//			nodes[node].scatter(in);
+//			nodes[node].distributeOutputWaveVector();
+//			out += nodes[node].getNodeOutput();
+//		}
 		out += node1MicDelay->read();
 		out += node2MicDelay->read();
 		out += node3MicDelay->read();

@@ -4,6 +4,10 @@
               jucerVersion="5.4.1">
   <MAINGROUP id="WV8Hy2" name="ScatteringDelayReverb">
     <GROUP id="{713028AC-9195-0C15-8647-28424C1F4E23}" name="Source">
+      <FILE id="UQ8d3Z" name="Terminal.cpp" compile="1" resource="0" file="Source/Terminal.cpp"/>
+      <FILE id="tvi36j" name="Terminal.h" compile="0" resource="0" file="Source/Terminal.h"/>
+      <FILE id="F1hovL" name="Connection.cpp" compile="1" resource="0" file="Source/Connection.cpp"/>
+      <FILE id="tpnZVo" name="Connection.h" compile="0" resource="0" file="Source/Connection.h"/>
       <FILE id="GUjNvH" name="Node.cpp" compile="1" resource="0" file="Source/Node.cpp"/>
       <FILE id="xBAMk5" name="Node.h" compile="0" resource="0" file="Source/Node.h"/>
       <FILE id="Mf7OEE" name="Boundary.cpp" compile="1" resource="0" file="Source/Boundary.cpp"/>

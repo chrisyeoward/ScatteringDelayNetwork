@@ -9,6 +9,7 @@
 */
 
 #include "Node.h"
+#include <iostream>
 
 namespace SDN {
 	Node::Node(Point position) : position(position)
@@ -20,6 +21,7 @@ namespace SDN {
 
 			if(i % (delayOrder + 1) == 0) scatteringMatrix[i] -= 1.0;
 		}
+		
 	}
 	
 	Point Node::getPosition()
@@ -27,7 +29,35 @@ namespace SDN {
 		return position;
 	}
 	
-	void Node::scatter(float sourceInput, float *waveVector) {
+	void Node::addTerminal(SDN::Terminal *terminal)
+	{
+		terminals[terminalCount] = terminal;
+		terminalCount++;
+	}
+	
+	void Node::gatherInputWaveVector() {
+		for(int terminal = 0; terminal < terminalCount; terminal ++) {
+			waveVector[terminal] = 0;
+			waveVector[terminal] = terminals[terminal]->read();
+		}
+	}
+	
+	void Node::distributeOutputWaveVector() {
+		for(int terminal = 0; terminal < terminalCount; terminal++) {
+			terminals[terminal]->write(waveVector[terminal]);
+		}
+	}
+	
+	float Node::getNodeOutput() {
+		float out = 0.0;
+		
+		for(int terminal = 0; terminal < terminalCount; terminal ++) {
+			out += waveVector[terminal];
+		}
+		return out;
+	}
+	
+	void Node::scatter(float sourceInput) {
 	
 		float absorptionFactor = 0.7;
 		
