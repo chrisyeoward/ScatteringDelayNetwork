@@ -14,9 +14,6 @@
 namespace SDN{
 	Connection::Connection(float distance, float sampleRate) : distance(distance)
 	{
-//		std::cout << "connection\n";
-//		std::cout << distance;
-//		std::cout << "\n";
 		startToEndDelay = new SDN::Delay(sampleRate, distance);
 		endToStartDelay = new SDN::Delay(sampleRate, distance);
 		
