@@ -21,20 +21,23 @@ namespace SDN
 	class Network {
 		private:
 		
-			const static int nodeCount = 3;
+			const static int nodeCount = 4;
 			const int delayOrder = nodeCount - 1;
-			const static int connectionCount = 3;
+			int connectionCount = 0;
 		
-			SDN::Point source = SDN::Point(0.5, 0.0);
-			SDN::Point mic = SDN::Point(1.2, 8.0);
+			SDN::Point source = SDN::Point(0.5, 8.0);
+			SDN::Point mic = SDN::Point(1.2, 1.0);
 		
 			SDN::Boundary bounds[nodeCount] = { SDN::Boundary(0.0, SDN::Orientation::Y),
 				SDN::Boundary(2.0, SDN::Orientation::Y),
-				SDN::Boundary(10.0, SDN::Orientation::X) };
+				SDN::Boundary(10.0, SDN::Orientation::X),
+				SDN::Boundary(0.0, SDN::Orientation::X)
+			};
 		
 		SDN::Node nodes[nodeCount] = {SDN::Node(bounds[0].getScatteringNodePosition(mic, source)),
 			SDN::Node(bounds[1].getScatteringNodePosition(mic, source)),
-			SDN::Node(bounds[2].getScatteringNodePosition(mic, source))
+			SDN::Node(bounds[2].getScatteringNodePosition(mic, source)),
+			SDN::Node(bounds[3].getScatteringNodePosition(mic, source))
 		};
 		
 		SDN::Connection* connections;

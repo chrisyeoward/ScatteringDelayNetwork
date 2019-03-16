@@ -18,7 +18,7 @@ namespace SDN {
 		private:
 		Point position;
 		float* scatteringMatrix;
-		static const int delayOrder = 2;
+		static const int delayOrder = 3;
 		int terminalCount = 0;
 		static const int maxTerminalCount = delayOrder;
 		SDN::Terminal *terminals[maxTerminalCount];
