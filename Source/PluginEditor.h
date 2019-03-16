@@ -16,7 +16,7 @@
 //==============================================================================
 /**
 */
-class ScatteringDelayReverbAudioProcessorEditor  : public AudioProcessorEditor
+class ScatteringDelayReverbAudioProcessorEditor  : public AudioProcessorEditor, public Slider::Listener
 {
 public:
     ScatteringDelayReverbAudioProcessorEditor (ScatteringDelayReverbAudioProcessor&);
@@ -25,8 +25,14 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
+	
+	void sliderValueChanged (Slider*) override;
 
 private:
+	Slider sourceXPositionSlider;
+	Slider sourceYPositionSlider;
+	Label sourceXPositionLabel;
+	Label sourceYPositionLabel;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     ScatteringDelayReverbAudioProcessor& processor;

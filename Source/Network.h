@@ -54,6 +54,7 @@ namespace SDN
 		SDN::StereoOutput scatterStereo(float input);
 		float scatterMono(float input);
 	
+		void setSourcePosition(float x, float y, float z);
 		
 		Network(float sampleRate);
 		~Network();

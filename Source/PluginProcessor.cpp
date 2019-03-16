@@ -24,7 +24,15 @@ ScatteringDelayReverbAudioProcessor::ScatteringDelayReverbAudioProcessor()
                        )
 #endif
 {
+	addParameter (sourceXPosition = new AudioParameterFloat ("sourceXPosition", // parameter ID
+															   "Source X Position", // parameter name
+															   NormalisableRange<float> (0.0f, 5.0f),
+															   2.5f)); // default value
 	
+	addParameter (sourceYPosition = new AudioParameterFloat ("sourceYPosition", // parameter ID
+															 "Source Y Position", // parameter name
+															 NormalisableRange<float> (0.0f, 5.0f),
+															 2.5f)); // default value
 }
 
 ScatteringDelayReverbAudioProcessor::~ScatteringDelayReverbAudioProcessor()
@@ -99,6 +107,7 @@ void ScatteringDelayReverbAudioProcessor::prepareToPlay (double sampleRate, int 
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 	network = new SDN::Network(sampleRate);
+	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 0);
 }
 
 void ScatteringDelayReverbAudioProcessor::releaseResources()
@@ -158,6 +167,7 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
 	
+	
 		for (int i = 0; i < numSamples; ++i)
 		{
 			float in = 0.0;
@@ -170,11 +180,9 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 			
 			auto out = network->scatterStereo(in);
 
-//			for (int channel = 0; channel < totalNumInputChannels; ++channel)
-//			{
 			buffer.getWritePointer (0)[i] = out.L;
 			buffer.getWritePointer (1)[i] = out.R;
-//			}
+
 		}
 
         // ..do something to the data...
@@ -204,6 +212,14 @@ void ScatteringDelayReverbAudioProcessor::setStateInformation (const void* data,
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+void ScatteringDelayReverbAudioProcessor::updateSourcePosition(float x, float y, float z)
+{
+	std::cout << "Processor - Updating position... \n";
+	sourceXPosition->operator=(x);
+	sourceYPosition->operator=(y);
+	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 0);
 }
 
 //==============================================================================

@@ -56,6 +56,15 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+	
+	void updateSourcePosition(float x, float y, float z);
+	
+	AudioParameterFloat* sourceXPosition;
+	AudioParameterFloat* sourceYPosition;
+	
+	AudioParameterFloat* roomWidth;
+	AudioParameterFloat* roomLength;
+	AudioParameterFloat* roomHeight;
 
 private:
 	SDN::Network *network;

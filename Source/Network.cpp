@@ -107,12 +107,11 @@ namespace SDN
 			nodes[node].distributeOutputWaveVectorToNodes();
 			nodeToMicDelays[node].write(nodes[node].getNodeOutput());
 		}
-		
-//		auto out = sourceMicDelay->read()/source.distanceTo(mic);
-//		for(int node = 0; node < nodeCount; node++)
-//		{
-//			out += nodeToMicDelays[node].read() / (1 + (mic.distanceTo(nodes[node].getPosition()) / (source.distanceTo(nodes[node].getPosition()))));
-//		}
-//		return out;
+	}
+	
+	void Network::setSourcePosition(float x, float y, float z) {
+		std::cout << "Network - Setting source position... \n";
+		source.setX(x);
+		source.setY(y);
 	}
 }

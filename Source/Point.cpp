@@ -25,6 +25,14 @@ namespace SDN {
 		return atan(dx/dy);
 	}
 	
+	void Point::setX(float x){
+		this->x = x;
+	}
+	
+	void Point::setY(float y){
+		this->y = y;
+	}
+	
 	float Point::getX(){
 		return x;
 	}
