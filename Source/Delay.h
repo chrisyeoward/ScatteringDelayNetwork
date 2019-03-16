@@ -25,13 +25,14 @@ namespace SDN {
 			int readPointer, writePointer;
 
 		public:
-			float process(float inputSample);
-			void write(float sample);
-			float read();
+		float process(float inputSample);
+		void write(float sample);
+		float read();
 		
-			Delay(int d);
-			Delay(float sampleRate, float d);
-			~Delay() {}
+		Delay() {};
+		Delay(int d);
+		Delay(float sampleRate, float d);
+		~Delay() {}
 	};
 }
 

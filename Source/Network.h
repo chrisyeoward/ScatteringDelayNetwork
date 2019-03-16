@@ -39,15 +39,18 @@ namespace SDN
 		
 		SDN::Connection* connections;
 		
+		SDN::Delay sourceToNodeDelays[nodeCount];
+		SDN::Delay nodeToMicDelays[nodeCount];
+		
 			SDN::Delay *sourceMicDelay;
 		
-			SDN::Delay *sourceNode1Delay;
-			SDN::Delay *sourceNode2Delay;
-			SDN::Delay *sourceNode3Delay;
-		
-			SDN::Delay *node1MicDelay;
-			SDN::Delay *node2MicDelay;
-			SDN::Delay *node3MicDelay;
+//			SDN::Delay *sourceNode1Delay;
+//			SDN::Delay *sourceNode2Delay;
+//			SDN::Delay *sourceNode3Delay;
+//		
+//			SDN::Delay *node1MicDelay;
+//			SDN::Delay *node2MicDelay;
+//			SDN::Delay *node3MicDelay;
 		
 		public:
 			float scatter(float input);
