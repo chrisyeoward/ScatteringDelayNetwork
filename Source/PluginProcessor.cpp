@@ -168,12 +168,13 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 			
 			in /= totalNumInputChannels; // sum to mono
 			
-			auto out = network->scatter(in);
+			auto out = network->scatterStereo(in);
 
-			for (int channel = 0; channel < totalNumInputChannels; ++channel)
-			{
-				buffer.getWritePointer (channel)[i] = out;
-			}
+//			for (int channel = 0; channel < totalNumInputChannels; ++channel)
+//			{
+			buffer.getWritePointer (0)[i] = out.L;
+			buffer.getWritePointer (1)[i] = out.R;
+//			}
 		}
 
         // ..do something to the data...

@@ -15,6 +15,7 @@
 #include "Boundary.h"
 #include "Node.h"
 #include "Connection.h"
+#include "StereoOutput.h"
 
 namespace SDN
 {
@@ -47,11 +48,15 @@ namespace SDN
 		
 		SDN::Delay *sourceMicDelay;
 		
+		void scatter(float input);
+		
 		public:
-			float scatter(float input);
-			
-			Network(float sampleRate);
-			~Network();
+		SDN::StereoOutput scatterStereo(float input);
+		float scatterMono(float input);
+	
+		
+		Network(float sampleRate);
+		~Network();
 	};
 }
 

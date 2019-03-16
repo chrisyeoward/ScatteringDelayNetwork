@@ -18,6 +18,13 @@ namespace SDN {
 		return sqrt(pow(point.x - x,2) + pow(point.y - y,2));
 	}
 	
+	float Point::azimuthFrom(Point point)
+	{
+		float dx = x - point.x;
+		float dy = y - point.y;
+		return atan(dx/dy);
+	}
+	
 	float Point::getX(){
 		return x;
 	}

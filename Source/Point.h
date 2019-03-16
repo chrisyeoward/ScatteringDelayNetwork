@@ -18,10 +18,11 @@ namespace SDN {
 			float x, y, z;
 		
 		public:
-			float getX();
-			float getY();
-			float distanceTo(Point point);
-			Point(float x, float y);
-			~Point(){}
+		float getX();
+		float getY();
+		float distanceTo(Point point);
+		float azimuthFrom(Point point);
+		Point(float x, float y);
+		~Point(){}
 	};
 }

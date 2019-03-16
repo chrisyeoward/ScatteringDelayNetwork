@@ -45,7 +45,51 @@ namespace SDN
 		sourceMicDelay = new SDN::Delay(sampleRate, source.distanceTo(mic));
 	}
 	
-	float Network::scatter(float in)
+	StereoOutput Network::scatterStereo(float in)
+	{
+		scatter(in);
+		
+		StereoOutput out;
+		
+		float fromSource = sourceMicDelay->read()/source.distanceTo(mic);
+		float sourceAzimuth = source.azimuthFrom(mic);
+		float sinAzimuth = sin(sourceAzimuth);
+		float denom = 1 / sqrt(2 * (1 + pow(sinAzimuth, 2)));
+		float sourceGainLeft = (1 - sinAzimuth) * denom;
+		float sourceGainRight = (1 + sinAzimuth) * denom;
+		
+		out.L = fromSource * sourceGainLeft;
+		out.R = fromSource * sourceGainRight;
+		
+		for(int node = 0; node < nodeCount; node++)
+		{
+			float fromSource = nodeToMicDelays[node].read();
+			fromSource /= (1 + (mic.distanceTo(nodes[node].getPosition()) / (source.distanceTo(nodes[node].getPosition()))));
+			float sourceAzimuth = nodes[node].getPosition().azimuthFrom(mic);
+			float sinAzimuth = sin(sourceAzimuth);
+			float denom = 1 / sqrt(2 * (1 + pow(sinAzimuth, 2)));
+			float sourceGainLeft = (1 - sinAzimuth) * denom;
+			float sourceGainRight = (1 + sinAzimuth) * denom;
+			
+			out.L += fromSource * sourceGainLeft;
+			out.R += fromSource * sourceGainRight;
+		}
+		
+		return out;
+	}
+	
+	float Network::scatterMono(float in)
+	{
+		scatter(in);
+		auto out = sourceMicDelay->read()/source.distanceTo(mic);
+		for(int node = 0; node < nodeCount; node++)
+		{
+			out += nodeToMicDelays[node].read() / (1 + (mic.distanceTo(nodes[node].getPosition()) / (source.distanceTo(nodes[node].getPosition()))));
+		}
+		return out;
+	}
+	
+	void Network::scatter(float in)
 	{
 		in *= 0.5;
 		
@@ -64,11 +108,11 @@ namespace SDN
 			nodeToMicDelays[node].write(nodes[node].getNodeOutput());
 		}
 		
-		auto out = sourceMicDelay->read()/source.distanceTo(mic);
-		for(int node = 0; node < nodeCount; node++)
-		{
-			out += nodeToMicDelays[node].read() / (1 + (mic.distanceTo(nodes[node].getPosition()) / (source.distanceTo(nodes[node].getPosition()))));
-		}
-		return out;
+//		auto out = sourceMicDelay->read()/source.distanceTo(mic);
+//		for(int node = 0; node < nodeCount; node++)
+//		{
+//			out += nodeToMicDelays[node].read() / (1 + (mic.distanceTo(nodes[node].getPosition()) / (source.distanceTo(nodes[node].getPosition()))));
+//		}
+//		return out;
 	}
 }
