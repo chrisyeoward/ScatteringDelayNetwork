@@ -36,14 +36,14 @@ namespace SDN {
 		terminalCount++;
 	}
 	
-	void Node::gatherInputWaveVector() {
+	void Node::gatherInputWaveVectorFromNodes() {
 		for(int terminal = 0; terminal < terminalCount; terminal ++) {
 			waveVector[terminal] = 0;
 			waveVector[terminal] = terminals[terminal]->read();
 		}
 	}
 	
-	void Node::distributeOutputWaveVector() {
+	void Node::distributeOutputWaveVectorToNodes() {
 		for(int terminal = 0; terminal < terminalCount; terminal++) {
 			terminals[terminal]->write(waveVector[terminal]);
 		}

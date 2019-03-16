@@ -27,8 +27,8 @@ namespace SDN {
 		float* waveVector;
 		
 		public:
-		void gatherInputWaveVector();
-		void distributeOutputWaveVector();
+		void gatherInputWaveVectorFromNodes();
+		void distributeOutputWaveVectorToNodes();
 		float getNodeOutput();
 		
 		void addTerminal(SDN::Terminal *terminal);

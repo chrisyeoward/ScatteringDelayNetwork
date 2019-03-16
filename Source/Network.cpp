@@ -54,13 +54,13 @@ namespace SDN
 		for(int node = 0; node < nodeCount; node++)
 		{
 			sourceToNodeDelays[node].write(in);
-			nodes[node].gatherInputWaveVector();
+			nodes[node].gatherInputWaveVectorFromNodes();
 		}
 		
 		for(int node = 0; node < nodeCount; node++)
 		{
 			nodes[node].scatter(sourceToNodeDelays[node].read());
-			nodes[node].distributeOutputWaveVector();
+			nodes[node].distributeOutputWaveVectorToNodes();
 			nodeToMicDelays[node].write(nodes[node].getNodeOutput());
 		}
 		
