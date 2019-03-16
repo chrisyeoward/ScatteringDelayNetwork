@@ -13,5 +13,6 @@
 namespace SDN {
     
     const int c = 343;
-
+	
+	const int MAXIMUM_NODES = 6;
 }

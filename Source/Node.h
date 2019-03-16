@@ -12,18 +12,19 @@
 #include "Point.h"
 #include "Terminal.h"
 #include <string.h>
+#include "Constants.h"
 
 namespace SDN {
     class Node {
 		private:
 		Point position;
 		float* scatteringMatrix;
-		static const int delayOrder = 3;
+		int numberOfOtherNodes;
 		int terminalCount = 0;
-		static const int maxTerminalCount = delayOrder;
+		static const int maxTerminalCount = MAXIMUM_NODES - 1;
 		SDN::Terminal *terminals[maxTerminalCount];
 		
-		float waveVector[delayOrder];
+		float* waveVector;
 		
 		public:
 		void gatherInputWaveVector();
@@ -33,7 +34,8 @@ namespace SDN {
 		void addTerminal(SDN::Terminal *terminal);
 		void scatter(float sourceInput);
 		Point getPosition();
-		Node(Point position);
+		
+		Node(Point position, int numberOfOtherNodes);
 		~Node() {}
 		
 	};

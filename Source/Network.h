@@ -21,23 +21,23 @@ namespace SDN
 	class Network {
 		private:
 		
-			const static int nodeCount = 4;
-			const int delayOrder = nodeCount - 1;
-			int connectionCount = 0;
+		const static int nodeCount = 4;
+		const int delayOrder = nodeCount - 1;
+		int connectionCount = 0;
+	
+		SDN::Point source = SDN::Point(0.5, 8.0);
+		SDN::Point mic = SDN::Point(1.2, 1.0);
+	
+		SDN::Boundary bounds[nodeCount] = { SDN::Boundary(0.0, SDN::Orientation::Y),
+			SDN::Boundary(2.0, SDN::Orientation::Y),
+			SDN::Boundary(10.0, SDN::Orientation::X),
+			SDN::Boundary(0.0, SDN::Orientation::X)
+		};
 		
-			SDN::Point source = SDN::Point(0.5, 8.0);
-			SDN::Point mic = SDN::Point(1.2, 1.0);
-		
-			SDN::Boundary bounds[nodeCount] = { SDN::Boundary(0.0, SDN::Orientation::Y),
-				SDN::Boundary(2.0, SDN::Orientation::Y),
-				SDN::Boundary(10.0, SDN::Orientation::X),
-				SDN::Boundary(0.0, SDN::Orientation::X)
-			};
-		
-		SDN::Node nodes[nodeCount] = {SDN::Node(bounds[0].getScatteringNodePosition(mic, source)),
-			SDN::Node(bounds[1].getScatteringNodePosition(mic, source)),
-			SDN::Node(bounds[2].getScatteringNodePosition(mic, source)),
-			SDN::Node(bounds[3].getScatteringNodePosition(mic, source))
+		SDN::Node nodes[nodeCount] = {SDN::Node(bounds[0].getScatteringNodePosition(mic, source), delayOrder),
+			SDN::Node(bounds[1].getScatteringNodePosition(mic, source), delayOrder),
+			SDN::Node(bounds[2].getScatteringNodePosition(mic, source), delayOrder),
+			SDN::Node(bounds[3].getScatteringNodePosition(mic, source), delayOrder)
 		};
 		
 		SDN::Connection* connections;
@@ -45,15 +45,7 @@ namespace SDN
 		SDN::Delay sourceToNodeDelays[nodeCount];
 		SDN::Delay nodeToMicDelays[nodeCount];
 		
-			SDN::Delay *sourceMicDelay;
-		
-//			SDN::Delay *sourceNode1Delay;
-//			SDN::Delay *sourceNode2Delay;
-//			SDN::Delay *sourceNode3Delay;
-//		
-//			SDN::Delay *node1MicDelay;
-//			SDN::Delay *node2MicDelay;
-//			SDN::Delay *node3MicDelay;
+		SDN::Delay *sourceMicDelay;
 		
 		public:
 			float scatter(float input);

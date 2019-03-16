@@ -12,14 +12,15 @@
 #include <iostream>
 
 namespace SDN {
-	Node::Node(Point position) : position(position)
+	Node::Node(Point position, int numberOfOtherNodes) : position(position), numberOfOtherNodes(numberOfOtherNodes)
 	{
-		scatteringMatrix = new float[delayOrder*delayOrder];
+		waveVector = new float[numberOfOtherNodes];
+		scatteringMatrix = new float[numberOfOtherNodes*numberOfOtherNodes];
 		
-		for(int i = 0; i < delayOrder * delayOrder; i++) {
-			scatteringMatrix[i] = 2.0 / (float) delayOrder;
+		for(int i = 0; i < numberOfOtherNodes * numberOfOtherNodes; i++) {
+			scatteringMatrix[i] = 2.0 / (float) numberOfOtherNodes;
 
-			if(i % (delayOrder + 1) == 0) scatteringMatrix[i] -= 1.0;
+			if(i % (numberOfOtherNodes + 1) == 0) scatteringMatrix[i] -= 1.0;
 		}
 		
 	}
@@ -61,19 +62,19 @@ namespace SDN {
 	
 		float absorptionFactor = 0.7;
 		
-		float networkInput = sourceInput / delayOrder;
+		float networkInput = sourceInput / numberOfOtherNodes;
 		
-		float tempVector[delayOrder];
+		float tempVector[numberOfOtherNodes];
 	
-		for(int i = 0; i < delayOrder; i ++) {
+		for(int i = 0; i < numberOfOtherNodes; i ++) {
 			tempVector[i] = 0.0;
-			for(int j = 0; j < delayOrder; j++) {
-				tempVector[i] += scatteringMatrix[(delayOrder * i) + j] * (networkInput + waveVector[j]);
+			for(int j = 0; j < numberOfOtherNodes; j++) {
+				tempVector[i] += scatteringMatrix[(numberOfOtherNodes * i) + j] * (networkInput + waveVector[j]);
 			}
 			tempVector[i] *= absorptionFactor;
 		}
 		
-		for(int i = 0; i < delayOrder; i ++) {
+		for(int i = 0; i < numberOfOtherNodes; i ++) {
 			waveVector[i] = tempVector[i];
 		}
 	}

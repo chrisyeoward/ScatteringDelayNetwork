@@ -16,12 +16,12 @@ namespace SDN
 {
 	Network::Network(float sampleRate)
 	{
-//		for(int node = 0; node < nodeCount; node++)
-//		{
-//			connectionCount += node;
-//		}
-//		connectionCount
-		connectionCount = 6;
+		
+		for(int node = 0; node < nodeCount; node++)
+		{
+			connectionCount += node;
+		}
+		
 		connections = new SDN::Connection[connectionCount];
 		
 		int connection = 0;
