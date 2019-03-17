@@ -12,7 +12,7 @@
 
 namespace SDN {
 	Delay::Delay(int delayInSamples) :
-	bufferLength(2*delayInSamples),
+	bufferLength(4 * delayInSamples),
 	delayInSamples(delayInSamples)
 	{
 		buffer = new float[bufferLength];
@@ -22,6 +22,16 @@ namespace SDN {
 	}
 	
 	Delay::Delay(float sampleRate, float distance) : Delay(floor((sampleRate * distance) / SDN::c)) {}
+	
+	void Delay::setDelayLength(int delayInSamples)
+	{
+		readPointer = (writePointer - delayInSamples + bufferLength) % bufferLength;
+	}
+	
+	void Delay::setDelayLengthFromDistance(float sampleRate, float distance)
+	{
+		setDelayLength(floor((sampleRate * distance) / SDN::c));
+	}
 	
 	float Delay::process(float sample) {
 		write(sample);

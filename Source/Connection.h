@@ -12,6 +12,7 @@
 #include "Delay.h"
 #include "Terminal.h"
 #include "Node.h"
+#include "Constants.h"
 
 namespace SDN {
     class Connection 
@@ -23,19 +24,14 @@ namespace SDN {
 			SDN::Terminal* startTerminal;
 			SDN::Terminal* endTerminal;
 		
-			float distance;
+			float sampleRate;
 		
 		public:
 		
 		SDN::Terminal* getStartTerminal();
 		SDN::Terminal* getEndTerminal();
 		
-		float readFrom(SDN::Delay *delay);
-		void writeToStart(float sample);
-		float readFromStart();
-		
-		void writeToEnd(float sample);
-		float readFromEnd();
+		void setLength(float distance);
 		
 		Connection() {};
 		Connection(float distance, float sampleRate);

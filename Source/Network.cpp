@@ -26,7 +26,7 @@ namespace SDN
 		connections = new SDN::Connection[connectionCount];
 		
 		int connection = 0;
-		for(int node = 0; node < delayOrder; node++)
+		for(int node = 0; node < nodeCount - 1; node++)
 		{
 			for(int otherNode = node + 1; otherNode < nodeCount; otherNode++)
 			{
@@ -117,6 +117,16 @@ namespace SDN
 		for(int node = 0; node < nodeCount; node++)
 		{
 			nodes[node].setPosition(bounds[node].getScatteringNodePosition(mic, source));
+		}
+		
+		int connection = 0;
+		for(int node = 0; node < nodeCount - 1; node++)
+		{
+			for(int otherNode = node + 1; otherNode < nodeCount; otherNode++)
+			{
+				connections[connection].setLength(nodes[node].getPosition().distanceTo(nodes[otherNode].getPosition()));
+				connection++;
+			}
 		}
 	}
 }

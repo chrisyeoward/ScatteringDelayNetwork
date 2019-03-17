@@ -12,13 +12,21 @@
 #include <iostream>
 
 namespace SDN{
-	Connection::Connection(float distance, float sampleRate) : distance(distance)
+	Connection::Connection(float distance, float sampleRate) : sampleRate(sampleRate)
 	{
-		startToEndDelay = new SDN::Delay(sampleRate, distance);
-		endToStartDelay = new SDN::Delay(sampleRate, distance);
+		float delay = floor((sampleRate * distance) / SDN::c);
+		startToEndDelay = new SDN::Delay(delay);
+		endToStartDelay = new SDN::Delay(delay);
 		
 		startTerminal = new SDN::Terminal(endToStartDelay, startToEndDelay);
 		endTerminal = new SDN::Terminal(startToEndDelay, endToStartDelay);
+	}
+	
+	void Connection::setLength(float distance)
+	{
+		float delay = floor((sampleRate * distance) / SDN::c);
+		startToEndDelay->setDelayLength(delay);
+		endToStartDelay->setDelayLength(delay);
 	}
 	
 	Connection::Connection(SDN::Node startNode, SDN::Node endNode, float sampleRate) :

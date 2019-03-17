@@ -25,6 +25,9 @@ namespace SDN {
 			int readPointer, writePointer;
 
 		public:
+		void setDelayLengthFromDistance(float sampleRate, float distance);
+		void setDelayLength(int delayInSamples);
+		
 		float process(float inputSample);
 		void write(float sample);
 		float read();
