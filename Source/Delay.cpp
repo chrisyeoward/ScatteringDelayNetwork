@@ -11,9 +11,10 @@
 #include "Delay.h"
 
 namespace SDN {
-	Delay::Delay(int delayInSamples) :
+	Delay::Delay(float sampleRate, int delayInSamples) :
 	bufferLength(4 * delayInSamples),
-	delayInSamples(delayInSamples)
+	delayInSamples(delayInSamples),
+	sampleRate(sampleRate)
 	{
 		buffer = new float[bufferLength];
 		memset(buffer, 0.0, bufferLength * sizeof(float));
@@ -21,14 +22,19 @@ namespace SDN {
 		readPointer = (writePointer - delayInSamples + bufferLength) % bufferLength;
 	}
 	
-	Delay::Delay(float sampleRate, float distance) : Delay(floor((sampleRate * distance) / SDN::c)) {}
+	Delay::Delay(float sampleRate, float distance) : Delay(sampleRate, (int) floor((sampleRate * distance) / SDN::c)) {}
+	
+	Delay* Delay::fromDistance(float sampleRate, float distance)
+	{
+		return new Delay(sampleRate, (int) floor((sampleRate * distance) / SDN::c));
+	}
 	
 	void Delay::setDelayLength(int delayInSamples)
 	{
 		readPointer = (writePointer - delayInSamples + bufferLength) % bufferLength;
 	}
 	
-	void Delay::setDelayLengthFromDistance(float sampleRate, float distance)
+	void Delay::setDelayLengthFromDistance(float distance)
 	{
 		setDelayLength(floor((sampleRate * distance) / SDN::c));
 	}

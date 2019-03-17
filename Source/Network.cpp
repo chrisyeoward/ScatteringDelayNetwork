@@ -39,11 +39,11 @@ namespace SDN
 		
 		for(int node = 0; node < nodeCount; node++)
 		{
-			sourceToNodeDelays[node] = SDN::Delay(sampleRate, source.distanceTo(nodes[node].getPosition()));
-			nodeToMicDelays[node] = SDN::Delay(sampleRate, mic.distanceTo(nodes[node].getPosition()));
+			sourceToNodeDelays[node] = *Delay::fromDistance(sampleRate, source.distanceTo(nodes[node].getPosition()));
+			nodeToMicDelays[node] = *Delay::fromDistance(sampleRate, mic.distanceTo(nodes[node].getPosition()));
 		}
 				
-		sourceMicDelay = new SDN::Delay(sampleRate, source.distanceTo(mic));
+		sourceMicDelay = Delay::fromDistance(sampleRate, source.distanceTo(mic));
 	}
 	
 	StereoOutput Network::scatterStereo(float in)
@@ -52,7 +52,7 @@ namespace SDN
 		
 		StereoOutput out;
 		
-		float fromSource = sourceMicDelay->read()/source.distanceTo(mic);
+		float fromSource = sourceMicDelay->read()/(fmax(source.distanceTo(mic), 0.1));
 		float sourceAzimuth = source.azimuthFrom(mic);
 		float sinAzimuth = sin(sourceAzimuth);
 		float denom = 1 / sqrt(2 * (1 + pow(sinAzimuth, 2)));
@@ -64,16 +64,16 @@ namespace SDN
 		
 		for(int node = 0; node < nodeCount; node++)
 		{
-			float fromSource = nodeToMicDelays[node].read();
-			fromSource /= (1 + (mic.distanceTo(nodes[node].getPosition()) / (source.distanceTo(nodes[node].getPosition()))));
-			float sourceAzimuth = nodes[node].getPosition().azimuthFrom(mic);
-			float sinAzimuth = sin(sourceAzimuth);
+			float fromNode = nodeToMicDelays[node].read();
+			fromNode /= (1 + (fmax(mic.distanceTo(nodes[node].getPosition()), 0.1) / (fmax(source.distanceTo(nodes[node].getPosition()), 0.1))));
+			float nodeAzimuth = nodes[node].getPosition().azimuthFrom(mic);
+			float sinAzimuth = sin(nodeAzimuth);
 			float denom = 1 / sqrt(2 * (1 + pow(sinAzimuth, 2)));
-			float sourceGainLeft = (1 - sinAzimuth) * denom;
-			float sourceGainRight = (1 + sinAzimuth) * denom;
+			float nodeGainLeft = (1 - sinAzimuth) * denom;
+			float nodeGainRight = (1 + sinAzimuth) * denom;
 			
-			out.L += fromSource * sourceGainLeft;
-			out.R += fromSource * sourceGainRight;
+			out.L += fromNode * nodeGainLeft;
+			out.R += fromNode * nodeGainRight;
 		}
 		
 		return out;
@@ -85,7 +85,7 @@ namespace SDN
 		auto out = sourceMicDelay->read()/source.distanceTo(mic);
 		for(int node = 0; node < nodeCount; node++)
 		{
-			out += nodeToMicDelays[node].read() / (1 + (mic.distanceTo(nodes[node].getPosition()) / (source.distanceTo(nodes[node].getPosition()))));
+			out += nodeToMicDelays[node].read() / (1 + (mic.distanceTo(nodes[node].getPosition()) + 1 / (source.distanceTo(nodes[node].getPosition()) + 1)));
 		}
 		return out;
 	}
@@ -128,5 +128,13 @@ namespace SDN
 				connection++;
 			}
 		}
+		
+		for(int node = 0; node < nodeCount; node++)
+		{
+			sourceToNodeDelays[node].setDelayLengthFromDistance(source.distanceTo(nodes[node].getPosition()));
+			nodeToMicDelays[node].setDelayLengthFromDistance(mic.distanceTo(nodes[node].getPosition()));
+		}
+		
+		sourceMicDelay->setDelayLengthFromDistance(source.distanceTo(mic));
 	}
 }

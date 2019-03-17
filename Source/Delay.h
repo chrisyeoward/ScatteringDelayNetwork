@@ -23,18 +23,21 @@ namespace SDN {
 			int bufferLength;
 			int delayInSamples;
 			int readPointer, writePointer;
+			float sampleRate;
 
 		public:
-		void setDelayLengthFromDistance(float sampleRate, float distance);
+		void setDelayLengthFromDistance(float distance);
 		void setDelayLength(int delayInSamples);
 		
 		float process(float inputSample);
 		void write(float sample);
 		float read();
 		
+		static Delay* fromDistance(float sampleRate, float distance);
+		
 		Delay() {};
-		Delay(int d);
-		Delay(float sampleRate, float d);
+		Delay(float sampleRate, int delayInSamples);
+		Delay(float sampleRate, float distance);
 		~Delay() {}
 	};
 }

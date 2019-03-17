@@ -16,6 +16,7 @@
 #include "Node.h"
 #include "Connection.h"
 #include "StereoOutput.h"
+#include <math.h>
 
 namespace SDN
 {
