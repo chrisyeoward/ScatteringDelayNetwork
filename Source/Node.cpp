@@ -30,6 +30,12 @@ namespace SDN {
 		return position;
 	}
 	
+	void Node::setPosition(Point p)
+	{
+		position.setY(p.getY());
+		position.setX(p.getX());
+	}
+	
 	void Node::addTerminal(SDN::Terminal *terminal)
 	{
 		terminals[terminalCount] = terminal;

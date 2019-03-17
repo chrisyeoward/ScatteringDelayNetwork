@@ -35,11 +35,7 @@ namespace SDN
 			SDN::Boundary(0.0, SDN::Orientation::X)
 		};
 		
-		SDN::Node nodes[nodeCount] = {SDN::Node(bounds[0].getScatteringNodePosition(mic, source), delayOrder),
-			SDN::Node(bounds[1].getScatteringNodePosition(mic, source), delayOrder),
-			SDN::Node(bounds[2].getScatteringNodePosition(mic, source), delayOrder),
-			SDN::Node(bounds[3].getScatteringNodePosition(mic, source), delayOrder)
-		};
+		SDN::Node nodes[nodeCount];
 		
 		SDN::Connection* connections;
 		

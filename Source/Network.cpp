@@ -20,6 +20,7 @@ namespace SDN
 		for(int node = 0; node < nodeCount; node++)
 		{
 			connectionCount += node;
+			nodes[node] = SDN::Node(bounds[node].getScatteringNodePosition(mic, source), delayOrder);
 		}
 		
 		connections = new SDN::Connection[connectionCount];
@@ -113,5 +114,10 @@ namespace SDN
 		std::cout << "Network - Setting source position... \n";
 		source.setX(x);
 		source.setY(y);
+		
+		for(int node = 0; node < nodeCount; node++)
+		{
+			nodes[node].setPosition(bounds[node].getScatteringNodePosition(mic, source));
+		}
 	}
 }

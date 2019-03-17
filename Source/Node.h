@@ -34,9 +34,11 @@ namespace SDN {
 		void addTerminal(SDN::Terminal *terminal);
 		void scatter(float sourceInput);
 		Point getPosition();
+		void setPosition(Point p);
 		
+		Node () {};
 		Node(Point position, int numberOfOtherNodes);
-		~Node() {}
+		~Node() {};
 		
 	};
 }
