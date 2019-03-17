@@ -21,7 +21,7 @@ namespace SDN {
 	float Point::azimuthFrom(Point point)
 	{
 		float dx = x - point.x;
-		float dy = y - point.y;
+		float dy = abs(y - point.y);
 		return atan(dx/dy);
 	}
 	

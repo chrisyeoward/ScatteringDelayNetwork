@@ -216,7 +216,6 @@ void ScatteringDelayReverbAudioProcessor::setStateInformation (const void* data,
 
 void ScatteringDelayReverbAudioProcessor::updateSourcePosition(float x, float y, float z)
 {
-	std::cout << "Processor - Updating position... \n";
 	sourceXPosition->operator=(x);
 	sourceYPosition->operator=(y);
 	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 0);

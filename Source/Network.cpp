@@ -111,7 +111,6 @@ namespace SDN
 	}
 	
 	void Network::setSourcePosition(float x, float y, float z) {
-		std::cout << "Network - Setting source position... \n";
 		source.setX(x);
 		source.setY(y);
 		

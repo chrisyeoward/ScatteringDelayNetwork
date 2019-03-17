@@ -56,7 +56,6 @@ void ScatteringDelayReverbAudioProcessorEditor::paint (Graphics& g)
 }
 
 void ScatteringDelayReverbAudioProcessorEditor::sliderValueChanged (Slider* slider) {
-	DBG("slider value changed!");
 //	if (slider == &sourceXPositionSlider) {
 		processor.updateSourcePosition(sourceXPositionSlider.getValue(), sourceYPositionSlider.getValue(), 0);
 //		processor.sourceXPosition->operator=((float) slider->getValue());
