@@ -118,7 +118,7 @@ void ScatteringDelayReverbAudioProcessor::prepareToPlay (double sampleRate, int 
     // initialisation that you need..
 	network = new SDN::Network(sampleRate);
 	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
-	network->setMicPosition(micXPosition->get(), micYPosition->get(), 1.4);
+	network->setMicPosition(micXPosition->get(), micYPosition->get(), 1.5);
 }
 
 void ScatteringDelayReverbAudioProcessor::releaseResources()

@@ -46,7 +46,7 @@ namespace SDN {
 				float parallelXDistance = source.getX() - mic.getX();
 				
 				float micDistance = position - mic.getZ();
-				float sourceDistance = position - source.getX();
+				float sourceDistance = position - source.getZ();
 				
 				float offsetY = micDistance * parallelYDistance / (micDistance + sourceDistance);
 				float offsetX = micDistance * parallelXDistance / (micDistance + sourceDistance);

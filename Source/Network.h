@@ -28,13 +28,13 @@ namespace SDN
 		const int delayOrder = nodeCount - 1;
 		int connectionCount = 0;
 	
-		SDN::Point source = SDN::Point(1.5, 4.0, 1.5);
+		SDN::Point source = SDN::Point(2.5, 4.0, 1.5);
 		SDN::Point mic = SDN::Point(2.5, 0.5, 1.5);
 	
 		SDN::Boundary bounds[nodeCount] = { SDN::Boundary(0.0, SDN::Plane::YZ),
-			SDN::Boundary(10.0, SDN::Plane::YZ),
+			SDN::Boundary(5.0, SDN::Plane::YZ),
 			SDN::Boundary(0.0, SDN::Plane::XZ),
-			SDN::Boundary(10.0, SDN::Plane::XZ),
+			SDN::Boundary(5.0, SDN::Plane::XZ),
 			SDN::Boundary(0.0, SDN::Plane::XY),
 			SDN::Boundary(3.0, SDN::Plane::XY)
 		};
