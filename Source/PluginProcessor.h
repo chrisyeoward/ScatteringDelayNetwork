@@ -65,9 +65,8 @@ public:
 	AudioParameterFloat* micXPosition;
 	AudioParameterFloat* micYPosition;
 	
-	AudioParameterFloat* roomWidth;
-	AudioParameterFloat* roomLength;
-	AudioParameterFloat* roomHeight;
+	AudioParameterFloat* roomSize;
+
 
 private:
 	SDN::Network *network;

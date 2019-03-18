@@ -31,13 +31,7 @@ namespace SDN
 		SDN::Point source = SDN::Point(2.5, 4.0, 1.5);
 		SDN::Point mic = SDN::Point(2.5, 0.5, 1.5);
 	
-		SDN::Boundary bounds[nodeCount] = { SDN::Boundary(0.0, SDN::Plane::YZ),
-			SDN::Boundary(5.0, SDN::Plane::YZ),
-			SDN::Boundary(0.0, SDN::Plane::XZ),
-			SDN::Boundary(5.0, SDN::Plane::XZ),
-			SDN::Boundary(0.0, SDN::Plane::XY),
-			SDN::Boundary(3.0, SDN::Plane::XY)
-		};
+		SDN::Boundary bounds[nodeCount];
 		
 		SDN::Node nodes[nodeCount];
 		
@@ -60,6 +54,7 @@ namespace SDN
 		void setMicPosition(float x, float y, float z);
 		
 		Network(float sampleRate);
+		Network(float sampleRate, float width, float length, float height);
 		~Network();
 	};
 }

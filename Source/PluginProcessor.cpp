@@ -24,25 +24,31 @@ ScatteringDelayReverbAudioProcessor::ScatteringDelayReverbAudioProcessor()
                        )
 #endif
 {
+	
+	addParameter (roomSize = new AudioParameterFloat ("roomSize", // parameter ID
+															 "Room size", // parameter name
+															 NormalisableRange<float> (0.0f, 100.0f),
+															 5.0f)); // default value
+	
 	addParameter (sourceXPosition = new AudioParameterFloat ("sourceXPosition", // parameter ID
 															   "Source X Position", // parameter name
-															   NormalisableRange<float> (0.0f, 5.0f),
-															   2.5f)); // default value
+															   NormalisableRange<float> (0.0f, roomSize->get()),
+															   roomSize->get()/2)); // default value
 	
 	addParameter (sourceYPosition = new AudioParameterFloat ("sourceYPosition", // parameter ID
 															 "Source Y Position", // parameter name
-															 NormalisableRange<float> (0.0f, 5.0f),
-															 4.0f)); // default value
+															 NormalisableRange<float> (0.0f, roomSize->get()),
+															 roomSize->get()*0.9)); // default value
 	
 	addParameter (micXPosition = new AudioParameterFloat ("micXPosition", // parameter ID
 															 "Mic X Position", // parameter name
-															 NormalisableRange<float> (0.0f, 5.0f),
-															 2.5f)); // default value
+															 NormalisableRange<float> (0.0f, roomSize->get()),
+															 roomSize->get()/2)); // default value
 	
 	addParameter (micYPosition = new AudioParameterFloat ("micYPosition", // parameter ID
 															 "Mic Y Position", // parameter name
-															 NormalisableRange<float> (0.0f, 5.0f),
-															 0.5f)); // default value
+															 NormalisableRange<float> (0.0f, roomSize->get()),
+															 roomSize->get()/10)); // default value
 }
 
 ScatteringDelayReverbAudioProcessor::~ScatteringDelayReverbAudioProcessor()
@@ -116,7 +122,7 @@ void ScatteringDelayReverbAudioProcessor::prepareToPlay (double sampleRate, int 
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-	network = new SDN::Network(sampleRate);
+	network = new SDN::Network(sampleRate, roomSize->get(), roomSize->get(), 3.0);
 	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
 	network->setMicPosition(micXPosition->get(), micYPosition->get(), 1.5);
 }
@@ -195,14 +201,14 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 			in /= totalNumInputChannels; // sum to mono
 			
 			auto out = network->scatterStereo(in);
-//			DBG(out.L);
-//			DBG(out.R);
 			
 			buffer.getWritePointer (0)[i] = 0.0;
 			buffer.getWritePointer (1)[i] = 0.0;
-			if(out.L <= 1 && out.R <= 1){
+			if(abs(out.L) <= 1 && abs(out.R) <= 1){
 				buffer.getWritePointer (0)[i] = out.L;
 				buffer.getWritePointer (1)[i] = out.R;
+			} else {
+				DBG("PEAKING");
 			}
 		}
 

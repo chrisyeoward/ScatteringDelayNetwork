@@ -12,8 +12,17 @@
 
 namespace SDN
 {
-	Network::Network(float sampleRate)
+	Network::Network(float sampleRate) : Network(sampleRate, 5.0, 5.0, 3.0) {}
+	
+	Network::Network(float sampleRate, float width, float length, float height)
 	{
+		bounds[0] = SDN::Boundary(0.0, SDN::Plane::YZ);
+		bounds[1] = SDN::Boundary(width, SDN::Plane::YZ);
+		bounds[2] = SDN::Boundary(0.0, SDN::Plane::XZ);
+		bounds[3] = SDN::Boundary(length, SDN::Plane::XZ);
+		bounds[4] = SDN::Boundary(0.0, SDN::Plane::XY);
+		bounds[5] = SDN::Boundary(height, SDN::Plane::XY);
+		
 		for(int node = 0; node < nodeCount; node++)
 		{
 			connectionCount += node;
@@ -56,8 +65,8 @@ namespace SDN
 		float sourceGainLeft = (1 - sinAzimuth) * denom;
 		float sourceGainRight = (1 + sinAzimuth) * denom;
 		
-		out.L = fromSource * sourceGainLeft;
-		out.R = fromSource * sourceGainRight;
+		out.L = 0.0;// fromSource * sourceGainLeft;
+		out.R = 0.0;// fromSource * sourceGainRight;
 		
 		for(int node = 0; node < nodeCount; node++)
 		{

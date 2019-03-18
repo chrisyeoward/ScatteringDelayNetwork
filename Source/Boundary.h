@@ -26,7 +26,8 @@ namespace SDN {
         Plane orientation;
         
         public:
-        
+		
+		Boundary() {};
         Boundary(float position, Plane orientation);
         ~Boundary() {}
 		
