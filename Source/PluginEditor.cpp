@@ -18,10 +18,13 @@ ScatteringDelayReverbAudioProcessorEditor::ScatteringDelayReverbAudioProcessorEd
 	sourceYPositionSlider(Slider::RotaryVerticalDrag, Slider::TextBoxAbove),
 	sourceXPositionLabel("", "X Position: "),
 	sourceYPositionLabel("", "Y Position: "),
+	roomContainer(p),
 	processor (p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
+	addAndMakeVisible(roomContainer);
+	
 	
 	addAndMakeVisible (&sourceXPositionSlider);
 	sourceXPositionSlider.addListener (this);
@@ -48,7 +51,8 @@ ScatteringDelayReverbAudioProcessorEditor::~ScatteringDelayReverbAudioProcessorE
 void ScatteringDelayReverbAudioProcessorEditor::paint (Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
+//    g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
+	g.fillAll (Colours::black);
 
     g.setColour (Colours::white);
     g.setFont (15.0f);
@@ -56,17 +60,15 @@ void ScatteringDelayReverbAudioProcessorEditor::paint (Graphics& g)
 }
 
 void ScatteringDelayReverbAudioProcessorEditor::sliderValueChanged (Slider* slider) {
-//	if (slider == &sourceXPositionSlider) {
-		processor.updateSourcePosition(sourceXPositionSlider.getValue(), sourceYPositionSlider.getValue(), 0);
-//		processor.sourceXPosition->operator=((float) slider->getValue());
-//	}
+
+	
 };
 
 void ScatteringDelayReverbAudioProcessorEditor::resized()
 {
-	
-	sourceXPositionSlider.setBoundsRelative(0, 0.1, 0.5, 0.5);
-	sourceYPositionSlider.setBoundsRelative(0.5, 0.1, 0.5, 0.5);
+	roomContainer.setBoundsRelative(0.1, 0.1, 0.8, 0.8);
+//	sourceXPositionSlider.setBoundsRelative(0, 0.1, 0.5, 0.5);
+//	sourceYPositionSlider.setBoundsRelative(0.5, 0.1, 0.5, 0.5);
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }

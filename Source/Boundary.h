@@ -13,21 +13,21 @@
 #include "Point.h"
 
 namespace SDN {
-	enum class Orientation {
-		X,
-		Y,
-		Z
+	enum class Plane {
+		XZ,
+		XY,
+		YZ,
 	};
 	
     class Boundary 
     {
         private: 
         float position;
-        Orientation orientation;
+        Plane orientation;
         
         public:
         
-        Boundary(float position, Orientation orientation);
+        Boundary(float position, Plane orientation);
         ~Boundary() {}
 		
 		Point getScatteringNodePosition(Point mic, Point Source);

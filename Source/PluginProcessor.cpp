@@ -32,7 +32,17 @@ ScatteringDelayReverbAudioProcessor::ScatteringDelayReverbAudioProcessor()
 	addParameter (sourceYPosition = new AudioParameterFloat ("sourceYPosition", // parameter ID
 															 "Source Y Position", // parameter name
 															 NormalisableRange<float> (0.0f, 5.0f),
+															 4.0f)); // default value
+	
+	addParameter (micXPosition = new AudioParameterFloat ("micXPosition", // parameter ID
+															 "Mic X Position", // parameter name
+															 NormalisableRange<float> (0.0f, 5.0f),
 															 2.5f)); // default value
+	
+	addParameter (micYPosition = new AudioParameterFloat ("micYPosition", // parameter ID
+															 "Mic Y Position", // parameter name
+															 NormalisableRange<float> (0.0f, 5.0f),
+															 0.5f)); // default value
 }
 
 ScatteringDelayReverbAudioProcessor::~ScatteringDelayReverbAudioProcessor()
@@ -167,6 +177,11 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
 	
+//	DBG("------------");
+//	DBG(sourceXPosition->get());
+//	DBG(sourceYPosition->get());
+//	DBG(micXPosition->get());
+//	DBG(micYPosition->get());
 	
 		for (int i = 0; i < numSamples; ++i)
 		{
@@ -179,9 +194,14 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 			in /= totalNumInputChannels; // sum to mono
 			
 			auto out = network->scatterStereo(in);
-
-			buffer.getWritePointer (0)[i] = out.L;
-			buffer.getWritePointer (1)[i] = out.R;
+//			DBG(out.L);
+//			DBG(out.R);
+			
+			
+			if(out.L <= 1 && out.R <= 1){
+				buffer.getWritePointer (0)[i] = out.L;
+				buffer.getWritePointer (1)[i] = out.R;
+			}
 
 		}
 
@@ -216,9 +236,9 @@ void ScatteringDelayReverbAudioProcessor::setStateInformation (const void* data,
 
 void ScatteringDelayReverbAudioProcessor::updateSourcePosition(float x, float y, float z)
 {
-	sourceXPosition->operator=(x);
-	sourceYPosition->operator=(y);
-	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 0);
+	sourceXPosition->setValueNotifyingHost(x);
+	sourceYPosition->setValueNotifyingHost(y);
+	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
 }
 
 //==============================================================================

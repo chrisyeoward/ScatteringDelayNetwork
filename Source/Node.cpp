@@ -18,9 +18,11 @@ namespace SDN {
 		scatteringMatrix = new float[numberOfOtherNodes*numberOfOtherNodes];
 		
 		for(int i = 0; i < numberOfOtherNodes * numberOfOtherNodes; i++) {
+			
 			scatteringMatrix[i] = 2.0 / (float) numberOfOtherNodes;
 
 			if(i % (numberOfOtherNodes + 1) == 0) scatteringMatrix[i] -= 1.0;
+			
 		}
 		
 	}
@@ -34,6 +36,7 @@ namespace SDN {
 	{
 		position.setY(p.getY());
 		position.setX(p.getX());
+		position.setZ(p.getZ());
 	}
 	
 	void Node::addTerminal(SDN::Terminal *terminal)

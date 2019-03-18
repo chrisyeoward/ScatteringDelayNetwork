@@ -16,7 +16,6 @@ namespace SDN
 {
 	Network::Network(float sampleRate)
 	{
-		
 		for(int node = 0; node < nodeCount; node++)
 		{
 			connectionCount += node;

@@ -11,32 +11,51 @@
 #include "Boundary.h"
 
 namespace SDN {
-	Boundary::Boundary(float position, Orientation orientation) : position(position), orientation(orientation){};
+	Boundary::Boundary(float position, Plane orientation) : position(position), orientation(orientation){};
 	
 	Point Boundary::getScatteringNodePosition(Point mic, Point source){
 		switch(orientation) {
-			case Orientation::X : {
-				float parallelDistance = source.getX() - mic.getX();
+			case Plane::XZ : {
+				float parallelXDistance = source.getX() - mic.getX();
+				float parallelZDistance = source.getZ() - mic.getZ();
+				
 				float micDistance = position - mic.getY();
 				float sourceDistance = position - source.getY();
-				float offset = micDistance * parallelDistance / (micDistance + sourceDistance);
-				return Point(mic.getX() + offset, position);
+				
+				float offsetX = micDistance * parallelXDistance / (micDistance + sourceDistance);
+				float offsetZ = micDistance * parallelZDistance / (micDistance + sourceDistance);
+				
+				return Point(mic.getX() + offsetX, position, mic.getZ() + offsetZ);
 				break;
 			}
-			case Orientation::Y : {
-				float parallelDistance = source.getY() - mic.getY();
+			case Plane::YZ : {
+				float parallelYDistance = source.getY() - mic.getY();
+				float parallelZDistance = source.getZ() - mic.getZ();
+				
 				float micDistance = position - mic.getX();
 				float sourceDistance = position - source.getX();
-				float offset = micDistance * parallelDistance / (micDistance + sourceDistance);
-				return Point(position, mic.getY() + offset);
+				
+				float offsetY = micDistance * parallelYDistance / (micDistance + sourceDistance);
+				float offsetZ = micDistance * parallelZDistance / (micDistance + sourceDistance);
+				
+				return Point(position, mic.getY() + offsetY, mic.getZ() + offsetZ);
 				break;
 			}
-			case Orientation::Z : {
-				return Point(0,0);
+			case Plane::XY : {
+				float parallelYDistance = source.getY() - mic.getY();
+				float parallelXDistance = source.getX() - mic.getX();
+				
+				float micDistance = position - mic.getZ();
+				float sourceDistance = position - source.getX();
+				
+				float offsetY = micDistance * parallelYDistance / (micDistance + sourceDistance);
+				float offsetX = micDistance * parallelXDistance / (micDistance + sourceDistance);
+				
+				return Point(mic.getX() + offsetX, mic.getY() + offsetY, position);
 				break;
 			}
 			default:
-				return Point(0,0);
+				return Point(0,0,0);
 		}
 	}
 }

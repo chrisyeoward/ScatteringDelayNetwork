@@ -24,11 +24,15 @@ namespace SDN {
 		float getY();
 		void setY(float y);
 		
+		float getZ();
+		void setZ(float z);
+		
 		float distanceTo(Point point);
 		float azimuthFrom(Point point);
 		
 		Point() {};
 		Point(float x, float y);
+		Point(float x, float y, float z);
 		~Point() {};
 	};
 }

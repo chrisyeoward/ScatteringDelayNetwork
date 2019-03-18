@@ -62,6 +62,9 @@ public:
 	AudioParameterFloat* sourceXPosition;
 	AudioParameterFloat* sourceYPosition;
 	
+	AudioParameterFloat* micXPosition;
+	AudioParameterFloat* micYPosition;
+	
 	AudioParameterFloat* roomWidth;
 	AudioParameterFloat* roomLength;
 	AudioParameterFloat* roomHeight;

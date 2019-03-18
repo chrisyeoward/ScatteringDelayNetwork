@@ -23,17 +23,19 @@ namespace SDN
 	class Network {
 		private:
 		
-		const static int nodeCount = 4;
+		const static int nodeCount = 6;
 		const int delayOrder = nodeCount - 1;
 		int connectionCount = 0;
 	
-		SDN::Point source = SDN::Point(1.5, 4.0);
-		SDN::Point mic = SDN::Point(2.5, 1.0);
+		SDN::Point source = SDN::Point(1.5, 4.0, 1.5);
+		SDN::Point mic = SDN::Point(2.5, 0.5, 1.5);
 	
-		SDN::Boundary bounds[nodeCount] = { SDN::Boundary(0.0, SDN::Orientation::Y),
-			SDN::Boundary(5.0, SDN::Orientation::Y),
-			SDN::Boundary(5.0, SDN::Orientation::X),
-			SDN::Boundary(0.0, SDN::Orientation::X)
+		SDN::Boundary bounds[nodeCount] = { SDN::Boundary(0.0, SDN::Plane::YZ),
+			SDN::Boundary(10.0, SDN::Plane::YZ),
+			SDN::Boundary(0.0, SDN::Plane::XZ),
+			SDN::Boundary(10.0, SDN::Plane::XZ),
+			SDN::Boundary(0.0, SDN::Plane::XY),
+			SDN::Boundary(3.0, SDN::Plane::XY)
 		};
 		
 		SDN::Node nodes[nodeCount];

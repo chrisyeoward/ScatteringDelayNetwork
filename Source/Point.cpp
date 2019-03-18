@@ -11,17 +11,19 @@
 #include "Point.h"
 
 namespace SDN {
-	Point::Point(float x, float y) : x(x), y(y), z(0.0) {}
+	Point::Point(float x, float y) : Point(x,y,0) {}
+	
+	Point::Point(float x, float y, float z) : x(x), y(y), z(z) {}
 	
 	float Point::distanceTo(Point point)
 	{
-		return sqrt(pow(point.x - x,2) + pow(point.y - y,2));
+		return sqrt(pow(point.getX() - x,2) + pow(point.getY() - y,2) + pow(point.getZ() - z,2));
 	}
 	
 	float Point::azimuthFrom(Point point)
 	{
-		float dx = x - point.x;
-		float dy = abs(y - point.y);
+		float dx = x - point.getX();
+		float dy = abs(y - point.getY());
 		return atan(dx/dy);
 	}
 	
@@ -29,15 +31,23 @@ namespace SDN {
 		this->x = x;
 	}
 	
-	void Point::setY(float y){
-		this->y = y;
-	}
-	
 	float Point::getX(){
 		return x;
 	}
 	
+	void Point::setY(float y){
+		this->y = y;
+	}
+	
 	float Point::getY(){
 		return y;
+	}
+	
+	void Point::setZ(float z){
+		this->z = z;
+	}
+	
+	float Point::getZ(){
+		return z;
 	}
 }

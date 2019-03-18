@@ -12,6 +12,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "./XYContainer.h"
 
 //==============================================================================
 /**
@@ -33,6 +34,8 @@ private:
 	Slider sourceYPositionSlider;
 	Label sourceXPositionLabel;
 	Label sourceYPositionLabel;
+	
+	XYContainer roomContainer;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     ScatteringDelayReverbAudioProcessor& processor;
