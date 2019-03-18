@@ -65,8 +65,13 @@ namespace SDN
 		float sourceGainLeft = (1 - sinAzimuth) * denom;
 		float sourceGainRight = (1 + sinAzimuth) * denom;
 		
-		out.L = 0.0;// fromSource * sourceGainLeft;
-		out.R = 0.0;// fromSource * sourceGainRight;
+		out.L = fromSource * sourceGainLeft;
+		out.R = fromSource * sourceGainRight;
+		
+		if(abs(fromSource) >= 1) {
+			DBG("Source peak");
+			DBG(fromSource);
+		}
 		
 		for(int node = 0; node < nodeCount; node++)
 		{
@@ -80,8 +85,17 @@ namespace SDN
 			
 			out.L += fromNode * nodeGainLeft;
 			out.R += fromNode * nodeGainRight;
+			if(abs(fromNode) >= 1) {
+				DBG("Node peak");
+				DBG(fromNode);
+			}
 		}
 		
+		if(abs(out.L) >= 1 || abs(out.R) >= 1) {
+			DBG("peaking in network");
+		}
+		
+			
 		return out;
 	}
 	
@@ -89,9 +103,32 @@ namespace SDN
 	{
 		scatter(in); // accommodate 10x gain factor in 1/r volume adjustment
 		auto out = sourceMicDelay->read()/source.distanceTo(mic);
+		
+		if(out >= 1) {
+			DBG("Source peak");
+			DBG(out);
+		}
 		for(int node = 0; node < nodeCount; node++)
 		{
-			out += nodeToMicDelays[node].read() / (1 + (mic.distanceTo(nodes[node].getPosition()) + 1 / (source.distanceTo(nodes[node].getPosition()) + 1)));
+			float micDistance = mic.distanceTo(nodes[node].getPosition());
+			float sourceDistance = source.distanceTo(nodes[node].getPosition());
+			float nodeReading = nodeToMicDelays[node].read();
+			float nodeOut = nodeReading / (1 + (micDistance / sourceDistance));
+			out += nodeOut;
+			if(abs(nodeOut) >= 1) {
+				DBG("\n");
+				DBG("--------");
+				DBG("Mic distance ");
+				DBG(micDistance);
+				DBG("Source distance");
+				DBG(sourceDistance);
+				DBG("node reading");
+				DBG(nodeReading);
+				DBG("Node peak");
+				DBG(nodeOut);
+				DBG("Out peak");
+				DBG(out);
+			}
 		}
 		return out;
 	}
@@ -111,9 +148,16 @@ namespace SDN
 		
 		for(int node = 0; node < nodeCount; node++)
 		{
+			float nodeOut = nodes[node].getNodeOutput();
 			nodes[node].scatter(sourceToNodeDelays[node].read());
 			nodes[node].distributeOutputWaveVectorToNodes();
-			nodeToMicDelays[node].write(nodes[node].getNodeOutput());
+			nodeToMicDelays[node].write(nodeOut);
+			if(abs(nodeOut) >= 1) {
+				DBG("--------");
+				DBG("Node writing");
+				DBG(nodeOut);
+				DBG("\n");
+			}
 		}
 	}
 	

@@ -12,7 +12,7 @@
 
 namespace SDN {
 	Delay::Delay(float sampleRate, int delayInSamples) :
-	bufferLength(4 * delayInSamples),
+	bufferLength(5 * delayInSamples),
 	delayInSamples(delayInSamples),
 	sampleRate(sampleRate)
 	{

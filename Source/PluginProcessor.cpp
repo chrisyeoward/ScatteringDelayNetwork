@@ -28,7 +28,7 @@ ScatteringDelayReverbAudioProcessor::ScatteringDelayReverbAudioProcessor()
 	addParameter (roomSize = new AudioParameterFloat ("roomSize", // parameter ID
 															 "Room size", // parameter name
 															 NormalisableRange<float> (0.0f, 100.0f),
-															 5.0f)); // default value
+															 10.0f)); // default value
 	
 	addParameter (sourceXPosition = new AudioParameterFloat ("sourceXPosition", // parameter ID
 															   "Source X Position", // parameter name
@@ -200,8 +200,20 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 			
 			in /= totalNumInputChannels; // sum to mono
 			
-			auto out = network->scatterStereo(in);
 			
+//			auto out = network->scatterMono(in);
+//
+//			buffer.getWritePointer (0)[i] = 0.0;
+//			buffer.getWritePointer (1)[i] = 0.0;
+//			if(abs(out) <= 1){
+//				buffer.getWritePointer (0)[i] = out;
+//				buffer.getWritePointer (1)[i] = out;
+//			} else {
+//				DBG("PEAKING");
+//			}
+//
+			auto out = network->scatterStereo(in);
+
 			buffer.getWritePointer (0)[i] = 0.0;
 			buffer.getWritePointer (1)[i] = 0.0;
 			if(abs(out.L) <= 1 && abs(out.R) <= 1){
