@@ -51,6 +51,7 @@ namespace SDN
 		void scatter(float input);
 		
 		void updateConnectionLengths();
+		void recalculateConnectionLengths();
 		
 		public:
 		SDN::StereoOutput scatterStereo(float input);

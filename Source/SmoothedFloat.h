@@ -18,7 +18,7 @@ namespace SDN
 		float targetValue;
 		bool isSmoothing = false;
 		
-		int rampSamples = 44100; // 1/10 of a second
+		int rampSamples = 10000;
 		int rampCount = 0;
 		float delta = 0;
 		
