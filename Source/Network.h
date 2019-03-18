@@ -17,6 +17,7 @@
 #include "Connection.h"
 #include "StereoOutput.h"
 #include <math.h>
+#include "../JuceLibraryCode/JuceHeader.h"
 
 namespace SDN
 {
@@ -49,11 +50,14 @@ namespace SDN
 		
 		void scatter(float input);
 		
+		void updateConnectionLengths();
+		
 		public:
 		SDN::StereoOutput scatterStereo(float input);
 		float scatterMono(float input);
 	
 		void setSourcePosition(float x, float y, float z);
+		void setMicPosition(float x, float y, float z);
 		
 		Network(float sampleRate);
 		~Network();

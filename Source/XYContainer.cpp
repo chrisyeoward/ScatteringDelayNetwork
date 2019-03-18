@@ -67,9 +67,6 @@ void XYContainer::paint (Graphics& g)
 	g.drawLine(micX - pointSize/2, micY - pointSize/2, micX + pointSize/2, micY + pointSize/2);
 	g.drawLine(micX - pointSize/2, micY + pointSize/2, micX + pointSize/2, micY - pointSize/2);
 	
-//	setCentrePosition(getWidth()/2, getHeight()/2);
-//	setCentrePosition(0,0);
-//	setTransform(AffineTransform::rotation(float_Pi, getBounds().getCentreX(), getBounds().getCentreY()));
 }
 
 void XYContainer::resized()
@@ -98,6 +95,5 @@ void XYContainer::mouseDrag(const MouseEvent& event)
 		float y = 1 - ((event.getMouseDownY() + event.getDistanceFromDragStartY()) / (float) getHeight());
 		
 		processor.updateSourcePosition(x, y, 1.5);
-		repaint();
-	
+//		repaint();
 }

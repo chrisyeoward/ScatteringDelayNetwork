@@ -17,37 +17,37 @@ namespace SDN {
 	
 	float Point::distanceTo(Point point)
 	{
-		return sqrt(pow(point.getX() - x,2) + pow(point.getY() - y,2) + pow(point.getZ() - z,2));
+		return sqrt(pow(point.getX() - getX(),2) + pow(point.getY() - getY(),2) + pow(point.getZ() - getZ(),2));
 	}
 	
 	float Point::azimuthFrom(Point point)
 	{
-		float dx = x - point.getX();
-		float dy = abs(y - point.getY());
+		float dx = getX() - point.getX();
+		float dy = abs(getY() - point.getY());
 		return atan(dx/dy);
 	}
 	
 	void Point::setX(float x){
-		this->x = x;
+		this->x.setValue(x);
 	}
 	
 	float Point::getX(){
-		return x;
+		return x.getValue();
 	}
 	
 	void Point::setY(float y){
-		this->y = y;
+		this->y.setValue(y);
 	}
 	
 	float Point::getY(){
-		return y;
+		return y.getValue();
 	}
 	
 	void Point::setZ(float z){
-		this->z = z;
+		this->z.setValue(z);
 	}
 	
 	float Point::getZ(){
-		return z;
-	}
+		return z.getValue();
+	}	
 }

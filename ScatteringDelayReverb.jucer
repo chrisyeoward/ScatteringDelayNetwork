@@ -4,6 +4,9 @@
               jucerVersion="5.4.1">
   <MAINGROUP id="WV8Hy2" name="ScatteringDelayReverb">
     <GROUP id="{713028AC-9195-0C15-8647-28424C1F4E23}" name="Source">
+      <FILE id="hTkZFY" name="SmoothedFloat.cpp" compile="1" resource="0"
+            file="Source/SmoothedFloat.cpp"/>
+      <FILE id="FuywIR" name="SmoothedFloat.h" compile="0" resource="0" file="Source/SmoothedFloat.h"/>
       <GROUP id="{3BE06708-2BE3-733B-F565-ACD68F8F0B05}" name="UI">
         <FILE id="ifdL7i" name="XYContainer.cpp" compile="1" resource="0" file="Source/XYContainer.cpp"/>
         <FILE id="OjOyCu" name="XYContainer.h" compile="0" resource="0" file="Source/XYContainer.h"/>

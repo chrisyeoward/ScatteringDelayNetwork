@@ -9,8 +9,6 @@
 */
 
 #include "Network.h"
-#include <iostream>
-
 
 namespace SDN
 {
@@ -80,7 +78,7 @@ namespace SDN
 	
 	float Network::scatterMono(float in)
 	{
-		scatter(in);
+		scatter(in * 0.1); // accommodate 10x gain factor in 1/r volume adjustment
 		auto out = sourceMicDelay->read()/source.distanceTo(mic);
 		for(int node = 0; node < nodeCount; node++)
 		{
@@ -112,7 +110,21 @@ namespace SDN
 	void Network::setSourcePosition(float x, float y, float z) {
 		source.setX(x);
 		source.setY(y);
+		source.setZ(z);
 		
+		updateConnectionLengths();
+	}
+	
+	void Network::setMicPosition(float x, float y, float z) {
+		mic.setX(x);
+		mic.setY(y);
+		mic.setZ(z);
+		
+		updateConnectionLengths();
+	}
+	
+	void Network::updateConnectionLengths()
+	{
 		for(int node = 0; node < nodeCount; node++)
 		{
 			nodes[node].setPosition(bounds[node].getScatteringNodePosition(mic, source));
@@ -128,12 +140,20 @@ namespace SDN
 			}
 		}
 		
+		DBG("Setting node positions....");
 		for(int node = 0; node < nodeCount; node++)
 		{
 			sourceToNodeDelays[node].setDelayLengthFromDistance(source.distanceTo(nodes[node].getPosition()));
 			nodeToMicDelays[node].setDelayLengthFromDistance(mic.distanceTo(nodes[node].getPosition()));
+			DBG("-------------");
+			DBG(nodes[node].getPosition().getX());
+			DBG(nodes[node].getPosition().getY());
+			DBG(nodes[node].getPosition().getZ());
+			DBG("\n");
 		}
 		
 		sourceMicDelay->setDelayLengthFromDistance(source.distanceTo(mic));
+		
+		
 	}
 }

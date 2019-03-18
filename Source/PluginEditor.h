@@ -12,7 +12,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
-#include "./XYContainer.h"
+#include "XYContainer.h"
 
 //==============================================================================
 /**

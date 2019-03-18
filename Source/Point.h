@@ -10,12 +10,14 @@
 
 #pragma once
 #include "math.h"
+#include "SmoothedFloat.h"
+#include <iostream>
 
 namespace SDN {
 	class Point
 	{
 		private:
-			float x, y, z;
+			SmoothedFloat x, y, z;
 		
 		public:
 		float getX();
@@ -26,6 +28,12 @@ namespace SDN {
 		
 		float getZ();
 		void setZ(float z);
+		
+//		operator std::string() {
+//			char* s = new char[3];
+//			sprintf_s(s, 3, "(%f, %f, %f)", getX(), getY(), getZ());
+//			return s;
+//		}
 		
 		float distanceTo(Point point);
 		float azimuthFrom(Point point);
