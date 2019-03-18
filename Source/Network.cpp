@@ -89,12 +89,10 @@ namespace SDN
 	
 	void Network::scatter(float in)
 	{
-		in *= 0.1;  // accommodate 10x gain factor in 1/r volume adjustment
+		in *= 0.1; // accommodate 10x gain factor in 1/r volume adjustment
 		in *= 0.5;
 		
 		sourceMicDelay->write(in);
-		
-		updateConnectionLengths();
 		
 		for(int node = 0; node < nodeCount; node++)
 		{
@@ -115,7 +113,7 @@ namespace SDN
 		source.setY(y);
 		source.setZ(z);
 		
-		recalculateConnectionLengths();
+		updateConnectionLengths();
 	}
 	
 	void Network::setMicPosition(float x, float y, float z) {
@@ -123,19 +121,16 @@ namespace SDN
 		mic.setY(y);
 		mic.setZ(z);
 		
-		recalculateConnectionLengths();
+		updateConnectionLengths();
 	}
 	
-	void Network::recalculateConnectionLengths()
+	void Network::updateConnectionLengths()
 	{
 		for(int node = 0; node < nodeCount; node++)
 		{
 			nodes[node].setPosition(bounds[node].getScatteringNodePosition(mic, source));
 		}
-	}
-	
-	void Network::updateConnectionLengths()
-	{
+		
 		int connection = 0;
 		for(int node = 0; node < nodeCount - 1; node++)
 		{
@@ -146,14 +141,18 @@ namespace SDN
 			}
 		}
 		
+//		DBG("Setting node positions....");
 		for(int node = 0; node < nodeCount; node++)
 		{
 			sourceToNodeDelays[node].setDelayLengthFromDistance(source.distanceTo(nodes[node].getPosition()));
 			nodeToMicDelays[node].setDelayLengthFromDistance(mic.distanceTo(nodes[node].getPosition()));
+//			DBG("-------------");
+//			DBG(nodes[node].getPosition().getX());
+//			DBG(nodes[node].getPosition().getY());
+//			DBG(nodes[node].getPosition().getZ());
+//			DBG("\n");
 		}
 		
 		sourceMicDelay->setDelayLengthFromDistance(source.distanceTo(mic));
-		
-		
 	}
 }

@@ -13,7 +13,7 @@
 namespace SDN {
 	void SmoothedFloat::setValue(float value, bool forceUpdate)
 	{
-		if(forceUpdate) currentValue = value;
+		if(true || forceUpdate) currentValue = value;
 		targetValue = value;
 		rampCount = 0;
 		delta = (targetValue - currentValue) / rampSamples;

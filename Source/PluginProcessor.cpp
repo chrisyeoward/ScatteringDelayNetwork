@@ -198,12 +198,12 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 //			DBG(out.L);
 //			DBG(out.R);
 			
-			
+			buffer.getWritePointer (0)[i] = 0.0;
+			buffer.getWritePointer (1)[i] = 0.0;
 			if(out.L <= 1 && out.R <= 1){
 				buffer.getWritePointer (0)[i] = out.L;
 				buffer.getWritePointer (1)[i] = out.R;
 			}
-
 		}
 
         // ..do something to the data...
