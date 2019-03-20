@@ -14,7 +14,7 @@
 namespace SDN{
 	Connection::Connection(float distance, float sampleRate) : sampleRate(sampleRate)
 	{
-		float delay = floor((sampleRate * distance) / SDN::c);
+		float delay = (sampleRate * distance / SDN::c);
 		startToEndDelay = new SDN::Delay(sampleRate, delay);
 		endToStartDelay = new SDN::Delay(sampleRate, delay);
 		
@@ -24,9 +24,9 @@ namespace SDN{
 	
 	void Connection::setLength(float distance)
 	{
-		float delay = floor((sampleRate * distance) / SDN::c);
-		startToEndDelay->setDelayLength(delay);
-		endToStartDelay->setDelayLength(delay);
+//		float delay = (sampleRate * distance / SDN::c);
+		startToEndDelay->setDelayLengthFromDistance(distance);
+		endToStartDelay->setDelayLengthFromDistance(distance);
 	}
 	
 	Connection::Connection(SDN::Node startNode, SDN::Node endNode, float sampleRate) :

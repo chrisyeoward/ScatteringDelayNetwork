@@ -11,32 +11,38 @@
 #include "Delay.h"
 
 namespace SDN {
-	Delay::Delay(float sampleRate, int delayInSamples) :
-	bufferLength(5 * delayInSamples),
-	delayInSamples(delayInSamples),
+	Delay::Delay(float sampleRate, float delayInSamples) :
+	bufferLength(5 * (int) delayInSamples),
 	sampleRate(sampleRate)
 	{
 		buffer = new float[bufferLength];
 		memset(buffer, 0.0, bufferLength * sizeof(float));
 		writePointer = 0;
-		readPointer = (writePointer - delayInSamples + bufferLength) % bufferLength;
+
+		readPointer = (writePointer - delayInSamples);
+		readPointer += bufferLength;
+		if (readPointer >= bufferLength)
+			readPointer -= bufferLength;
 	}
 	
 //	Delay::Delay(float sampleRate, float distance) : Delay(sampleRate, (int) floor((sampleRate * distance) / SDN::c)) {}
 	
 	Delay* Delay::fromDistance(float sampleRate, float distance)
 	{
-		return new Delay(sampleRate, (int) floor((sampleRate * distance) / SDN::c));
+		return new Delay(sampleRate, (sampleRate * distance / SDN::c));
 	}
 	
-	void Delay::setDelayLength(int delayInSamples)
+	void Delay::setDelayLength(float delayInSamples)
 	{
-		readPointer = (writePointer - delayInSamples + bufferLength) % bufferLength;
+
+		readPointer = (writePointer + bufferLength) - delayInSamples;
+		if (readPointer >= bufferLength)
+			readPointer -= bufferLength;
 	}
 	
 	void Delay::setDelayLengthFromDistance(float distance)
 	{
-		setDelayLength(floor((sampleRate * distance) / SDN::c));
+		setDelayLength(sampleRate * distance / SDN::c);
 	}
 	
 	float Delay::process(float sample) {
@@ -51,8 +57,21 @@ namespace SDN {
 	}
 	
 	float Delay::read() {
-		float out = buffer[readPointer++];
-		readPointer = (readPointer + bufferLength) % bufferLength;
+		// get high sample for linearly interpolation
+		int highPointer = floor(readPointer + 1.5);
+		if(highPointer >= bufferLength) highPointer -= bufferLength;
+
+		float high = buffer[highPointer];
+		float low = buffer[(int) floor(readPointer)];
+		float out = (1 - (readPointer - floor(readPointer))) * low + (readPointer - floor(readPointer)) * high; // interpolate
+
+		readPointer += 1.0;
+		
+		if(bufferLength < 0)
+			readPointer += bufferLength;
+		else if (readPointer >= bufferLength)
+			readPointer -= bufferLength;
+		
 		return out;
 	}
 }

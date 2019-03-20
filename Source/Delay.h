@@ -21,13 +21,13 @@ namespace SDN {
 		private:
 			float* buffer;
 			int bufferLength;
-			int delayInSamples;
-			int readPointer, writePointer;
+		float readPointer;
+		int writePointer;
 			float sampleRate;
 
 		public:
 		void setDelayLengthFromDistance(float distance);
-		void setDelayLength(int delayInSamples);
+		void setDelayLength(float delayInSamples);
 		
 		float process(float inputSample);
 		void write(float sample);
@@ -36,7 +36,7 @@ namespace SDN {
 		static Delay* fromDistance(float sampleRate, float distance);
 		
 		Delay() {};
-		Delay(float sampleRate, int delayInSamples);
+		Delay(float sampleRate, float delayInSamples);
 //		Delay(float sampleRate, float distance);
 		~Delay() {}
 	};

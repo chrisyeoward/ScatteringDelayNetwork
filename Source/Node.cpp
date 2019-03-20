@@ -68,7 +68,7 @@ namespace SDN {
 	
 	void Node::scatter(float sourceInput) {
 	
-		float absorptionFactor = 0.8;
+		float absorptionFactor = 0.85;
 		
 		float networkInput = sourceInput / numberOfOtherNodes;
 		
