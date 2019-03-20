@@ -22,7 +22,7 @@ namespace SDN {
 		readPointer = (writePointer - delayInSamples + bufferLength) % bufferLength;
 	}
 	
-	Delay::Delay(float sampleRate, float distance) : Delay(sampleRate, (int) floor((sampleRate * distance) / SDN::c)) {}
+//	Delay::Delay(float sampleRate, float distance) : Delay(sampleRate, (int) floor((sampleRate * distance) / SDN::c)) {}
 	
 	Delay* Delay::fromDistance(float sampleRate, float distance)
 	{

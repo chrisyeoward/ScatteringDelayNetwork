@@ -61,9 +61,9 @@ namespace SDN
 		float fromSource = sourceMicDelay->read()/(fmax(source.distanceTo(mic), 0.1));
 		float sourceAzimuth = source.azimuthFrom(mic);
 		float sinAzimuth = sin(sourceAzimuth);
-		float denom = 1 / sqrt(2 * (1 + pow(sinAzimuth, 2)));
-		float sourceGainLeft = (1 - sinAzimuth) * denom;
-		float sourceGainRight = (1 + sinAzimuth) * denom;
+		float denom = sqrt(2 * (1 + pow(sinAzimuth, 2)));
+		float sourceGainLeft = (1 - sinAzimuth) / denom;
+		float sourceGainRight = (1 + sinAzimuth) / denom;
 		
 		out.L = fromSource * sourceGainLeft;
 		out.R = fromSource * sourceGainRight;
@@ -76,7 +76,7 @@ namespace SDN
 		for(int node = 0; node < nodeCount; node++)
 		{
 			float fromNode = nodeToMicDelays[node].read();
-			fromNode /= (1 + (fmax(mic.distanceTo(nodes[node].getPosition()), 0.1) / (fmax(source.distanceTo(nodes[node].getPosition()), 0.1))));
+			fromNode /= ((fmax(mic.distanceTo(nodes[node].getPosition()), 0.1) + (fmax(source.distanceTo(nodes[node].getPosition()), 0.1))));
 			float nodeAzimuth = nodes[node].getPosition().azimuthFrom(mic);
 			float sinAzimuth = sin(nodeAzimuth);
 			float denom = 1 / sqrt(2 * (1 + pow(sinAzimuth, 2)));
@@ -149,7 +149,7 @@ namespace SDN
 		for(int node = 0; node < nodeCount; node++)
 		{
 			float nodeOut = nodes[node].getNodeOutput();
-			nodes[node].scatter(sourceToNodeDelays[node].read());
+			nodes[node].scatter(sourceToNodeDelays[node].read() / (fmax(source.distanceTo(nodes[node].getPosition()), 0.1))); // add distance attenuation
 			nodes[node].distributeOutputWaveVectorToNodes();
 			nodeToMicDelays[node].write(nodeOut);
 			if(abs(nodeOut) >= 1) {

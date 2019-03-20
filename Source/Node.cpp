@@ -15,16 +15,15 @@ namespace SDN {
 	Node::Node(Point position, int numberOfOtherNodes) : position(position), numberOfOtherNodes(numberOfOtherNodes)
 	{
 		waveVector = new float[numberOfOtherNodes];
-		scatteringMatrix = new float[numberOfOtherNodes*numberOfOtherNodes];
+		scatteringMatrix = new float[numberOfOtherNodes*numberOfOtherNodes]; // K x K scattering matrix
 		
 		for(int i = 0; i < numberOfOtherNodes * numberOfOtherNodes; i++) {
 			
 			scatteringMatrix[i] = 2.0 / (float) numberOfOtherNodes;
 
-			if(i % (numberOfOtherNodes + 1) == 0) scatteringMatrix[i] -= 1.0;
+			if(i % (numberOfOtherNodes + 1) == 0) scatteringMatrix[i] -= 1.0; // apply identity subtraction along diagonal
 			
 		}
-		
 	}
 	
 	Point Node::getPosition()
@@ -69,7 +68,7 @@ namespace SDN {
 	
 	void Node::scatter(float sourceInput) {
 	
-		float absorptionFactor = 0.7;
+		float absorptionFactor = 0.8;
 		
 		float networkInput = sourceInput / numberOfOtherNodes;
 		

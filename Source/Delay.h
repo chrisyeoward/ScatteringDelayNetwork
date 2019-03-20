@@ -37,7 +37,7 @@ namespace SDN {
 		
 		Delay() {};
 		Delay(float sampleRate, int delayInSamples);
-		Delay(float sampleRate, float distance);
+//		Delay(float sampleRate, float distance);
 		~Delay() {}
 	};
 }

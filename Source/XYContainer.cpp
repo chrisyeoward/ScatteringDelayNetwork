@@ -94,6 +94,5 @@ void XYContainer::mouseDrag(const MouseEvent& event)
 		float x = (event.getMouseDownX() + event.getDistanceFromDragStartX()) / (float) getWidth();
 		float y = 1 - ((event.getMouseDownY() + event.getDistanceFromDragStartY()) / (float) getHeight());
 		
-		processor.updateSourcePosition(x, y, 1.5);
-//		repaint();
+		processor.updateSourcePosition(x, y, 1.5); // hard code z position to be 1.5 metres
 }

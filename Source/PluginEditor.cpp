@@ -40,7 +40,7 @@ ScatteringDelayReverbAudioProcessorEditor::ScatteringDelayReverbAudioProcessorEd
 	sourceYPositionLabel.attachToComponent(&sourceYPositionSlider, false);
 	sourceYPositionLabel.setJustificationType(Justification::centred);
 	
-    setSize (400, 400);
+    setSize (600, 600);
 }
 
 ScatteringDelayReverbAudioProcessorEditor::~ScatteringDelayReverbAudioProcessorEditor()
