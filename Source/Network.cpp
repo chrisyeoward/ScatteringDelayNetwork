@@ -58,7 +58,7 @@ namespace SDN
 		
 		StereoOutput out;
 		
-		float fromSource = sourceMicDelay->read()/(fmax(source.distanceTo(mic), 0.1));
+		float fromSource = sourceMicDelay->read() / source.distanceTo(mic);
 		float sourceAzimuth = source.azimuthFrom(mic);
 		float sinAzimuth = sin(sourceAzimuth);
 		float denom = sqrt(2 * (1 + pow(sinAzimuth, 2)));
@@ -76,7 +76,7 @@ namespace SDN
 		for(int node = 0; node < nodeCount; node++)
 		{
 			float fromNode = nodeToMicDelays[node].read();
-			fromNode /= ((fmax(mic.distanceTo(nodes[node].getPosition()), 0.1) + (fmax(source.distanceTo(nodes[node].getPosition()), 0.1))));
+			fromNode /= (mic.distanceTo(nodes[node].getPosition()) + source.distanceTo(nodes[node].getPosition()));
 			float nodeAzimuth = nodes[node].getPosition().azimuthFrom(mic);
 			float sinAzimuth = sin(nodeAzimuth);
 			float denom = 1 / sqrt(2 * (1 + pow(sinAzimuth, 2)));
@@ -149,7 +149,7 @@ namespace SDN
 		for(int node = 0; node < nodeCount; node++)
 		{
 			float nodeOut = nodes[node].getNodeOutput();
-			nodes[node].scatter(sourceToNodeDelays[node].read() / (fmax(source.distanceTo(nodes[node].getPosition()), 0.1))); // add distance attenuation
+			nodes[node].scatter(sourceToNodeDelays[node].read() / source.distanceTo(nodes[node].getPosition())); // add distance attenuation
 			nodes[node].distributeOutputWaveVectorToNodes();
 			nodeToMicDelays[node].write(nodeOut);
 			if(abs(nodeOut) >= 1) {
