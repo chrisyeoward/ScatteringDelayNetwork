@@ -23,7 +23,7 @@ namespace SDN {
 			int bufferLength;
 		float readPointer;
 		int writePointer;
-			float sampleRate;
+		float sampleRate;
 
 		public:
 		void setDelayLengthFromDistance(float distance);

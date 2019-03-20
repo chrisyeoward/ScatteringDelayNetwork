@@ -17,7 +17,7 @@ namespace SDN {
 	class Point
 	{
 		private:
-			SmoothedFloat x, y, z;
+			float x, y, z;
 		
 		public:
 		float getX();

@@ -28,26 +28,26 @@ namespace SDN {
 	}
 	
 	void Point::setX(float x){
-		this->x.setValue(x);
+		this->x = x;
 	}
 	
 	float Point::getX(){
-		return x.getValue();
+		return x;
 	}
 	
 	void Point::setY(float y){
-		this->y.setValue(y);
+		this->y = y;
 	}
 	
 	float Point::getY(){
-		return y.getValue();
+		return y;
 	}
 	
 	void Point::setZ(float z){
-		this->z.setValue(z);
+		this->z = z;
 	}
 	
 	float Point::getZ(){
-		return z.getValue();
+		return z;
 	}	
 }
