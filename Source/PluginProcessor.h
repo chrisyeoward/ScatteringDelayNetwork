@@ -58,6 +58,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 	
 	void updateSourcePosition(float x, float y, float z);
+	void setAbsorption(const float amount);
 	
 	AudioParameterFloat* sourceXPosition;
 	AudioParameterFloat* sourceYPosition;
@@ -66,7 +67,7 @@ public:
 	AudioParameterFloat* micYPosition;
 	
 	AudioParameterFloat* roomSize;
-
+	AudioParameterFloat* absorption;
 
 private:
 	SDN::Network *network;

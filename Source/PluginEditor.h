@@ -30,10 +30,8 @@ public:
 	void sliderValueChanged (Slider*) override;
 
 private:
-	Slider sourceXPositionSlider;
-	Slider sourceYPositionSlider;
-	Label sourceXPositionLabel;
-	Label sourceYPositionLabel;
+	Slider absorptionSlider;
+	Label absorptionLabel;
 	
 	XYContainer roomContainer;
     // This reference is provided as a quick way for your editor to

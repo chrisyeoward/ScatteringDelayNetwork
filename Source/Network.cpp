@@ -208,4 +208,11 @@ namespace SDN
 		
 		sourceMicDelay->setDelayLengthFromDistance(source.distanceTo(mic));
 	}
+	
+	void Network::setAbsorptionAmount(const float amount) {
+		for(int node = 0; node < nodeCount; node++)
+		{
+			nodes[node].setAbsorption(amount);
+		}
+	}
 }

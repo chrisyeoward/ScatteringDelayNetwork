@@ -53,6 +53,8 @@ namespace SDN
 		void setSourcePosition(float x, float y, float z);
 		void setMicPosition(float x, float y, float z);
 		
+		void setAbsorptionAmount(const float amount);
+		
 		Network(float sampleRate);
 		Network(float sampleRate, float width, float length, float height);
 		~Network();

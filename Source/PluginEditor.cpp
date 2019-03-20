@@ -14,10 +14,8 @@
 //==============================================================================
 ScatteringDelayReverbAudioProcessorEditor::ScatteringDelayReverbAudioProcessorEditor (ScatteringDelayReverbAudioProcessor& p)
     : AudioProcessorEditor (&p),
-	sourceXPositionSlider(Slider::RotaryVerticalDrag, Slider::TextBoxAbove),
-	sourceYPositionSlider(Slider::RotaryVerticalDrag, Slider::TextBoxAbove),
-	sourceXPositionLabel("", "X Position: "),
-	sourceYPositionLabel("", "Y Position: "),
+	absorptionSlider(Slider::LinearVertical, Slider::TextBoxAbove),
+	absorptionLabel("", "Wall Absorption Amount: "),
 	roomContainer(p),
 	processor (p)
 {
@@ -25,22 +23,14 @@ ScatteringDelayReverbAudioProcessorEditor::ScatteringDelayReverbAudioProcessorEd
     // editor's size to whatever you need it to be.
 	addAndMakeVisible(roomContainer);
 	
+	addAndMakeVisible (&absorptionSlider);
+	absorptionSlider.addListener (this);
+	absorptionSlider.setRange (0.0, 1.0, 0.001);
+	absorptionSlider.setValue (processor.absorption->get());
+	absorptionLabel.attachToComponent(&absorptionSlider, false);
+	absorptionLabel.setJustificationType(Justification::centred);
 	
-	addAndMakeVisible (&sourceXPositionSlider);
-	sourceXPositionSlider.addListener (this);
-	sourceXPositionSlider.setRange (0.01, 4.99, 0.001);
-	sourceXPositionSlider.setValue (processor.sourceXPosition->get());
-	sourceXPositionLabel.attachToComponent(&sourceXPositionSlider, false);
-	sourceXPositionLabel.setJustificationType(Justification::centred);
-	
-	addAndMakeVisible (&sourceYPositionSlider);
-	sourceYPositionSlider.addListener (this);
-	sourceYPositionSlider.setRange (0.01, 4.99, 0.001);
-	sourceYPositionSlider.setValue (processor.sourceYPosition->get());
-	sourceYPositionLabel.attachToComponent(&sourceYPositionSlider, false);
-	sourceYPositionLabel.setJustificationType(Justification::centred);
-	
-    setSize (600, 600);
+    setSize (800, 600);
 }
 
 ScatteringDelayReverbAudioProcessorEditor::~ScatteringDelayReverbAudioProcessorEditor()
@@ -60,14 +50,15 @@ void ScatteringDelayReverbAudioProcessorEditor::paint (Graphics& g)
 }
 
 void ScatteringDelayReverbAudioProcessorEditor::sliderValueChanged (Slider* slider) {
-
-	
+	if(slider == &absorptionSlider) {
+		processor.setAbsorption(slider->getValue());
+	}
 };
 
 void ScatteringDelayReverbAudioProcessorEditor::resized()
 {
-	roomContainer.setBoundsRelative(0.1, 0.1, 0.8, 0.8);
-//	sourceXPositionSlider.setBoundsRelative(0, 0.1, 0.5, 0.5);
+	roomContainer.setBoundsRelative(0.3, 0.1, 0.6, 0.8);
+	absorptionSlider.setBoundsRelative(0, 0.3, 0.2, 0.5);
 //	sourceYPositionSlider.setBoundsRelative(0.5, 0.1, 0.5, 0.5);
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..

@@ -17,6 +17,7 @@
 namespace SDN {
     class Node {
 		private:
+		float absorptionFactor = 0.85;
 		Point position;
 		float* scatteringMatrix;
 		int numberOfOtherNodes;
@@ -35,6 +36,8 @@ namespace SDN {
 		void scatter(float sourceInput);
 		Point getPosition();
 		void setPosition(Point p);
+		
+		void setAbsorption(const float amount);
 		
 		Node () {};
 		Node(Point position, int numberOfOtherNodes);

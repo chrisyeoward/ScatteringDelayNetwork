@@ -67,9 +67,6 @@ namespace SDN {
 	}
 	
 	void Node::scatter(float sourceInput) {
-	
-		float absorptionFactor = 0.85;
-		
 		float networkInput = sourceInput / numberOfOtherNodes;
 		
 		float tempVector[numberOfOtherNodes];
@@ -85,5 +82,9 @@ namespace SDN {
 		for(int i = 0; i < numberOfOtherNodes; i ++) {
 			waveVector[i] = tempVector[i];
 		}
+	}
+	
+	void Node::setAbsorption(const float amount) {
+		absorptionFactor = amount;
 	}
 }

@@ -30,6 +30,12 @@ ScatteringDelayReverbAudioProcessor::ScatteringDelayReverbAudioProcessor()
 															 NormalisableRange<float> (0.0f, 100.0f),
 															 10.0f)); // default value
 	
+	
+	addParameter (absorption = new AudioParameterFloat ("absorption", // parameter ID
+														  "Wall Absorption", // parameter name
+														  NormalisableRange<float> (0.0f, 1.0),
+														  0.85)); // default value
+	
 	addParameter (sourceXPosition = new AudioParameterFloat ("sourceXPosition", // parameter ID
 															   "Source X Position", // parameter name
 															   NormalisableRange<float> (0.0f, roomSize->get()),
@@ -125,6 +131,7 @@ void ScatteringDelayReverbAudioProcessor::prepareToPlay (double sampleRate, int 
 	network = new SDN::Network(sampleRate, roomSize->get(), roomSize->get(), 3.0);
 	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
 	network->setMicPosition(micXPosition->get(), micYPosition->get(), 1.5);
+	network->setAbsorptionAmount(absorption->get());
 }
 
 void ScatteringDelayReverbAudioProcessor::releaseResources()
@@ -258,6 +265,11 @@ void ScatteringDelayReverbAudioProcessor::updateSourcePosition(float x, float y,
 	sourceXPosition->setValueNotifyingHost(x);
 	sourceYPosition->setValueNotifyingHost(y);
 	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
+}
+
+void ScatteringDelayReverbAudioProcessor::setAbsorption(const float amount) {
+	absorption->setValueNotifyingHost(amount);
+	network->setAbsorptionAmount(amount);
 }
 
 //==============================================================================

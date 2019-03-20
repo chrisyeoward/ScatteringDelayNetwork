@@ -10,7 +10,6 @@
 
 #pragma once
 #include "math.h"
-#include "SmoothedFloat.h"
 #include <iostream>
 
 namespace SDN {
@@ -28,12 +27,6 @@ namespace SDN {
 		
 		float getZ();
 		void setZ(float z);
-		
-//		operator std::string() {
-//			char* s = new char[3];
-//			sprintf_s(s, 3, "(%f, %f, %f)", getX(), getY(), getZ());
-//			return s;
-//		}
 		
 		float distanceTo(Point point);
 		float azimuthFrom(Point point);
