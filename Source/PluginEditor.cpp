@@ -14,8 +14,10 @@
 //==============================================================================
 ScatteringDelayReverbAudioProcessorEditor::ScatteringDelayReverbAudioProcessorEditor (ScatteringDelayReverbAudioProcessor& p)
     : AudioProcessorEditor (&p),
-	absorptionSlider(Slider::LinearVertical, Slider::TextBoxAbove),
-	absorptionLabel("", "Wall Absorption Amount: "),
+	absorptionSlider(Slider::RotaryVerticalDrag, Slider::TextBoxAbove),
+	absorptionLabel("", "Wall Reflectivity Amount: "),
+	dryWetSlider(Slider::RotaryVerticalDrag, Slider::TextBoxAbove),
+	dryWetLabel("", "Dry/Wet Mix: "),
 	roomContainer(p),
 	processor (p)
 {
@@ -27,8 +29,15 @@ ScatteringDelayReverbAudioProcessorEditor::ScatteringDelayReverbAudioProcessorEd
 	absorptionSlider.addListener (this);
 	absorptionSlider.setRange (0.0, 1.0, 0.001);
 	absorptionSlider.setValue (processor.absorption->get());
-	absorptionLabel.attachToComponent(&absorptionSlider, false);
+	dryWetLabel.attachToComponent(&absorptionSlider, false);
 	absorptionLabel.setJustificationType(Justification::centred);
+	
+	addAndMakeVisible (&dryWetSlider);
+	dryWetSlider.addListener (this);
+	dryWetSlider.setRange (0.0, 1.0, 0.001);
+	dryWetSlider.setValue (processor.dryWet->get());
+	dryWetLabel.attachToComponent(&dryWetSlider, false);
+	dryWetLabel.setJustificationType(Justification::centred);
 	
     setSize (800, 600);
 }
@@ -53,12 +62,17 @@ void ScatteringDelayReverbAudioProcessorEditor::sliderValueChanged (Slider* slid
 	if(slider == &absorptionSlider) {
 		processor.setAbsorption(slider->getValue());
 	}
+	
+	if(slider == &dryWetSlider) {
+		processor.dryWet->operator=(slider->getValue());
+	}
 };
 
 void ScatteringDelayReverbAudioProcessorEditor::resized()
 {
 	roomContainer.setBoundsRelative(0.3, 0.1, 0.6, 0.8);
-	absorptionSlider.setBoundsRelative(0, 0.3, 0.2, 0.5);
+	absorptionSlider.setBoundsRelative(0.05, 0.1, 0.2, 0.3);
+	dryWetSlider.setBoundsRelative(0.05, 0.5, 0.2, 0.3);
 //	sourceYPositionSlider.setBoundsRelative(0.5, 0.1, 0.5, 0.5);
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..

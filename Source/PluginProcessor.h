@@ -68,6 +68,7 @@ public:
 	
 	AudioParameterFloat* roomSize;
 	AudioParameterFloat* absorption;
+	AudioParameterFloat* dryWet;
 
 private:
 	SDN::Network *network;

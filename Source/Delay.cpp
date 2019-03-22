@@ -56,6 +56,11 @@ namespace SDN {
 		writePointer = (writePointer + bufferLength) % bufferLength;
 	}
 	
+	void Delay::incrementReadPointer()
+	{
+		readPointer += 1.0;
+	}
+	
 	float Delay::read() {
 		// get high sample for linearly interpolation
 		int highPointer = floor(readPointer + 1.5);
@@ -65,7 +70,7 @@ namespace SDN {
 		float low = buffer[(int) floor(readPointer)];
 		float out = (1 - (readPointer - floor(readPointer))) * low + (readPointer - floor(readPointer)) * high; // interpolate
 
-		readPointer += 1.0;
+		incrementReadPointer();
 		
 		if(bufferLength < 0)
 			readPointer += bufferLength;

@@ -11,6 +11,7 @@
 #pragma once
 
 #include "Delay.h"
+#include "ModulatingDelay.h"
 #include "Point.h"
 #include "Boundary.h"
 #include "Node.h"
@@ -37,8 +38,8 @@ namespace SDN
 		
 		SDN::Connection* connections;
 		
-		SDN::Delay sourceToNodeDelays[nodeCount];
-		SDN::Delay nodeToMicDelays[nodeCount];
+		SDN::ModulatingDelay sourceToNodeDelays[nodeCount];
+		SDN::ModulatingDelay nodeToMicDelays[nodeCount];
 		
 		SDN::Delay *sourceMicDelay;
 		
@@ -49,6 +50,7 @@ namespace SDN
 		public:
 		SDN::StereoOutput scatterStereo(float input);
 		float scatterMono(float input);
+		SDN::StereoOutput positionSource(float sourceInput);
 	
 		void setSourcePosition(float x, float y, float z);
 		void setMicPosition(float x, float y, float z);

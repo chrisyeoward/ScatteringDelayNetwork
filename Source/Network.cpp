@@ -45,16 +45,16 @@ namespace SDN
 		
 		for(int node = 0; node < nodeCount; node++)
 		{
-			sourceToNodeDelays[node] = *Delay::fromDistance(sampleRate, source.distanceTo(nodes[node].getPosition()));
-			nodeToMicDelays[node] = *Delay::fromDistance(sampleRate, mic.distanceTo(nodes[node].getPosition()));
+			sourceToNodeDelays[node] = *ModulatingDelay::fromDistance(sampleRate, source.distanceTo(nodes[node].getPosition()));
+			nodeToMicDelays[node] = *ModulatingDelay::fromDistance(sampleRate, mic.distanceTo(nodes[node].getPosition()));
 		}
 				
 		sourceMicDelay = Delay::fromDistance(sampleRate, source.distanceTo(mic));
 	}
 	
-	StereoOutput Network::scatterStereo(float in)
+	StereoOutput Network::positionSource(float sourceInput)
 	{
-		scatter(in);
+		sourceMicDelay->write(sourceInput);
 		
 		StereoOutput out;
 		
@@ -68,10 +68,16 @@ namespace SDN
 		out.L = fromSource * sourceGainLeft;
 		out.R = fromSource * sourceGainRight;
 		
-		if(abs(fromSource) >= 1) {
-			DBG("Source peak");
-			DBG(fromSource);
-		}
+		return out;
+	}
+	
+	StereoOutput Network::scatterStereo(float in)
+	{
+		scatter(in);
+		
+		StereoOutput out;
+		out.L = 0;
+		out.R = 0;
 		
 		for(int node = 0; node < nodeCount; node++)
 		{
@@ -95,7 +101,6 @@ namespace SDN
 			DBG("peaking in network");
 		}
 		
-			
 		return out;
 	}
 	
@@ -135,10 +140,7 @@ namespace SDN
 	
 	void Network::scatter(float in)
 	{
-		in *= 0.1; // accommodate 10x gain factor in 1/r volume adjustment
-		in *= 0.5;
-		
-		sourceMicDelay->write(in);
+		in *= 0.2; // accommodate 10x gain factor in 1/r volume adjustment
 		
 		for(int node = 0; node < nodeCount; node++)
 		{

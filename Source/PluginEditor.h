@@ -32,6 +32,10 @@ public:
 private:
 	Slider absorptionSlider;
 	Label absorptionLabel;
+	Slider dryWetSlider;
+	Label dryWetLabel;
+	
+//	Label
 	
 	XYContainer roomContainer;
     // This reference is provided as a quick way for your editor to

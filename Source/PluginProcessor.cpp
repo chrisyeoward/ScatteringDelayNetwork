@@ -32,9 +32,14 @@ ScatteringDelayReverbAudioProcessor::ScatteringDelayReverbAudioProcessor()
 	
 	
 	addParameter (absorption = new AudioParameterFloat ("absorption", // parameter ID
-														  "Wall Absorption", // parameter name
+														  "Wall Reflectivity", // parameter name
 														  NormalisableRange<float> (0.0f, 1.0),
 														  0.85)); // default value
+	
+	addParameter (dryWet = new AudioParameterFloat ("dryWet", // parameter ID
+														"Dry/Wet", // parameter name
+														NormalisableRange<float> (0.0f, 1.0f),
+														0.5f)); // default value
 	
 	addParameter (sourceXPosition = new AudioParameterFloat ("sourceXPosition", // parameter ID
 															   "Source X Position", // parameter name
@@ -130,7 +135,7 @@ void ScatteringDelayReverbAudioProcessor::prepareToPlay (double sampleRate, int 
     // initialisation that you need..
 	network = new SDN::Network(sampleRate, roomSize->get(), roomSize->get(), 3.0);
 	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
-	network->setMicPosition(micXPosition->get(), micYPosition->get(), 1.5);
+	network->setMicPosition(micXPosition->get(), micYPosition->get(), 1.8);
 	network->setAbsorptionAmount(absorption->get());
 }
 
@@ -191,12 +196,6 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
 	
-//	DBG("------------");
-//	DBG(sourceXPosition->get());
-//	DBG(sourceYPosition->get());
-//	DBG(micXPosition->get());
-//	DBG(micYPosition->get());
-	
 		for (int i = 0; i < numSamples; ++i)
 		{
 			float in = 0.0;
@@ -207,25 +206,14 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 			
 			in /= totalNumInputChannels; // sum to mono
 			
-			
-//			auto out = network->scatterMono(in);
-//
-//			buffer.getWritePointer (0)[i] = 0.0;
-//			buffer.getWritePointer (1)[i] = 0.0;
-//			if(abs(out) <= 1){
-//				buffer.getWritePointer (0)[i] = out;
-//				buffer.getWritePointer (1)[i] = out;
-//			} else {
-//				DBG("PEAKING");
-//			}
-//
-			auto out = network->scatterStereo(in);
+			auto outDry = network->positionSource(in);
+			auto outWet = network->scatterStereo(in);
 
 			buffer.getWritePointer (0)[i] = 0.0;
 			buffer.getWritePointer (1)[i] = 0.0;
-			if(abs(out.L) <= 1 && abs(out.R) <= 1){
-				buffer.getWritePointer (0)[i] = out.L;
-				buffer.getWritePointer (1)[i] = out.R;
+			if(abs(outWet.L) <= 1 && abs(outWet.R) <= 1 && abs(outDry.L) < 1 && abs(outDry.R) < 1){ // avoid gain distortion
+				buffer.getWritePointer (0)[i] = dryWet->get() * outDry.L + (1.0 - dryWet->get()) * outWet.L;
+				buffer.getWritePointer (1)[i] = dryWet->get() * outDry.R + (1.0 - dryWet->get()) * outWet.R;
 			} else {
 				DBG("PEAKING");
 			}

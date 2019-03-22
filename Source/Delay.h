@@ -18,12 +18,14 @@
 namespace SDN {
 	class Delay
 	{
-		private:
-			float* buffer;
-			int bufferLength;
+		protected:
+		float* buffer;
+		int bufferLength;
 		float readPointer;
 		int writePointer;
 		float sampleRate;
+		
+		void incrementReadPointer();
 
 		public:
 		void setDelayLengthFromDistance(float distance);

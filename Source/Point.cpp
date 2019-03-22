@@ -17,7 +17,7 @@ namespace SDN {
 	
 	float Point::distanceTo(Point point)
 	{
-		return fmax(0.1, sqrt(pow(point.getX() - getX(),2) + pow(point.getY() - getY(),2) + pow(point.getZ() - getZ(),2)));
+		return fmax(0.2, sqrt(pow(point.getX() - getX(),2) + pow(point.getY() - getY(),2) + pow(point.getZ() - getZ(),2)));
 	}
 	
 	float Point::azimuthFrom(Point point)
