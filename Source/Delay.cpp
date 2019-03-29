@@ -10,6 +10,11 @@
 
 #include "Delay.h"
 
+
+// buffer length is arbitrarily chosen to be several times higher than delay length.
+// no mechanism implemented for resizing the buffer dynamically, so a high enough value was chosen
+// THIS BREAKS DOWN FOR VERY LARGE BUFFER SIZES
+
 namespace SDN {
 	Delay::Delay(float sampleRate, float delayInSamples) :
 	bufferLength(5 * (int) delayInSamples),
@@ -25,16 +30,14 @@ namespace SDN {
 			readPointer -= bufferLength;
 	}
 	
-//	Delay::Delay(float sampleRate, float distance) : Delay(sampleRate, (int) floor((sampleRate * distance) / SDN::c)) {}
-	
 	Delay* Delay::fromDistance(float sampleRate, float distance)
 	{
 		return new Delay(sampleRate, (sampleRate * distance / SDN::c));
 	}
 	
+	// for updating length
 	void Delay::setDelayLength(float delayInSamples)
 	{
-
 		readPointer = (writePointer + bufferLength) - delayInSamples;
 		if (readPointer >= bufferLength)
 			readPointer -= bufferLength;
@@ -50,6 +53,7 @@ namespace SDN {
 		return read();
 	}
 	
+	// writes to the buffer and increments
 	void Delay::write(float sample) {
 		buffer[writePointer++] = sample;
 		
@@ -61,6 +65,7 @@ namespace SDN {
 		readPointer += 1.0;
 	}
 	
+	// reads next sample
 	float Delay::read() {
 		// get high sample for linearly interpolation
 		int highPointer = floor(readPointer + 1.5);
@@ -68,10 +73,11 @@ namespace SDN {
 
 		float high = buffer[highPointer];
 		float low = buffer[(int) floor(readPointer)];
-		float out = (1 - (readPointer - floor(readPointer))) * low + (readPointer - floor(readPointer)) * high; // interpolate
+		float out = (1 - (readPointer - floor(readPointer))) * low + (readPointer - floor(readPointer)) * high; // linearly interpolate
 
 		incrementReadPointer();
 		
+		// housekeeping to keep within buffer
 		if(bufferLength < 0)
 			readPointer += bufferLength;
 		else if (readPointer >= bufferLength)

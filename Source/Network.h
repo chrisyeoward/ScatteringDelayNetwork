@@ -20,6 +20,13 @@
 #include <math.h>
 #include "../JuceLibraryCode/JuceHeader.h"
 
+/*
+ This class does all the orchestration between the components
+ It defines a source and mic position, wall boundaries and reflection coefficients.
+ It manages positions and updates accordingly.
+ It determines the stereo output based on the locations of the source and walls.
+ */
+
 namespace SDN
 {
 	class Network {
@@ -29,23 +36,23 @@ namespace SDN
 		const int delayOrder = nodeCount - 1;
 		int connectionCount = 0;
 	
-		SDN::Point source = SDN::Point(2.5, 4.0, 1.5);
-		SDN::Point mic = SDN::Point(2.5, 0.5, 1.5);
+		SDN::Point source = SDN::Point(2.5, 4.0, 1.5); // default source position
+		SDN::Point mic = SDN::Point(2.5, 0.5, 1.5); // default source position
 	
-		SDN::Boundary bounds[nodeCount];
+		SDN::Boundary bounds[nodeCount]; // walls
 		
-		SDN::Node nodes[nodeCount];
+		SDN::Node nodes[nodeCount]; // scattering junction nodes
 		
-		SDN::Connection* connections;
+		SDN::Connection* connections; // inter node connections
 		
 		SDN::ModulatingDelay sourceToNodeDelays[nodeCount];
 		SDN::ModulatingDelay nodeToMicDelays[nodeCount];
 		
-		SDN::Delay *sourceMicDelay;
+		SDN::Delay *sourceMicDelay; // direct delay line
 		
-		void scatter(float input);
+		void scatter(float input); // function to do the scattering
 		
-		void updateConnectionLengths();
+		void updateConnectionLengths(); // updates the connection lengths based on a new source or mic position
 		
 		public:
 		SDN::StereoOutput scatterStereo(float input);

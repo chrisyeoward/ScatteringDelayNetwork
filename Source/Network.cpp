@@ -16,6 +16,7 @@ namespace SDN
 	
 	Network::Network(float sampleRate, float width, float length, float height)
 	{
+		// define wall positions
 		bounds[0] = SDN::Boundary(0.0, SDN::Plane::YZ);
 		bounds[1] = SDN::Boundary(width, SDN::Plane::YZ);
 		bounds[2] = SDN::Boundary(0.0, SDN::Plane::XZ);
@@ -23,6 +24,7 @@ namespace SDN
 		bounds[4] = SDN::Boundary(0.0, SDN::Plane::XY);
 		bounds[5] = SDN::Boundary(height, SDN::Plane::XY);
 		
+		// calculate number of connections and initialise node positions
 		for(int node = 0; node < nodeCount; node++)
 		{
 			connectionCount += node;
@@ -31,6 +33,7 @@ namespace SDN
 		
 		connections = new SDN::Connection[connectionCount];
 		
+		// initialise connections between nodes, defining lengths and providing terminals to the nodes to interact with
 		int connection = 0;
 		for(int node = 0; node < nodeCount - 1; node++)
 		{
@@ -43,6 +46,7 @@ namespace SDN
 			}
 		}
 		
+		// initialised the source to node and node to mic delay lines
 		for(int node = 0; node < nodeCount; node++)
 		{
 			sourceToNodeDelays[node] = *ModulatingDelay::fromDistance(sampleRate, source.distanceTo(nodes[node].getPosition()));
@@ -52,13 +56,15 @@ namespace SDN
 		sourceMicDelay = Delay::fromDistance(sampleRate, source.distanceTo(mic));
 	}
 	
+	// returns a stereo output of the direct line between the source and mic, based on their relative positions
 	StereoOutput Network::positionSource(float sourceInput)
 	{
+		sourceInput *= 0.2; // accommodate 5x gain factor in 1/r volume adjustment
 		sourceMicDelay->write(sourceInput);
 		
 		StereoOutput out;
 		
-		float fromSource = sourceMicDelay->read() / source.distanceTo(mic);
+		float fromSource = sourceMicDelay->read() / source.distanceTo(mic); // get value from delay line and attenuate by 1/r
 		float sourceAzimuth = source.azimuthFrom(mic);
 		float sinAzimuth = sin(sourceAzimuth);
 		float denom = sqrt(2 * (1 + pow(sinAzimuth, 2)));
@@ -71,48 +77,40 @@ namespace SDN
 		return out;
 	}
 	
+	// returns a stereo signal of a the reverberation.
 	StereoOutput Network::scatterStereo(float in)
 	{
 		scatter(in);
 		
 		StereoOutput out;
-		out.L = 0;
-		out.R = 0;
+		out.L = 0.0;
+		out.R = 0.0;
 		
 		for(int node = 0; node < nodeCount; node++)
 		{
 			float fromNode = nodeToMicDelays[node].read();
-			fromNode /= (mic.distanceTo(nodes[node].getPosition()) + source.distanceTo(nodes[node].getPosition()));
+			fromNode /= (mic.distanceTo(nodes[node].getPosition())); // get value from delay line and attenuate by 1/r
 			float nodeAzimuth = nodes[node].getPosition().azimuthFrom(mic);
 			float sinAzimuth = sin(nodeAzimuth);
 			float denom = 1 / sqrt(2 * (1 + pow(sinAzimuth, 2)));
-			float nodeGainLeft = (1 - sinAzimuth) * denom;
-			float nodeGainRight = (1 + sinAzimuth) * denom;
+			
+			float nodeGainLeft = (1 - sinAzimuth) * denom; // calculate left gain
+			float nodeGainRight = (1 + sinAzimuth) * denom; // calculate right gain
 			
 			out.L += fromNode * nodeGainLeft;
 			out.R += fromNode * nodeGainRight;
-			if(abs(fromNode) >= 1) {
-				DBG("Node peak");
-				DBG(fromNode);
-			}
-		}
-		
-		if(abs(out.L) >= 1 || abs(out.R) >= 1) {
-			DBG("peaking in network");
 		}
 		
 		return out;
 	}
 	
+	
+	// method for scattering only in mono
 	float Network::scatterMono(float in)
 	{
-		scatter(in); // accommodate 10x gain factor in 1/r volume adjustment
-		auto out = sourceMicDelay->read()/source.distanceTo(mic);
+		scatter(in);
+		auto out = sourceMicDelay->read()/source.distanceTo(mic); // get value from delay line and attenuate by 1/r
 		
-		if(out >= 1) {
-			DBG("Source peak");
-			DBG(out);
-		}
 		for(int node = 0; node < nodeCount; node++)
 		{
 			float micDistance = mic.distanceTo(nodes[node].getPosition());
@@ -120,46 +118,29 @@ namespace SDN
 			float nodeReading = nodeToMicDelays[node].read();
 			float nodeOut = nodeReading / (1 + (micDistance / sourceDistance));
 			out += nodeOut;
-			if(abs(nodeOut) >= 1) {
-				DBG("\n");
-				DBG("--------");
-				DBG("Mic distance ");
-				DBG(micDistance);
-				DBG("Source distance");
-				DBG(sourceDistance);
-				DBG("node reading");
-				DBG(nodeReading);
-				DBG("Node peak");
-				DBG(nodeOut);
-				DBG("Out peak");
-				DBG(out);
-			}
 		}
 		return out;
 	}
 	
+	// main reverberation method
 	void Network::scatter(float in)
 	{
-		in *= 0.2; // accommodate 10x gain factor in 1/r volume adjustment
+		in *= 0.2; // accommodate 5x gain factor in 1/r volume adjustment
 		
+		// for each node, gather inputs
 		for(int node = 0; node < nodeCount; node++)
 		{
 			sourceToNodeDelays[node].write(in);
 			nodes[node].gatherInputWaveVectorFromNodes();
 		}
 		
+		// scatter and distribute
 		for(int node = 0; node < nodeCount; node++)
 		{
 			float nodeOut = nodes[node].getNodeOutput();
 			nodes[node].scatter(sourceToNodeDelays[node].read() / source.distanceTo(nodes[node].getPosition())); // add distance attenuation
 			nodes[node].distributeOutputWaveVectorToNodes();
 			nodeToMicDelays[node].write(nodeOut);
-			if(abs(nodeOut) >= 1) {
-				DBG("--------");
-				DBG("Node writing");
-				DBG(nodeOut);
-				DBG("\n");
-			}
 		}
 	}
 	
@@ -179,6 +160,8 @@ namespace SDN
 		updateConnectionLengths();
 	}
 	
+	
+	// update lengths if mic or source position have changed
 	void Network::updateConnectionLengths()
 	{
 		for(int node = 0; node < nodeCount; node++)
@@ -196,16 +179,10 @@ namespace SDN
 			}
 		}
 		
-//		DBG("Setting node positions....");
 		for(int node = 0; node < nodeCount; node++)
 		{
 			sourceToNodeDelays[node].setDelayLengthFromDistance(source.distanceTo(nodes[node].getPosition()));
 			nodeToMicDelays[node].setDelayLengthFromDistance(mic.distanceTo(nodes[node].getPosition()));
-//			DBG("-------------");
-//			DBG(nodes[node].getPosition().getX());
-//			DBG(nodes[node].getPosition().getY());
-//			DBG(nodes[node].getPosition().getZ());
-//			DBG("\n");
 		}
 		
 		sourceMicDelay->setDelayLengthFromDistance(source.distanceTo(mic));

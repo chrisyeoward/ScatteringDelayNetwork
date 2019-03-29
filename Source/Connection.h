@@ -14,6 +14,11 @@
 #include "Node.h"
 #include "Constants.h"
 
+/*
+ A connection represents a birectional delay line between 2 nodes. It provides terminals at its start
+ and end to which to interact with.
+ */
+
 namespace SDN {
     class Connection 
     {
@@ -31,7 +36,7 @@ namespace SDN {
 		SDN::Terminal* getStartTerminal();
 		SDN::Terminal* getEndTerminal();
 		
-		void setLength(float distance);
+		void setLength(float distance); // update the length of the delay lines
 		
 		Connection() {};
 		Connection(float distance, float sampleRate);

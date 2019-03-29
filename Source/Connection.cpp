@@ -22,9 +22,8 @@ namespace SDN{
 		endTerminal = new SDN::Terminal(startToEndDelay, endToStartDelay);
 	}
 	
-	void Connection::setLength(float distance)
+	void Connection::setLength(float distance) // used for updating the delay lines
 	{
-//		float delay = (sampleRate * distance / SDN::c);
 		startToEndDelay->setDelayLengthFromDistance(distance);
 		endToStartDelay->setDelayLengthFromDistance(distance);
 	}

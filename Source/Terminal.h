@@ -11,6 +11,12 @@
 #pragma once
 #include "Delay.h"
 
+/*
+ This class represents one end to a bidirectional delay line, with pointers to which delay to read and write to.
+ Each node has as one of these for each other node to read and write to.
+
+*/
+
 namespace SDN {
     class Terminal
     {

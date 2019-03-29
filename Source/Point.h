@@ -12,6 +12,13 @@
 #include "math.h"
 #include <iostream>
 
+/*
+ Point class gives holds position, used for source, mic and nodes
+ 
+ Returns distance and azimuth measurements
+ 
+ */
+
 namespace SDN {
 	class Point
 	{
@@ -28,7 +35,7 @@ namespace SDN {
 		float getZ();
 		void setZ(float z);
 		
-		float distanceTo(Point point);
+		float distanceTo(Point point); //
 		float azimuthFrom(Point point);
 		
 		Point() {};

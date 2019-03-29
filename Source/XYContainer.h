@@ -17,6 +17,10 @@
 
 //==============================================================================
 /*
+ Container component for the XY Pad
+ 
+ Manages the sources position, and updates the parameters based on change
+ 
 */
 class XYContainer    : public Component, public Timer
 {
@@ -28,10 +32,12 @@ public:
     void resized() override;
 	void timerCallback() override;
 	
-	virtual void mouseDrag (const MouseEvent& event) override;
+	virtual void mouseDrag (const MouseEvent& event) override; // handle mousedrag
 
 private:
-	XYPoint source;
+	XYPoint source; 
+	
+	Label roomSizeLabel;
 	
 	ScatteringDelayReverbAudioProcessor& processor;
 	

@@ -15,11 +15,11 @@ namespace SDN {
 	Node::Node(Point position, int numberOfOtherNodes) : position(position), numberOfOtherNodes(numberOfOtherNodes)
 	{
 		waveVector = new float[numberOfOtherNodes];
-		scatteringMatrix = new float[numberOfOtherNodes*numberOfOtherNodes]; // K x K scattering matrix
+		scatteringMatrix = new float[numberOfOtherNodes * numberOfOtherNodes]; // K x K scattering matrix
 		
 		for(int i = 0; i < numberOfOtherNodes * numberOfOtherNodes; i++) {
 			
-			scatteringMatrix[i] = 2.0 / (float) numberOfOtherNodes;
+			scatteringMatrix[i] = 2.0 / (float) numberOfOtherNodes; // isotropic scattering matrix
 
 			if(i % (numberOfOtherNodes + 1) == 0) scatteringMatrix[i] -= 1.0; // apply identity subtraction along diagonal
 			
@@ -44,7 +44,7 @@ namespace SDN {
 		terminalCount++;
 	}
 	
-	void Node::gatherInputWaveVectorFromNodes() {
+	void Node::gatherInputWaveVectorFromNodes() { // get inputs from all terminals
 		for(int terminal = 0; terminal < terminalCount; terminal ++) {
 			waveVector[terminal] = 0;
 			waveVector[terminal] = terminals[terminal]->read();
@@ -66,17 +66,18 @@ namespace SDN {
 		return out;
 	}
 	
+	
 	void Node::scatter(float sourceInput) {
 		float networkInput = sourceInput / numberOfOtherNodes;
 		
-		float tempVector[numberOfOtherNodes];
+		float tempVector[numberOfOtherNodes]; // assign temporary vector for calculation
 	
-		for(int i = 0; i < numberOfOtherNodes; i ++) {
+		for(int i = 0; i < numberOfOtherNodes; i ++) { // i x j matrix multiplication
 			tempVector[i] = 0.0;
 			for(int j = 0; j < numberOfOtherNodes; j++) {
 				tempVector[i] += scatteringMatrix[(numberOfOtherNodes * i) + j] * (networkInput + waveVector[j]);
 			}
-			tempVector[i] *= absorptionFactor;
+			tempVector[i] *= absorptionFactor; // attenuate output
 		}
 		
 		for(int i = 0; i < numberOfOtherNodes; i ++) {

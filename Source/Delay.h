@@ -15,6 +15,10 @@
 #include <string.h>
 #include "Constants.h"
 
+/*
+ Delay line class, with fractional read pointer
+ */
+
 namespace SDN {
 	class Delay
 	{
@@ -25,7 +29,7 @@ namespace SDN {
 		int writePointer;
 		float sampleRate;
 		
-		void incrementReadPointer();
+		void incrementReadPointer(); // overriden in modulating delay
 
 		public:
 		void setDelayLengthFromDistance(float distance);

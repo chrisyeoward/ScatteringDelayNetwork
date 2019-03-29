@@ -14,11 +14,11 @@ namespace SDN
 {
 	ModulatingDelay::ModulatingDelay(float sampleRate, float delayInSamples) : Delay(sampleRate, delayInSamples)
 	{
-		modFreq = (float) rand() / RAND_MAX;
+		modFreq = (float) rand() / RAND_MAX; // pick a random freq
 		modFreq *= 5;
 	}
 	
-	void ModulatingDelay::incrementReadPointer()
+	void ModulatingDelay::incrementReadPointer() // increment read pointer +1 with additional sine wave
 	{
 		readPointer += 1.0;
 		readPointer += amount * sin(phase);

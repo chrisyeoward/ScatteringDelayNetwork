@@ -14,6 +14,10 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Constants.h"
 
+/*
+ Modulated Delay line class. Read pointer fluctuates at random frequency 
+ */
+
 
 namespace SDN 
 {

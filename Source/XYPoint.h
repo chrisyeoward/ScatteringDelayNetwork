@@ -14,6 +14,8 @@
 
 //==============================================================================
 /*
+ 
+ Simple circle class that is moved around the XY pad
 */
 class XYPoint    : public Component
 {

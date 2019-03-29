@@ -29,7 +29,7 @@ ScatteringDelayReverbAudioProcessorEditor::ScatteringDelayReverbAudioProcessorEd
 	absorptionSlider.addListener (this);
 	absorptionSlider.setRange (0.0, 1.0, 0.001);
 	absorptionSlider.setValue (processor.absorption->get());
-	dryWetLabel.attachToComponent(&absorptionSlider, false);
+	absorptionLabel.attachToComponent(&absorptionSlider, false);
 	absorptionLabel.setJustificationType(Justification::centred);
 	
 	addAndMakeVisible (&dryWetSlider);
@@ -38,6 +38,7 @@ ScatteringDelayReverbAudioProcessorEditor::ScatteringDelayReverbAudioProcessorEd
 	dryWetSlider.setValue (processor.dryWet->get());
 	dryWetLabel.attachToComponent(&dryWetSlider, false);
 	dryWetLabel.setJustificationType(Justification::centred);
+
 	
     setSize (800, 600);
 }
@@ -55,7 +56,6 @@ void ScatteringDelayReverbAudioProcessorEditor::paint (Graphics& g)
 
     g.setColour (Colours::white);
     g.setFont (15.0f);
-//    g.drawFittedText ("Hello World!", getLocalBounds(), Justification::centred, 1);
 }
 
 void ScatteringDelayReverbAudioProcessorEditor::sliderValueChanged (Slider* slider) {
@@ -73,7 +73,4 @@ void ScatteringDelayReverbAudioProcessorEditor::resized()
 	roomContainer.setBoundsRelative(0.3, 0.1, 0.6, 0.8);
 	absorptionSlider.setBoundsRelative(0.05, 0.1, 0.2, 0.3);
 	dryWetSlider.setBoundsRelative(0.05, 0.5, 0.2, 0.3);
-//	sourceYPositionSlider.setBoundsRelative(0.5, 0.1, 0.5, 0.5);
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
 }

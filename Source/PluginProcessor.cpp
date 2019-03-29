@@ -28,7 +28,7 @@ ScatteringDelayReverbAudioProcessor::ScatteringDelayReverbAudioProcessor()
 	addParameter (roomSize = new AudioParameterFloat ("roomSize", // parameter ID
 															 "Room size", // parameter name
 															 NormalisableRange<float> (0.0f, 100.0f),
-															 10.0f)); // default value
+															 5.0f)); // default value
 	
 	
 	addParameter (absorption = new AudioParameterFloat ("absorption", // parameter ID
@@ -206,16 +206,24 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 			
 			in /= totalNumInputChannels; // sum to mono
 			
-			auto outDry = network->positionSource(in);
-			auto outWet = network->scatterStereo(in);
+			auto outDry = network->positionSource(in); // get stereo positioned source output (DRY)
+			auto outWet = network->scatterStereo(in); // get stereo reverb output (WET)
 
 			buffer.getWritePointer (0)[i] = 0.0;
 			buffer.getWritePointer (1)[i] = 0.0;
-			if(abs(outWet.L) <= 1 && abs(outWet.R) <= 1 && abs(outDry.L) < 1 && abs(outDry.R) < 1){ // avoid gain distortion
-				buffer.getWritePointer (0)[i] = dryWet->get() * outDry.L + (1.0 - dryWet->get()) * outWet.L;
-				buffer.getWritePointer (1)[i] = dryWet->get() * outDry.R + (1.0 - dryWet->get()) * outWet.R;
-			} else {
-				DBG("PEAKING");
+
+			float dryMix = fmin(dryWet->get() * 2, 1.0); // crossfade dry wet amounts (at 0.5 both have gain of 1)
+			float wetMix = fmin((1 - dryWet->get()) * 2, 1.0);
+			
+			float outL = dryMix * outDry.L + wetMix * outWet.L;
+			float outR = dryMix * outDry.R + wetMix * outWet.R;
+			
+			if (outL <= 1 && outR <= 1) {
+				buffer.getWritePointer (0)[i] = outL;
+				buffer.getWritePointer (1)[i] = outR;
+			}
+			 else {
+				DBG("PEAKING"); // TO SAVE YOUR EARS
 			}
 		}
 
@@ -248,6 +256,7 @@ void ScatteringDelayReverbAudioProcessor::setStateInformation (const void* data,
     // whose contents will have been created by the getStateInformation() call.
 }
 
+// method for updating source position only when slider changes
 void ScatteringDelayReverbAudioProcessor::updateSourcePosition(float x, float y, float z)
 {
 	sourceXPosition->setValueNotifyingHost(x);

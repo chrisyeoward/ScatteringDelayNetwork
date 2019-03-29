@@ -12,18 +12,23 @@
 #include "Node.h"
 #include "Point.h"
 
+/*
+ This represents a wall, its orientation and position.
+ 
+ */
+
 namespace SDN {
 	enum class Plane {
-		XZ,
-		XY,
-		YZ,
+		XZ, // perpendicular to Y
+		XY, // perpendicular to Z
+		YZ, // perpendicular to X
 	};
 	
     class Boundary 
     {
         private: 
         float position;
-        Plane orientation;
+        Plane orientation; 
         
         public:
 		
@@ -31,6 +36,6 @@ namespace SDN {
         Boundary(float position, Plane orientation);
         ~Boundary() {}
 		
-		Point getScatteringNodePosition(Point mic, Point Source);
+		Point getScatteringNodePosition(Point mic, Point Source); // based on the mic and source position, get point of first reflection
 	};
 }

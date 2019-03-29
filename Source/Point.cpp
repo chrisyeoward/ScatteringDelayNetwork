@@ -23,7 +23,7 @@ namespace SDN {
 	float Point::azimuthFrom(Point point)
 	{
 		float dx = getX() - point.getX();
-		float dy = abs(getY() - point.getY());
+		float dy = abs(getY() - point.getY()); // restrict y to be positive so angle within -90 and +90 degrees
 		return atan(dx/dy);
 	}
 	

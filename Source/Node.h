@@ -14,28 +14,32 @@
 #include <string.h>
 #include "Constants.h"
 
+/*
+ This represents a scattering junction.
+ */
+
 namespace SDN {
     class Node {
 		private:
 		float absorptionFactor = 0.85;
 		Point position;
-		float* scatteringMatrix;
+		float* scatteringMatrix; // array holding the scattering matrix for the number of nodes in the network
 		int numberOfOtherNodes;
 		int terminalCount = 0;
 		static const int maxTerminalCount = MAXIMUM_NODES - 1;
-		SDN::Terminal *terminals[maxTerminalCount];
+		SDN::Terminal *terminals[maxTerminalCount]; // hold references to each of the other nodes
 		
-		float* waveVector;
+		float* waveVector; // used to represent samples from each other node, and then their values after scattering
 		
 		public:
-		void gatherInputWaveVectorFromNodes();
-		void distributeOutputWaveVectorToNodes();
-		float getNodeOutput();
+		void gatherInputWaveVectorFromNodes(); // accumulates samlpes into the wave vector from each of the connection terminals
+		void distributeOutputWaveVectorToNodes(); // writes the wave vector to each of the respective terminals
+		float getNodeOutput(); // get the sum of all outputs at the current time step
 		
-		void addTerminal(SDN::Terminal *terminal);
-		void scatter(float sourceInput);
+		void addTerminal(SDN::Terminal *terminal); // add another terminal
+		void scatter(float sourceInput); // scatters the current wave vector
 		Point getPosition();
-		void setPosition(Point p);
+		void setPosition(Point p); // used for updating the position and nodes
 		
 		void setAbsorption(const float amount);
 		
