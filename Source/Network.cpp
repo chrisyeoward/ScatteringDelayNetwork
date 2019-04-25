@@ -149,7 +149,7 @@ namespace SDN
 		source.setY(y);
 		source.setZ(z);
 		
-		updateConnectionLengths();
+		updateNodePositions();
 	}
 	
 	void Network::setMicPosition(float x, float y, float z) {
@@ -157,15 +157,16 @@ namespace SDN
 		mic.setY(y);
 		mic.setZ(z);
 		
-		updateConnectionLengths();
+		updateNodePositions();
 	}
 	
 	
 	// update lengths if mic or source position have changed
-	void Network::updateConnectionLengths()
+	void Network::updateNodePositions()
 	{
 		for(int node = 0; node < nodeCount; node++)
 		{
+			Point pos = bounds[node].getScatteringNodePosition(mic, source);
 			nodes[node].setPosition(bounds[node].getScatteringNodePosition(mic, source));
 		}
 		
@@ -193,5 +194,17 @@ namespace SDN
 		{
 			nodes[node].setAbsorption(amount);
 		}
+	}
+	
+	float* Network::getNodeAzimuths() {
+		float* azimuths = new float[nodeCount + 1];
+		
+		azimuths[0] = source.azimuthFrom(mic);
+		
+		for (int node = 0; node < nodeCount; node++) {
+			azimuths[node + 1] = nodes[node].getPosition().azimuthFrom(mic);
+		}
+		
+		return azimuths;
 	}
 }

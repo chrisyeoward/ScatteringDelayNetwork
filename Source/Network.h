@@ -52,12 +52,18 @@ namespace SDN
 		
 		void scatter(float input); // function to do the scattering
 		
-		void updateConnectionLengths(); // updates the connection lengths based on a new source or mic position
+		void updateNodePositions(); // updates the connection lengths based on a new source or mic position
+		
+		
+		float azimuthFor(Point point);
 		
 		public:
 		SDN::StereoOutput scatterStereo(float input);
 		float scatterMono(float input);
 		SDN::StereoOutput positionSource(float sourceInput);
+		
+		float* getNodeElevations();
+		float* getNodeAzimuths();
 	
 		void setSourcePosition(float x, float y, float z);
 		void setMicPosition(float x, float y, float z);

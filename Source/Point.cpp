@@ -22,9 +22,15 @@ namespace SDN {
 	
 	float Point::azimuthFrom(Point point)
 	{
-		float dx = getX() - point.getX();
-		float dy = abs(getY() - point.getY()); // restrict y to be positive so angle within -90 and +90 degrees
-		return atan(dx/dy);
+		float x = getX() - point.getX();
+		float y = -(getY() - point.getY());
+		float angle = ((atan(y/x)) * 180) / M_PI;
+		if (x >= 0)
+			return angle;
+		else if (y >= 0)
+			return 180 + angle;
+		else
+			return - (180 - angle);
 	}
 	
 	void Point::setX(float x){

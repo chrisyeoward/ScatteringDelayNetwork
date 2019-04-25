@@ -208,6 +208,11 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 			
 			auto outDry = network->positionSource(in); // get stereo positioned source output (DRY)
 			auto outWet = network->scatterStereo(in); // get stereo reverb output (WET)
+		
+			// if position changes, get new positions
+			// get struct of streams
+			// set source/mic position
+		
 
 			buffer.getWritePointer (0)[i] = 0.0;
 			buffer.getWritePointer (1)[i] = 0.0;
@@ -262,6 +267,14 @@ void ScatteringDelayReverbAudioProcessor::updateSourcePosition(float x, float y,
 	sourceXPosition->setValueNotifyingHost(x);
 	sourceYPosition->setValueNotifyingHost(y);
 	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
+	float* azimuths = network->getNodeAzimuths();
+	DBG("azimuths: ");
+	
+	for(int i = 0; i < 7; i++) {
+		DBG(azimuths[i]);
+	}
+	
+	delete[] azimuths;
 }
 
 void ScatteringDelayReverbAudioProcessor::setAbsorption(const float amount) {
