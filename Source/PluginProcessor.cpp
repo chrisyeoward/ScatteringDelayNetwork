@@ -134,8 +134,8 @@ void ScatteringDelayReverbAudioProcessor::prepareToPlay (double sampleRate, int 
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 	network = new SDN::Network(sampleRate, roomSize->get(), roomSize->get(), 3.0);
-	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
-	network->setMicPosition(micXPosition->get(), micYPosition->get(), 1.8);
+//	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
+//	network->setMicPosition(micXPosition->get(), micYPosition->get(), 1.8);
 	network->setAbsorptionAmount(absorption->get());
 }
 
@@ -206,30 +206,34 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 			
 			in /= totalNumInputChannels; // sum to mono
 			
-			auto outDry = network->positionSource(in); // get stereo positioned source output (DRY)
-			auto outWet = network->scatterStereo(in); // get stereo reverb output (WET)
+//			auto outDry = network->positionSource(in); // get stereo positioned source output (DRY)
+//			auto outWet = network->scatterStereo(in); // get stereo reverb output (WET)
 		
 			// if position changes, get new positions
 			// get struct of streams
 			// set source/mic position
+			
+			auto outMono = network->scatterMono(in);
 		
-
 			buffer.getWritePointer (0)[i] = 0.0;
 			buffer.getWritePointer (1)[i] = 0.0;
 
 			float dryMix = fmin(dryWet->get() * 2, 1.0); // crossfade dry wet amounts (at 0.5 both have gain of 1)
 			float wetMix = fmin((1 - dryWet->get()) * 2, 1.0);
 			
-			float outL = dryMix * outDry.L + wetMix * outWet.L;
-			float outR = dryMix * outDry.R + wetMix * outWet.R;
+//			float outL = dryMix * outDry.L + wetMix * outWet.L;
+//			float outR = dryMix * outDry.R + wetMix * outWet.R;
 			
-			if (outL <= 1 && outR <= 1) {
-				buffer.getWritePointer (0)[i] = outL;
-				buffer.getWritePointer (1)[i] = outR;
-			}
-			 else {
-				DBG("PEAKING"); // TO SAVE YOUR EARS
-			}
+			buffer.getWritePointer (0)[i] = outMono;
+			buffer.getWritePointer (1)[i] = outMono;
+			
+//			if (outL <= 1 && outR <= 1) {
+//				buffer.getWritePointer (0)[i] = outL;
+//				buffer.getWritePointer (1)[i] = outR;
+//			}
+//			 else {
+//				DBG("PEAKING"); // TO SAVE YOUR EARS
+//			}
 		}
 
         // ..do something to the data...
@@ -266,7 +270,7 @@ void ScatteringDelayReverbAudioProcessor::updateSourcePosition(float x, float y,
 {
 	sourceXPosition->setValueNotifyingHost(x);
 	sourceYPosition->setValueNotifyingHost(y);
-	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
+//	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
 	float* azimuths = network->getNodeAzimuths();
 	DBG("azimuths: ");
 	

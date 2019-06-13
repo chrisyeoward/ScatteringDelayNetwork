@@ -4,32 +4,34 @@
               jucerVersion="5.4.1">
   <MAINGROUP id="WV8Hy2" name="ScatteringDelayReverb">
     <GROUP id="{713028AC-9195-0C15-8647-28424C1F4E23}" name="Source">
+      <GROUP id="{3D271CBC-ECAC-2F99-A976-CBE1D5C0C44D}" name="Reverb">
+        <FILE id="bP7LAL" name="Boundary.cpp" compile="1" resource="0" file="Source/Reverb/Boundary.cpp"/>
+        <FILE id="s3tfg5" name="Boundary.h" compile="0" resource="0" file="Source/Reverb/Boundary.h"/>
+        <FILE id="RwRFAP" name="Connection.cpp" compile="1" resource="0" file="Source/Reverb/Connection.cpp"/>
+        <FILE id="XDA1f2" name="Connection.h" compile="0" resource="0" file="Source/Reverb/Connection.h"/>
+        <FILE id="dcgRWg" name="Constants.h" compile="0" resource="0" file="Source/Reverb/Constants.h"/>
+        <FILE id="C0nFTl" name="Delay.cpp" compile="1" resource="0" file="Source/Reverb/Delay.cpp"/>
+        <FILE id="b94Sqg" name="Delay.h" compile="0" resource="0" file="Source/Reverb/Delay.h"/>
+        <FILE id="hPUk2L" name="ModulatingDelay.cpp" compile="1" resource="0"
+              file="Source/Reverb/ModulatingDelay.cpp"/>
+        <FILE id="xjZ8Nq" name="ModulatingDelay.h" compile="0" resource="0"
+              file="Source/Reverb/ModulatingDelay.h"/>
+        <FILE id="p1sNs4" name="Network.cpp" compile="1" resource="0" file="Source/Reverb/Network.cpp"/>
+        <FILE id="a0VX5R" name="Network.h" compile="0" resource="0" file="Source/Reverb/Network.h"/>
+        <FILE id="lK4IGZ" name="Node.cpp" compile="1" resource="0" file="Source/Reverb/Node.cpp"/>
+        <FILE id="jj4MEI" name="Node.h" compile="0" resource="0" file="Source/Reverb/Node.h"/>
+        <FILE id="TUQYsV" name="Point.cpp" compile="1" resource="0" file="Source/Reverb/Point.cpp"/>
+        <FILE id="TLxwr3" name="Point.h" compile="0" resource="0" file="Source/Reverb/Point.h"/>
+        <FILE id="mYStZf" name="StereoOutput.h" compile="0" resource="0" file="Source/Reverb/StereoOutput.h"/>
+        <FILE id="wY8Z0S" name="Terminal.cpp" compile="1" resource="0" file="Source/Reverb/Terminal.cpp"/>
+        <FILE id="DomNG4" name="Terminal.h" compile="0" resource="0" file="Source/Reverb/Terminal.h"/>
+      </GROUP>
       <GROUP id="{3BE06708-2BE3-733B-F565-ACD68F8F0B05}" name="UI">
         <FILE id="ifdL7i" name="XYContainer.cpp" compile="1" resource="0" file="Source/XYContainer.cpp"/>
         <FILE id="OjOyCu" name="XYContainer.h" compile="0" resource="0" file="Source/XYContainer.h"/>
         <FILE id="ZQpu54" name="XYPoint.cpp" compile="1" resource="0" file="Source/XYPoint.cpp"/>
         <FILE id="S1WiSf" name="XYPoint.h" compile="0" resource="0" file="Source/XYPoint.h"/>
       </GROUP>
-      <FILE id="IPwZ5O" name="StereoOutput.h" compile="0" resource="0" file="Source/StereoOutput.h"/>
-      <FILE id="UQ8d3Z" name="Terminal.cpp" compile="1" resource="0" file="Source/Terminal.cpp"/>
-      <FILE id="tvi36j" name="Terminal.h" compile="0" resource="0" file="Source/Terminal.h"/>
-      <FILE id="F1hovL" name="Connection.cpp" compile="1" resource="0" file="Source/Connection.cpp"/>
-      <FILE id="tpnZVo" name="Connection.h" compile="0" resource="0" file="Source/Connection.h"/>
-      <FILE id="GUjNvH" name="Node.cpp" compile="1" resource="0" file="Source/Node.cpp"/>
-      <FILE id="xBAMk5" name="Node.h" compile="0" resource="0" file="Source/Node.h"/>
-      <FILE id="Mf7OEE" name="Boundary.cpp" compile="1" resource="0" file="Source/Boundary.cpp"/>
-      <FILE id="jPFxNK" name="Boundary.h" compile="0" resource="0" file="Source/Boundary.h"/>
-      <FILE id="JICjXo" name="Constants.h" compile="0" resource="0" file="Source/Constants.h"/>
-      <FILE id="jOjeNe" name="Point.cpp" compile="1" resource="0" file="Source/Point.cpp"/>
-      <FILE id="oamexB" name="Point.h" compile="0" resource="0" file="Source/Point.h"/>
-      <FILE id="qDunyF" name="Delay.cpp" compile="1" resource="0" file="Source/Delay.cpp"/>
-      <FILE id="VLAoZu" name="Delay.h" compile="0" resource="0" file="Source/Delay.h"/>
-      <FILE id="si8RBh" name="ModulatingDelay.cpp" compile="1" resource="0"
-            file="Source/ModulatingDelay.cpp"/>
-      <FILE id="uqs86O" name="ModulatingDelay.h" compile="0" resource="0"
-            file="Source/ModulatingDelay.h"/>
-      <FILE id="RLPxJH" name="Network.cpp" compile="1" resource="0" file="Source/Network.cpp"/>
-      <FILE id="jbqvgJ" name="Network.h" compile="0" resource="0" file="Source/Network.h"/>
       <FILE id="TrsSAY" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="ucYyeo" name="PluginProcessor.h" compile="0" resource="0"
@@ -42,8 +44,8 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug"/>
-        <CONFIGURATION isDebug="0" name="Release"/>
+        <CONFIGURATION isDebug="1" name="Debug" headerPath="/Users/chrisyeoward/Documents/Uni/MSc/DAFX/ScatteringDelayReverb/Source/Reverb"/>
+        <CONFIGURATION isDebug="0" name="Release" headerPath="/Users/chrisyeoward/Documents/Uni/MSc/DAFX/ScatteringDelayReverb/Source/Reverb"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="../../../../../../../Applications/JUCE/modules"/>
