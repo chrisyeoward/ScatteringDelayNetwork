@@ -22,15 +22,16 @@ namespace SDN {
 	
 	float Point::azimuthFrom(Point point)
 	{
+		
 		float x = getX() - point.getX();
 		float y = -(getY() - point.getY());
-		float angle = atan(y/x);
-		if (x >= 0)
-			return angle;
-		else if (y >= 0)
-			return M_PI_2 + angle;
-		else
-			return - (M_PI_2 - angle);
+		return atan2(y,x);
+	}
+	
+	float Point::elevationFrom(Point point)
+	{
+		float z = getZ() - point.getZ();
+		return asin(z/distanceTo(point));
 	}
 	
 	void Point::setX(float x){

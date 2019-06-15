@@ -44,22 +44,22 @@ ScatteringDelayReverbAudioProcessor::ScatteringDelayReverbAudioProcessor()
 	addParameter (sourceXPosition = new AudioParameterFloat ("sourceXPosition", // parameter ID
 															   "Source X Position", // parameter name
 															   NormalisableRange<float> (0.0f, roomSize->get()),
-															   roomSize->get()/2)); // default value
+															   roomSize->get()*0.9)); // default value
 	
 	addParameter (sourceYPosition = new AudioParameterFloat ("sourceYPosition", // parameter ID
 															 "Source Y Position", // parameter name
 															 NormalisableRange<float> (0.0f, roomSize->get()),
-															 roomSize->get()*0.9)); // default value
+															 roomSize->get()/2)); // default value
 	
 	addParameter (micXPosition = new AudioParameterFloat ("micXPosition", // parameter ID
 															 "Mic X Position", // parameter name
 															 NormalisableRange<float> (0.0f, roomSize->get()),
-															 roomSize->get()/2)); // default value
+															 roomSize->get()/10)); // default value
 	
 	addParameter (micYPosition = new AudioParameterFloat ("micYPosition", // parameter ID
 															 "Mic Y Position", // parameter name
 															 NormalisableRange<float> (0.0f, roomSize->get()),
-															 roomSize->get()/10)); // default value
+															 roomSize->get()/2)); // default value
 }
 
 ScatteringDelayReverbAudioProcessor::~ScatteringDelayReverbAudioProcessor()
@@ -134,9 +134,21 @@ void ScatteringDelayReverbAudioProcessor::prepareToPlay (double sampleRate, int 
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 	network = new SDN::Network(sampleRate, roomSize->get(), roomSize->get(), 3.0);
-//	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
-//	network->setMicPosition(micXPosition->get(), micYPosition->get(), 1.8);
+	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
+	network->setMicPosition(micXPosition->get(), micYPosition->get(), 1.8);
 	network->setAbsorptionAmount(absorption->get());
+	
+	DBG("azimuths");
+	DBG(network->getSourceAzimuth());
+	for(int node = 0; node < 6; node++) {
+		DBG(network->getNodeAzimuth(node));
+	}
+	
+	DBG("elevations");
+	DBG(network->getSourceElevation());
+	for(int node = 0; node < 6; node++) {
+		DBG(network->getNodeElevation(node));
+	}
 }
 
 void ScatteringDelayReverbAudioProcessor::releaseResources()
@@ -270,15 +282,18 @@ void ScatteringDelayReverbAudioProcessor::updateSourcePosition(float x, float y,
 {
 	sourceXPosition->setValueNotifyingHost(x);
 	sourceYPosition->setValueNotifyingHost(y);
-//	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
-	float* azimuths = network->getNodeAzimuths();
-	DBG("azimuths: ");
-	
-	for(int i = 0; i < 7; i++) {
-		DBG(azimuths[i]);
+	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
+	DBG("azimuths");
+	DBG(network->getSourceAzimuth());
+	for(int node = 0; node < 6; node++) {
+		DBG(network->getNodeAzimuth(node));
 	}
 	
-	delete[] azimuths;
+	DBG("elevations");
+	DBG(network->getSourceElevation());
+	for(int node = 0; node < 6; node++) {
+		DBG(network->getNodeElevation(node));
+	}
 }
 
 void ScatteringDelayReverbAudioProcessor::setAbsorption(const float amount) {

@@ -91,9 +91,7 @@ namespace SDN {
 		
 		float outputWaveVector[numberOfOtherNodes]; // assign temporary vector for calculation
 		
-		float sum = 0.0;
-//		float sum = (2/numberOfOtherNodes)*(inputWaveVector[0] + inputWaveVector[1] + inputWaveVector[2] + inputWaveVector[3] + inputWaveVector[4]);
-		
+		float sum = 0.0;		
 		for(int node = 0; node < numberOfOtherNodes; node++) {
 			sum += inputWaveVector[node];
 		}
@@ -103,20 +101,7 @@ namespace SDN {
 		for(int node = 0; node < numberOfOtherNodes; node++) {
 			outputWaveVector[node] = sum - inputWaveVector[node];
 		}
-		
-//		outputWaveVector[0] = sum - inputWaveVector[0];
-//		outputWaveVector[1] = sum - inputWaveVector[1];
-//		outputWaveVector[2] = sum - inputWaveVector[2];
-//		outputWaveVector[3] = sum - inputWaveVector[3];
-//		outputWaveVector[4] = sum - inputWaveVector[4];
-		//
-		// outputWaveVector[0].x = -0.5*inputWaveVector[0].x + 0.5*inputWaveVector[0].y + 0.5*inputWaveVector[0].z + 0.5*inputWaveVector[0].w;
-		// outputWaveVector[0].y = 0.5*inputWaveVector[0].x + -0.5*inputWaveVector[0].y + 0.5*inputWaveVector[0].z + 0.5*inputWaveVector[0].w;
-		// outputWaveVector[0].z = 0.5*inputWaveVector[0].x + 0.5*inputWaveVector[0].y + -0.5*inputWaveVector[0].z + 0.5*inputWaveVector[0].w;
-		// outputWaveVector[0].w = 0.5*inputWaveVector[0].x + 0.5*inputWaveVector[0].y + 0.5*inputWaveVector[0].z + -0.5*inputWaveVector[0].w;
-		
-		// ne10_mulcmatvec_cm4x4f_v4f_neon(outputWaveVector, scatteringMatrix, inputWaveVector, 1);
-		
+	
 		distributeOutput(outputWaveVector);
 	}
 	

@@ -32,7 +32,7 @@ namespace SDN
 	class Network {
 		private:
 		
-		const static int nodeCount = 5;
+		const static int nodeCount = 6;
 		const int delayOrder = nodeCount - 1;
 		int connectionCount = 0;
 	
@@ -54,7 +54,6 @@ namespace SDN
 		
 		void updateNodePositions(); // updates the connection lengths based on a new source or mic position
 		
-		
 		float azimuthFor(Point point);
 		
 		public:
@@ -62,9 +61,16 @@ namespace SDN
 		float scatterMono(float input);
 		SDN::StereoOutput positionSource(float sourceInput);
 		
-		float* getNodeElevations();
-		float* getNodeAzimuths();
-	
+		void process(float input, float* output);
+		
+		void getNodeElevations(float* elevations);
+		float getNodeElevation(int node);
+		float getSourceElevation();
+		
+		void getNodeAzimuths(float *azimuths);
+		float getNodeAzimuth(int node);
+		float getSourceAzimuth();
+		
 		void setSourcePosition(float x, float y, float z);
 		void setMicPosition(float x, float y, float z);
 		

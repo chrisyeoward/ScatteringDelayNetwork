@@ -9,7 +9,7 @@
 */
 
 #pragma once
-#include "math.h"
+#include <cmath>
 #include <iostream>
 
 /*
@@ -37,6 +37,7 @@ namespace SDN {
 		
 		float distanceTo(Point point); //
 		float azimuthFrom(Point point);
+		float elevationFrom(Point point);
 		
 		Point() {};
 		Point(float x, float y);

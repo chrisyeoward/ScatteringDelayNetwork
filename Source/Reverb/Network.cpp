@@ -123,6 +123,17 @@ namespace SDN
 		return out;
 	}
 	
+	void Network::process(float in, float* output) {
+		sourceMicDelay->write(in);
+		scatter(in);
+		
+		output[0] = sourceMicDelay->readWithDistanceAttenuation(); // get value from delay line and attenuate by 1/r
+		for(int node = 0; node < nodeCount; node++)
+		{
+			output[node + 1] = nodeToMicDelays[node].readWithDistanceAttenuation();
+		}
+	}
+	
 	// main reverberation method
 	void Network::scatter(float in)
 	{
@@ -190,15 +201,36 @@ namespace SDN
 		}
 	}
 	
-	float* Network::getNodeAzimuths() {
-		float* azimuths = new float[nodeCount + 1];
-		
+	void Network::getNodeAzimuths(float* azimuths) {
 		azimuths[0] = source.azimuthFrom(mic);
 		
 		for (int node = 0; node < nodeCount; node++) {
 			azimuths[node + 1] = nodes[node].getPosition().azimuthFrom(mic);
 		}
+	}
+	
+	void Network::getNodeElevations(float* elevations) {
+		elevations[0] = source.elevationFrom(mic);
 		
-		return azimuths;
+		for (int node = 0; node < nodeCount; node++) {
+			elevations[node + 1] = nodes[node].getPosition().elevationFrom(mic);
+		}
+	}
+	
+	// gets the node azimuths
+	float Network::getNodeAzimuth(int node) {
+		return nodes[node].getPosition().azimuthFrom(mic);
+	}
+	
+	float Network::getSourceAzimuth() {
+		return source.azimuthFrom(mic);
+	}
+	
+	float Network::getNodeElevation(int node) {
+		return nodes[node].getPosition().elevationFrom(mic);
+	}
+	
+	float Network::getSourceElevation() {
+		return source.elevationFrom(mic);
 	}
 }
