@@ -63,11 +63,11 @@ namespace SDN
 		
 		void process(float input, float* output);
 		
-		void getNodeElevations(float* elevations);
+		void getNodeElevations(int* elevations);
 		float getNodeElevation(int node);
 		float getSourceElevation();
 		
-		void getNodeAzimuths(float *azimuths);
+		void getNodeAzimuths(int *azimuths);
 		float getNodeAzimuth(int node);
 		float getSourceAzimuth();
 		
