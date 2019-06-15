@@ -202,35 +202,35 @@ namespace SDN
 	}
 	
 	void Network::getNodeAzimuths(float* azimuths) {
-		azimuths[0] = source.azimuthFrom(mic);
+		azimuths[0] = getSourceAzimuth();
 		
 		for (int node = 0; node < nodeCount; node++) {
-			azimuths[node + 1] = nodes[node].getPosition().azimuthFrom(mic);
+			azimuths[node + 1] = getNodeAzimuth(node);
 		}
 	}
 	
 	void Network::getNodeElevations(float* elevations) {
-		elevations[0] = source.elevationFrom(mic);
+		elevations[0] = getSourceElevation();
 		
 		for (int node = 0; node < nodeCount; node++) {
-			elevations[node + 1] = nodes[node].getPosition().elevationFrom(mic);
+			elevations[node + 1] = getNodeElevation(node);
 		}
 	}
 	
 	// gets the node azimuths
 	float Network::getNodeAzimuth(int node) {
-		return nodes[node].getPosition().azimuthFrom(mic);
+		return nodes[node].getPosition().azimuthFrom(mic) * 180 / M_PI;
 	}
 	
 	float Network::getSourceAzimuth() {
-		return source.azimuthFrom(mic);
+		return source.azimuthFrom(mic) * 180 / M_PI;
 	}
 	
 	float Network::getNodeElevation(int node) {
-		return nodes[node].getPosition().elevationFrom(mic);
+		return nodes[node].getPosition().elevationFrom(mic) * 180 / M_PI;
 	}
 	
 	float Network::getSourceElevation() {
-		return source.elevationFrom(mic);
+		return source.elevationFrom(mic) * 180 / M_PI;
 	}
 }
