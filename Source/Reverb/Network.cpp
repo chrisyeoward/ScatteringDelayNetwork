@@ -54,12 +54,15 @@ namespace SDN
 		}
 				
 		sourceMicDelay = ModulatingDelay::fromDistance(sampleRate, source.distanceTo(mic));
+		std::cout << "source pos: " << source.getX() << ", " << source.getY() << ", " << source.getZ() << "\n";
+		std::cout << "source pos: " << mic.getX() << ", " << mic.getY() << ", " << mic.getZ() << "\n";
+		std::cout << "source-mic distance: " << source.distanceTo(mic) << "\n";
+
 	}
 	
 	// returns a stereo output of the direct line between the source and mic, based on their relative positions
 	StereoOutput Network::positionSource(float sourceInput)
 	{
-		sourceInput *= 0.2; // accommodate 5x gain factor in 1/r volume adjustment
 		sourceMicDelay->write(sourceInput);
 		
 		StereoOutput out;
@@ -108,23 +111,18 @@ namespace SDN
 	// method for scattering only in mono
 	float Network::scatterMono(float in)
 	{
-//		in /= 5;
-		sourceMicDelay->write(in);
 		scatter(in);
 		
 		auto out = sourceMicDelay->readWithDistanceAttenuation(); // get value from delay line and attenuate by 1/r
 		
 		for(int node = 0; node < nodeCount; node++)
 		{
-//			float micDistance = mic.distanceTo(nodes[node].getPosition());
-//			float sourceDistance = source.distanceTo(nodes[node].getPosition());
 			out += nodeToMicDelays[node].readWithDistanceAttenuation();
 		}
 		return out;
 	}
 	
 	void Network::process(float in, float* output) {
-		sourceMicDelay->write(in);
 		scatter(in);
 		
 		output[0] = sourceMicDelay->readWithDistanceAttenuation(); // get value from delay line and attenuate by 1/r
@@ -137,7 +135,7 @@ namespace SDN
 	// main reverberation method
 	void Network::scatter(float in)
 	{
-		in *= 0.2; // accommodate 5x gain factor in 1/r volume adjustment
+		sourceMicDelay->write(in);
 		
 		// for each node, gather inputs
 		for(int node = 0; node < nodeCount; node++)

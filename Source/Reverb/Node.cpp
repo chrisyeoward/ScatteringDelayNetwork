@@ -14,18 +14,24 @@
 namespace SDN {
 	Node::Node(Point position, int numberOfOtherNodes) : position(position), numberOfOtherNodes(numberOfOtherNodes)
 	{
-		// waveVector = new float[numberOfOtherNodes];
-		// scatteringMatrix
-		// scatteringMatrix = new float[numberOfOtherNodes * numberOfOtherNodes]; // K x K scattering matrix
+		filters = new Filter[numberOfOtherNodes];
+		const int filterOrder = 2;
+//		float a[filterOrder + 1] = {1.0, -2.7618, 2.5368, -0.7749}; // carpet
+//		float b[filterOrder + 1] = {0.6876, -1.9207, 1.7899, -0.5567};
 		
-		// for(int i = 0; i < numberOfOtherNodes * numberOfOtherNodes; i++) {
-		//
-		// 	scatteringMatrix[i] = 2.0 / (float) numberOfOtherNodes; // isotropic scattering matrix
-		//
-		// 	if(i % (numberOfOtherNodes + 1) == 0) scatteringMatrix[i] -= 1.0; // apply identity subtraction along diagonal
-		//
-		// }
+//		float a[filterOrder + 1] = {1.0, -1.8540, 0.8455};
+//		float b[filterOrder + 1] = {0.1684, -0.2432, 0.0748};
 		
+		float a[filterOrder + 1] = {1, -2e-16, 0.171572875253810}; //butter
+		float b[filterOrder + 1] = {0.2929, 0.5858, 0.2929};
+		
+//		float a[filterOrder + 1] = {1.0, -1.8588, 0.8590};
+//		float b[filterOrder + 1] = {0.9874, -1.817, 0.8392};
+		
+		for(int i = 0; i < numberOfOtherNodes; i++){
+			filters[i].prepare(filterOrder);
+			filters[i].setCoefficients(a, b);
+		}
 	}
 	
 	Point Node::getPosition()
@@ -46,20 +52,8 @@ namespace SDN {
 		terminalCount++;
 	}
 	
-	// 	void Node::gatherInputWaveVectorFromNodes() { // get inputs from all terminals
-	// 		for(int terminal = 0; terminal < terminalCount; terminal ++) {
-	// //			waveVector[terminal] = 0;
-	// 			waveVector[terminal] = terminals[terminal]->read();
-	// 		}
-	// 	}
-	//
-	// 	void Node::distributeOutputWaveVectorToNodes() {
-	// 		for(int terminal = 0; terminal < terminalCount; terminal++) {
-	// 			terminals[terminal]->write(waveVector[terminal]);
-	// 		}
-	// 	}
-	
-	void Node::prepareInput(float *inputWaveVector, float sourceInput){
+	void Node::prepareInput(float *inputWaveVector, float sourceInput)
+	{
 		float networkInput = sourceInput / numberOfOtherNodes;
 		
 		for(int terminal = 0; terminal < numberOfOtherNodes; terminal++) {
@@ -67,24 +61,31 @@ namespace SDN {
 		}
 	}
 	
-	void Node::distributeOutput(float *outputWaveVector){
+	float Node::filterOutputForTerminal(float output, int terminal)
+	{
+//		return filters[terminal].processSample(output);
+		return output * absorptionFactor;
+	}
+	
+	void Node::distributeOutput(float *outputWaveVector)
+	{
 		float outs[numberOfOtherNodes];
 		
 		output = 0.0;
 		for(int terminal = 0; terminal < numberOfOtherNodes; terminal++) {
-			outs[terminal] = outputWaveVector[terminal] * absorptionFactor;
+			outs[terminal] = filterOutputForTerminal(outputWaveVector[terminal], terminal);
 			terminals[terminal]->write(outs[terminal]);
 			output += outs[terminal];
 		}
 	}
 	
-	float Node::getNodeOutput() {
+	float Node::getNodeOutput()
+	{
 		return output;
 	}
 	
-	
-	void Node::scatter(float sourceInput) {
-		
+	void Node::scatter(float sourceInput)
+	{
 		float inputWaveVector[numberOfOtherNodes]; // assign temporary vector for calculation
 		
 		prepareInput(inputWaveVector, sourceInput);
@@ -105,7 +106,8 @@ namespace SDN {
 		distributeOutput(outputWaveVector);
 	}
 	
-	void Node::setAbsorption(const float amount) {
+	void Node::setAbsorption(const float amount)
+	{
 		absorptionFactor = amount;
 	}
 }

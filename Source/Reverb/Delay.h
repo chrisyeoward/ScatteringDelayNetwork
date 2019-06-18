@@ -39,6 +39,7 @@ namespace SDN {
 		float process(float inputSample);
 		void write(float sample);
 		float read();
+		float readWithDistanceAttenuation();
 		
 		static Delay* fromDistance(float sampleRate, float distance);
 		

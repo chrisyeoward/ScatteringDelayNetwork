@@ -13,7 +13,8 @@
 #include "Terminal.h"
 #include <string.h>
 #include "Constants.h"
-//#include <ne10/NE10.h>
+#include "Filter.h"
+#include "../JuceLibraryCode/JuceHeader.h"
 
 
 /*
@@ -25,17 +26,14 @@ namespace SDN {
 	private:
 		float absorptionFactor = 0.85;
 		Point position;
-//		ne10_mat4x4f_t scatteringMatrix[1]; // array holding the scattering matrix for the number of nodes in the network
-		// float* scatteringMatrix; // array holding the scattering matrix for the number of nodes in the network
 		int numberOfOtherNodes;
 		int terminalCount = 0;
 		static const int maxTerminalCount = MAXIMUM_NODES - 1;
 		SDN::Terminal *terminals[maxTerminalCount]; // hold references to each of the other nodes
 		
 		float output = 0.0;
-		
-		// float* waveVector; // used to represent samples from each other node, and then their values after scattering
-		
+		float filterOutputForTerminal(float output, int terminal);
+		Filter* filters;
 		
 	public:
 		void prepareInput(float* inputWaveVector, float sourceInput);

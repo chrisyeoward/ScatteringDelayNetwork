@@ -32,9 +32,7 @@ namespace SDN
         
         public:
 		void incrementReadPointer();
-		
-		float readWithDistanceAttenuation();
-		
+				
 		static ModulatingDelay* fromDistance(float sampleRate, float distance);
         
         ModulatingDelay(){};

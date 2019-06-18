@@ -16,6 +16,7 @@ namespace SDN
 	{
 		modFreq = (float) rand() / RAND_MAX; // pick a random freq
 		modFreq *= 5;
+//		std::cout << "distance: " << distance << "\n";
 	}
 	
 	void ModulatingDelay::incrementReadPointer() // increment read pointer +1 with additional sine wave
@@ -25,11 +26,6 @@ namespace SDN
 //		phase += 2.0 * M_PI * (modFreq/sampleRate);
 //		if(phase > 2.0 * M_PI)
 //			phase -= 2.0 * M_PI;
-	}
-	
-	float ModulatingDelay::readWithDistanceAttenuation()
-	{
-		return read()/distance;
 	}
 	
 	ModulatingDelay* ModulatingDelay::fromDistance(float sampleRate, float distance)

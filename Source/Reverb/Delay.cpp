@@ -17,7 +17,8 @@
 namespace SDN {
 	Delay::Delay(float sampleRate, int delayInSamples) :
 	bufferLength(4 * delayInSamples),
-	sampleRate(sampleRate)
+	sampleRate(sampleRate),
+	distance(SDN::c * delayInSamples / sampleRate)
 	{
 		buffer = new float[bufferLength];
 		memset(buffer, 0.0, bufferLength * sizeof(float));
@@ -39,9 +40,10 @@ namespace SDN {
 		readPointer = (readPointer + bufferLength) % bufferLength;
 	}
 	
-	void Delay::setDelayLengthFromDistance(float distance)
+	void Delay::setDelayLengthFromDistance(float d)
 	{
-		setDelayLength(sampleRate * distance / SDN::c);
+		setDelayLength(sampleRate * d / SDN::c);
+		distance = d;
 	}
 	
 	float Delay::process(float sample) {
@@ -69,5 +71,10 @@ namespace SDN {
 		
 		readPointer = (readPointer + bufferLength) % bufferLength;
 		return out;
+	}
+	
+	float Delay::readWithDistanceAttenuation()
+	{
+		return read()/(distance + 1.0);
 	}
 }
