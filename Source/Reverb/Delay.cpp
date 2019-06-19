@@ -46,6 +46,10 @@ namespace SDN {
 		distance = d;
 	}
 	
+	float Delay::getDelayDistance() {
+		return distance;
+	}
+	
 	float Delay::process(float sample) {
 		write(sample);
 		return read();
@@ -73,8 +77,8 @@ namespace SDN {
 		return out;
 	}
 	
-	float Delay::readWithDistanceAttenuation()
+	float Delay::readWithDistanceAttenuation(float adjustment)
 	{
-		return read()/(distance + 1.0);
+		return read()/(distance + 1.0 + adjustment);
 	}
 }

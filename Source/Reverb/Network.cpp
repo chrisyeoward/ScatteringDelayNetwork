@@ -133,7 +133,7 @@ namespace SDN
 		output[0] = sourceMicDelay->readWithDistanceAttenuation(); // get value from delay line and attenuate by 1/r
 		for(int node = 0; node < nodeCount; node++)
 		{
-			output[node + 1] = nodeToMicDelays[node].readWithDistanceAttenuation();
+			output[node + 1] = nodeToMicDelays[node].readWithDistanceAttenuation(sourceToNodeDelays[node].getDelayDistance());
 		}
 	}
 	
@@ -146,7 +146,7 @@ namespace SDN
 		for(int node = 0; node < nodeCount; node++)
 		{
 			sourceToNodeDelays[node].write(in);
-			nodes[node].scatter(sourceToNodeDelays[node].readWithDistanceAttenuation()); // add distance attenuation
+			nodes[node].scatter(sourceToNodeDelays[node].read()); // add distance attenuation
 			float nodeOut = nodes[node].getNodeOutput();
 			nodeToMicDelays[node].write(nodeOut);
 		}
