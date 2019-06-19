@@ -54,10 +54,15 @@ namespace SDN
 		}
 				
 		sourceMicDelay = ModulatingDelay::fromDistance(sampleRate, source.distanceTo(mic));
-		std::cout << "source pos: " << source.getX() << ", " << source.getY() << ", " << source.getZ() << "\n";
-		std::cout << "source pos: " << mic.getX() << ", " << mic.getY() << ", " << mic.getZ() << "\n";
-		std::cout << "source-mic distance: " << source.distanceTo(mic) << "\n";
-
+		
+		
+		nodes[0].setAbsorption(0.0343);
+		nodes[1].setAbsorption(0.0343);
+		nodes[2].setAbsorption(0.0343);
+		nodes[3].setAbsorption(0.0343);
+		
+		nodes[4].setAbsorption(0.41); //floor
+		nodes[5].setAbsorption(0.7017); // ceiling
 	}
 	
 	// returns a stereo output of the direct line between the source and mic, based on their relative positions

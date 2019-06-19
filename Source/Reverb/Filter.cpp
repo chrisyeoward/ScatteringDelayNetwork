@@ -13,10 +13,10 @@
 Filter::Filter() {}
 
 void Filter::prepare(int filterOrder) {
+	order = filterOrder;
+
 	a = new float[order + 1];
 	b = new float[order + 1];
-	
-	order = filterOrder;
 	
 	feedforward = new float[order];
 	feedback = new float[order];
@@ -39,9 +39,9 @@ float Filter::processSample(float input) {
 
 	float output = (ff - fb)/a[0];
 
-	if(abs(output) > 1.0) {
-		raise(SIGINT);
-	};
+//	if(abs(output) > 1.0) {
+//		raise(SIGINT);
+//	};
 	
 	for(int i = order - 1; i > 0; i--) {
 		feedforward[i] = feedforward[i - 1];

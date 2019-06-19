@@ -24,7 +24,7 @@
 namespace SDN {
 	class Node {
 	private:
-		float absorptionFactor = 0.85;
+		float absorptionFactor = sqrt(1 - 0.03);
 		Point position;
 		int numberOfOtherNodes;
 		int terminalCount = 0;
