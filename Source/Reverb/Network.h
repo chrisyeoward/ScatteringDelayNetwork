@@ -48,7 +48,7 @@ namespace SDN
 		SDN::ModulatingDelay sourceToNodeDelays[nodeCount];
 		SDN::ModulatingDelay nodeToMicDelays[nodeCount];
 		
-		SDN::ModulatingDelay *sourceMicDelay; // direct delay line
+		SDN::Delay *sourceMicDelay; // direct delay line
 		
 		void scatter(float input); // function to do the scattering
 		

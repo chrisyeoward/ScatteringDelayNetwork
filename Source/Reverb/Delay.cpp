@@ -24,8 +24,11 @@ namespace SDN {
 		memset(buffer, 0.0, bufferLength * sizeof(float));
 		writePointer = 0;
 		
-		readPointer = writePointer - delayInSamples;
-		readPointer = (readPointer + bufferLength) % bufferLength;
+		readPointer = (writePointer - delayInSamples);
+		readPointer += bufferLength;
+		if (readPointer >= bufferLength)
+			readPointer -= bufferLength;
+		
 	}
 	
 	Delay* Delay::fromDistance(float sampleRate, float distance)
@@ -37,7 +40,9 @@ namespace SDN {
 	void Delay::setDelayLength(int delayInSamples)
 	{
 		readPointer = writePointer - delayInSamples;
-		readPointer = (readPointer + bufferLength) % bufferLength;
+		readPointer += bufferLength;
+		if (readPointer >= bufferLength)
+			readPointer -= bufferLength;
 	}
 	
 	void Delay::setDelayLengthFromDistance(float d)
@@ -70,10 +75,30 @@ namespace SDN {
 	
 	// reads next sample
 	float Delay::read() {
-		float out = buffer[readPointer];
-		readPointer++;
+		float out = 0.0;
 		
-		readPointer = (readPointer + bufferLength) % bufferLength;
+//		if(fractional) {
+			// get high sample for linearly interpolation
+			int highPointer = floor(readPointer + 1.0);
+			if(highPointer >= bufferLength) highPointer -= bufferLength;
+			
+			float high = buffer[highPointer];
+			float low = buffer[(int) floor(readPointer)];
+			out = (1 - (readPointer - floor(readPointer))) * low + (readPointer - floor(readPointer)) * high; // interpolate
+			
+			incrementReadPointer();
+			
+			if(bufferLength < 0)
+				readPointer += bufferLength;
+			else if (readPointer >= bufferLength)
+				readPointer -= bufferLength;
+//		} else {
+//			out = buffer[readPointer];
+//			readPointer++;
+//
+//			readPointer = (readPointer + bufferLength) % bufferLength;
+//		}
+		
 		return out;
 	}
 	

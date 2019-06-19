@@ -26,12 +26,10 @@ namespace SDN
         private:
         float modFreq;
         float phase = 0.0;
-		float amount = 0.2;
-		float sampleRate;
-		float distance;
-        
+		float amount = 0.01;
+		
         public:
-		void incrementReadPointer();
+		void incrementReadPointer() override;
 				
 		static ModulatingDelay* fromDistance(float sampleRate, float distance);
         

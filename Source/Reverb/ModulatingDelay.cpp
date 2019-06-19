@@ -12,20 +12,19 @@
 
 namespace SDN
 {
-	ModulatingDelay::ModulatingDelay(float sampleRate, float delayInSamples, float distance) : Delay(sampleRate, delayInSamples), distance(distance)
+	ModulatingDelay::ModulatingDelay(float sampleRate, float delayInSamples, float distance) : Delay(sampleRate, delayInSamples)
 	{
 		modFreq = (float) rand() / RAND_MAX; // pick a random freq
-		modFreq *= 5;
-//		std::cout << "distance: " << distance << "\n";
+		modFreq *= 4;
 	}
 	
 	void ModulatingDelay::incrementReadPointer() // increment read pointer +1 with additional sine wave
 	{
 		readPointer += 1.0;
-//		readPointer += amount * sin(phase);
-//		phase += 2.0 * M_PI * (modFreq/sampleRate);
-//		if(phase > 2.0 * M_PI)
-//			phase -= 2.0 * M_PI;
+		readPointer += amount * sin(phase);
+		phase += 2.0 * M_PI * (modFreq/sampleRate);
+		if(phase > 2.0 * M_PI)
+			phase -= 2.0 * M_PI;
 	}
 	
 	ModulatingDelay* ModulatingDelay::fromDistance(float sampleRate, float distance)

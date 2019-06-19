@@ -20,7 +20,7 @@ namespace SDN {
 		float dx = getX() - point.getX();
 		float dy = getY() - point.getY();
 		float dz = getZ() - point.getZ();
-		return sqrt(dx*dx + dy*dy + dy*dy);
+		return sqrt(dx*dx + dy*dy + dz*dz);
 	}
 	
 	float Point::azimuthFrom(Point point)

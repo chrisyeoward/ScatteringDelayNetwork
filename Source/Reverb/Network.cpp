@@ -53,7 +53,7 @@ namespace SDN
 			nodeToMicDelays[node] = *ModulatingDelay::fromDistance(sampleRate, mic.distanceTo(nodes[node].getPosition()));
 		}
 				
-		sourceMicDelay = ModulatingDelay::fromDistance(sampleRate, source.distanceTo(mic));
+		sourceMicDelay = Delay::fromDistance(sampleRate, source.distanceTo(mic));
 		
 		
 		nodes[0].setAbsorption(0.0343);
@@ -61,8 +61,8 @@ namespace SDN
 		nodes[2].setAbsorption(0.0343);
 		nodes[3].setAbsorption(0.0343);
 		
-		nodes[4].setAbsorption(0.41); //floor
-		nodes[5].setAbsorption(0.7017); // ceiling
+		nodes[4].setAbsorption(0.4); //floor
+		nodes[5].setAbsorption(0.7); // ceiling
 	}
 	
 	// returns a stereo output of the direct line between the source and mic, based on their relative positions

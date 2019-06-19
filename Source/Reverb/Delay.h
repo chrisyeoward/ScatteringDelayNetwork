@@ -25,12 +25,12 @@ namespace SDN {
 		protected:
 		float* buffer;
 		int bufferLength;
-		int readPointer;
+		float readPointer;
 		int writePointer;
 		float sampleRate;
 		float distance;
 		
-		void incrementReadPointer(); // overriden in modulating delay
+		virtual void incrementReadPointer(); // overriden in modulating delay
 
 		public:
 		void setDelayLengthFromDistance(float distance);
@@ -48,7 +48,7 @@ namespace SDN {
 		Delay() {};
 		Delay(float sampleRate, int delayInSamples);
 //		Delay(float sampleRate, float distance);
-		~Delay() {}
+		virtual ~Delay() {}
 	};
 }
 
