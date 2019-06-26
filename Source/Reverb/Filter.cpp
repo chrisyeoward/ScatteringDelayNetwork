@@ -38,10 +38,6 @@ float Filter::processSample(float input) {
 	}
 
 	float output = (ff - fb)/a[0];
-
-//	if(abs(output) > 1.0) {
-//		raise(SIGINT);
-//	};
 	
 	for(int i = order - 1; i > 0; i--) {
 		feedforward[i] = feedforward[i - 1];
@@ -60,6 +56,4 @@ void Filter::setCoefficients(float* newA, float* newB) {
 		a[i] = newA[i];
 		b[i] = newB[i];
 	}
-	std::cout << "a[0]" << a[0] << " a[1]" << a[1] << " a[2]" << a[2] << "\n";
-	std::cout << "b[0]" << b[0] << " b[1]" << b[1] << " b[2]" << b[2] << "\n";
 }

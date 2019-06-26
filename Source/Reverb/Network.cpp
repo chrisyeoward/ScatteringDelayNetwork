@@ -49,20 +49,22 @@ namespace SDN
 		// initialised the source to node and node to mic delay lines
 		for(int node = 0; node < nodeCount; node++)
 		{
-			sourceToNodeDelays[node] = *ModulatingDelay::fromDistance(sampleRate, source.distanceTo(nodes[node].getPosition()));
-			nodeToMicDelays[node] = *ModulatingDelay::fromDistance(sampleRate, mic.distanceTo(nodes[node].getPosition()));
+			sourceToNodeDelays[node] = *Delay::fromDistance(sampleRate, source.distanceTo(nodes[node].getPosition()));
+			nodeToMicDelays[node] = *Delay::fromDistance(sampleRate, mic.distanceTo(nodes[node].getPosition()));
 		}
 				
 		sourceMicDelay = Delay::fromDistance(sampleRate, source.distanceTo(mic));
 		
-		
+//		setAbsorptionAmount(0.01);
+		// small room
 		nodes[0].setAbsorption(0.0343);
 		nodes[1].setAbsorption(0.0343);
 		nodes[2].setAbsorption(0.0343);
 		nodes[3].setAbsorption(0.0343);
 		
 		nodes[4].setAbsorption(0.4); //floor
-		nodes[5].setAbsorption(0.7); // ceiling
+//		nodes[5].setAbsorption(0.7); // ceiling
+		nodes[5].setAbsorption(0.4); // ceiling
 	}
 	
 	// returns a stereo output of the direct line between the source and mic, based on their relative positions
@@ -133,7 +135,7 @@ namespace SDN
 		output[0] = sourceMicDelay->readWithDistanceAttenuation(); // get value from delay line and attenuate by 1/r
 		for(int node = 0; node < nodeCount; node++)
 		{
-			output[node + 1] = nodeToMicDelays[node].readWithDistanceAttenuation(sourceToNodeDelays[node].getDelayDistance());
+			output[node + 1] = sourceToNodeDelays[node].getDelayDistance() * nodeToMicDelays[node].readWithDistanceAttenuation(sourceToNodeDelays[node].getDelayDistance());
 		}
 	}
 	
@@ -146,7 +148,7 @@ namespace SDN
 		for(int node = 0; node < nodeCount; node++)
 		{
 			sourceToNodeDelays[node].write(in);
-			nodes[node].scatter(sourceToNodeDelays[node].read()); // add distance attenuation
+			nodes[node].scatter(sourceToNodeDelays[node].readWithDistanceAttenuation()); // add distance attenuation
 			float nodeOut = nodes[node].getNodeOutput();
 			nodeToMicDelays[node].write(nodeOut);
 		}

@@ -9,7 +9,7 @@
 */
 
 #pragma once
-#include "Delay.h"
+#include "ModulatingDelay.h"
 #include "Terminal.h"
 #include "Node.h"
 #include "Constants.h"
@@ -23,8 +23,8 @@ namespace SDN {
     class Connection 
     {
         private:
-            SDN::Delay* startToEndDelay;
-            SDN::Delay* endToStartDelay;
+            SDN::ModulatingDelay* startToEndDelay;
+            SDN::ModulatingDelay* endToStartDelay;
 		
 			SDN::Terminal* startTerminal;
 			SDN::Terminal* endTerminal;

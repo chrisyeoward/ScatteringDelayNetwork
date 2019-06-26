@@ -15,8 +15,8 @@ namespace SDN{
 	Connection::Connection(float distance, float sampleRate) : sampleRate(sampleRate)
 	{
 		float delay = (sampleRate * distance / SDN::c);
-		startToEndDelay = new SDN::Delay(sampleRate, delay);
-		endToStartDelay = new SDN::Delay(sampleRate, delay);
+		startToEndDelay = new SDN::ModulatingDelay(sampleRate, delay);
+		endToStartDelay = new SDN::ModulatingDelay(sampleRate, delay);
 		
 		startTerminal = new SDN::Terminal(endToStartDelay, startToEndDelay);
 		endTerminal = new SDN::Terminal(startToEndDelay, endToStartDelay);

@@ -26,7 +26,7 @@ namespace SDN
         private:
         float modFreq;
         float phase = 0.0;
-		float amount = 0.01;
+		float amount = 0.005;
 		
         public:
 		void incrementReadPointer() override;
@@ -34,7 +34,7 @@ namespace SDN
 		static ModulatingDelay* fromDistance(float sampleRate, float distance);
         
         ModulatingDelay(){};
-		ModulatingDelay(float sampleRate, float delayInSamples, float distance);
+		ModulatingDelay(float sampleRate, float delayInSamples);
         ~ModulatingDelay() {};
 	};
 }

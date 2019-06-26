@@ -45,8 +45,8 @@ namespace SDN
 		
 		SDN::Connection* connections; // inter node connections
 		
-		SDN::ModulatingDelay sourceToNodeDelays[nodeCount];
-		SDN::ModulatingDelay nodeToMicDelays[nodeCount];
+		SDN::Delay sourceToNodeDelays[nodeCount];
+		SDN::Delay nodeToMicDelays[nodeCount];
 		
 		SDN::Delay *sourceMicDelay; // direct delay line
 		

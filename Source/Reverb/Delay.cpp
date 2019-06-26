@@ -14,12 +14,17 @@
 // no mechanism implemented for resizing the buffer dynamically, so a high enough value was chosen
 // THIS BREAKS DOWN FOR VERY LARGE BUFFER SIZES
 
+inline float getAirAttenuationCoeffFromDistance(float distance) {
+	return 0.2 * log((distance/3) + 1);
+}
+
 namespace SDN {
 	Delay::Delay(float sampleRate, int delayInSamples) :
 	bufferLength(4 * delayInSamples),
 	sampleRate(sampleRate),
 	distance(SDN::c * delayInSamples / sampleRate)
 	{
+		
 		buffer = new float[bufferLength];
 		memset(buffer, 0.0, bufferLength * sizeof(float));
 		writePointer = 0;
@@ -29,11 +34,20 @@ namespace SDN {
 		if (readPointer >= bufferLength)
 			readPointer -= bufferLength;
 		
+		airAbsorptionFilter.prepare(1);
+		setAirAbsorption();
 	}
 	
 	Delay* Delay::fromDistance(float sampleRate, float distance)
 	{
 		return new Delay(sampleRate, (sampleRate * distance / SDN::c));
+	}
+	
+	void Delay::setAirAbsorption(){
+		airAbsorptionCoefficient = getAirAttenuationCoeffFromDistance(distance);
+		float a[] = {1.0, -airAbsorptionCoefficient};
+		float b[] = {1 - airAbsorptionCoefficient, 0.0};
+		airAbsorptionFilter.setCoefficients(a, b);
 	}
 	
 	// for updating length
@@ -49,6 +63,7 @@ namespace SDN {
 	{
 		setDelayLength(sampleRate * d / SDN::c);
 		distance = d;
+		setAirAbsorption();
 	}
 	
 	float Delay::getDelayDistance() {
@@ -102,8 +117,13 @@ namespace SDN {
 		return out;
 	}
 	
+	float Delay::readWithAirAbsorption(){
+		return airAbsorptionFilter.processSample(read());
+	}
+	
 	float Delay::readWithDistanceAttenuation(float adjustment)
 	{
-		return read()/(distance + 1.0 + adjustment);
+		return readWithAirAbsorption()/(distance + 1.0 + adjustment);
 	}
+
 }

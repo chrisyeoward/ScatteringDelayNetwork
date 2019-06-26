@@ -14,6 +14,7 @@
 #include <math.h>
 #include <string.h>
 #include "Constants.h"
+#include "Filter.h"
 
 /*
  Delay line class, with fractional read pointer
@@ -30,11 +31,16 @@ namespace SDN {
 		float sampleRate;
 		float distance;
 		
+		Filter airAbsorptionFilter;
+		float airAbsorptionCoefficient;
+		
 		virtual void incrementReadPointer(); // overriden in modulating delay
 
 		public:
 		void setDelayLengthFromDistance(float distance);
 		void setDelayLength(int delayInSamples);
+		
+		void setAirAbsorption();
 		
 		float getDelayDistance();
 		
@@ -42,6 +48,7 @@ namespace SDN {
 		void write(float sample);
 		float read();
 		float readWithDistanceAttenuation(float adjustment = 0.0);
+		float readWithAirAbsorption();
 		
 		static Delay* fromDistance(float sampleRate, float distance);
 		

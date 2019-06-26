@@ -19,6 +19,6 @@ namespace SDN {
 	}
 	
 	float Terminal::read() {
-		return readDelay->read();
+		return readDelay->readWithAirAbsorption();
 	}
 }
