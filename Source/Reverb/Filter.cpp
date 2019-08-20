@@ -28,7 +28,7 @@ void Filter::prepare(int filterOrder) {
 }
 
 float Filter::processSample(float input) {
-	assert(order > -1);
+//	assert(order > -1);
 	float ff = b[0] * input;
 	float fb = 0.0;
 
@@ -51,7 +51,7 @@ float Filter::processSample(float input) {
 }
 
 void Filter::setCoefficients(float* newA, float* newB) {
-	assert(order > -1);
+//	assert(order > -1);
 	for(int i = 0; i < order + 1; i++) {
 		a[i] = newA[i];
 		b[i] = newB[i];

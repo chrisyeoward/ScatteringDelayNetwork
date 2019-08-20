@@ -9,6 +9,7 @@
  */
 
 #include "Delay.h"
+#include <iostream>
 
 // buffer length is arbitrarily chosen to be several times higher than delay length.
 // no mechanism implemented for resizing the buffer dynamically, so a high enough value was chosen
@@ -19,13 +20,12 @@ inline float getAirAttenuationCoeffFromDistance(float distance) {
 }
 
 namespace SDN {
-	Delay::Delay(float sampleRate, int delayInSamples) :
-	bufferLength(4 * delayInSamples),
+	Delay::Delay(float sampleRate, int delayInSamples, int maxBufferLength) :
+	bufferLength(maxBufferLength),
 	sampleRate(sampleRate),
 	distance(SDN::c * delayInSamples / sampleRate)
 	{
-		
-		buffer = new float[bufferLength];
+		buffer = new float[maxBufferLength];
 		memset(buffer, 0.0, bufferLength * sizeof(float));
 		writePointer = 0;
 		
@@ -38,9 +38,9 @@ namespace SDN {
 		setAirAbsorption();
 	}
 	
-	Delay* Delay::fromDistance(float sampleRate, float distance)
+	Delay* Delay::fromDistance(float sampleRate, float distance, float maxDistance)
 	{
-		return new Delay(sampleRate, (sampleRate * distance / SDN::c));
+		return new Delay(sampleRate, (sampleRate * distance) / SDN::c, (sampleRate * maxDistance) / SDN::c);
 	}
 	
 	void Delay::setAirAbsorption(){
@@ -123,7 +123,7 @@ namespace SDN {
 	
 	float Delay::readWithDistanceAttenuation(float adjustment)
 	{
-		return readWithAirAbsorption()/(distance + 1.0 + adjustment);
+		return read()/(fmaxf(distance, 1.0) + adjustment);
 	}
 
 }

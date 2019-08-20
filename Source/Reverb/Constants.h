@@ -13,7 +13,7 @@
 
 namespace SDN {
     
-    const int c = 343; // speed of sound in air
+    const float c = 343; // speed of sound in air
 	
 	const int MAXIMUM_NODES = 6; // limit total number of nodes
 }

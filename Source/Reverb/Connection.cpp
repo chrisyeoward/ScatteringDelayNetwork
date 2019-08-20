@@ -12,11 +12,11 @@
 #include <iostream>
 
 namespace SDN{
-	Connection::Connection(float distance, float sampleRate) : sampleRate(sampleRate)
+	Connection::Connection(float distance, float sampleRate, float maxDistance) : sampleRate(sampleRate)
 	{
 		float delay = (sampleRate * distance / SDN::c);
-		startToEndDelay = new SDN::ModulatingDelay(sampleRate, delay);
-		endToStartDelay = new SDN::ModulatingDelay(sampleRate, delay);
+		startToEndDelay = ModulatingDelay::fromDistance(sampleRate, distance, maxDistance);
+		endToStartDelay = ModulatingDelay::fromDistance(sampleRate, distance, maxDistance);
 		
 		startTerminal = new SDN::Terminal(endToStartDelay, startToEndDelay);
 		endTerminal = new SDN::Terminal(startToEndDelay, endToStartDelay);
@@ -28,8 +28,8 @@ namespace SDN{
 		endToStartDelay->setDelayLengthFromDistance(distance);
 	}
 	
-	Connection::Connection(SDN::Node startNode, SDN::Node endNode, float sampleRate) :
-	Connection(startNode.getPosition().distanceTo(endNode.getPosition()), sampleRate) {}
+	Connection::Connection(SDN::Node startNode, SDN::Node endNode, float sampleRate, float maxDistance) :
+	Connection(startNode.getPosition().distanceTo(endNode.getPosition()), sampleRate, maxDistance) {}
 	
 	SDN::Terminal* Connection::getStartTerminal(){
 		return startTerminal;

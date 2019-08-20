@@ -39,8 +39,8 @@ namespace SDN {
 		void setLength(float distance); // update the length of the delay lines
 		
 		Connection() {};
-		Connection(float distance, float sampleRate);
-		Connection(SDN::Node startNode, SDN::Node endNode, float sampleRate);
+		Connection(float distance, float sampleRate, float maxDistance);
+		Connection(SDN::Node startNode, SDN::Node endNode, float sampleRate, float maxDistance);
 		~Connection() {};
 	};
 }

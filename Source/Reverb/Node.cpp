@@ -39,6 +39,8 @@ namespace SDN {
 			filters[i].prepare(filterOrder);
 			filters[i].setCoefficients(a, b);
 		}
+		
+		weightingFactor = 2.0 / (float) numberOfOtherNodes;
 	}
 	
 	Point Node::getPosition()
@@ -82,8 +84,9 @@ namespace SDN {
 		for(int terminal = 0; terminal < numberOfOtherNodes; terminal++) {
 			outs[terminal] = filterOutputForTerminal(outputWaveVector[terminal], terminal);
 			terminals[terminal]->write(outs[terminal]);
-			output += outs[terminal];
+			output += outs[terminal]; // weighting vector
 		}
+//		output *= weightingFactor;
 	}
 	
 	float Node::getNodeOutput()
@@ -101,8 +104,7 @@ namespace SDN {
 		for(int node = 0; node < numberOfOtherNodes; node++) {
 			sum += inputWaveVector[node];
 		}
-		sum *= 2;
-		sum /= numberOfOtherNodes;
+		sum *= weightingFactor;
 		
 		float outputWaveVector[numberOfOtherNodes]; // assign temporary vector for calculation
 		

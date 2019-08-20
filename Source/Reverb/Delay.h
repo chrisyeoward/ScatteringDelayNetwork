@@ -50,10 +50,10 @@ namespace SDN {
 		float readWithDistanceAttenuation(float adjustment = 0.0);
 		float readWithAirAbsorption();
 		
-		static Delay* fromDistance(float sampleRate, float distance);
+		static Delay* fromDistance(float sampleRate, float distance, float maxDistance);
 		
 		Delay() {};
-		Delay(float sampleRate, int delayInSamples);
+		Delay(float sampleRate, int delayInSamples, int maxBuffer);
 //		Delay(float sampleRate, float distance);
 		virtual ~Delay() {}
 	};

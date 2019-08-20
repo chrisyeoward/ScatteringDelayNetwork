@@ -36,8 +36,8 @@ namespace SDN
 		const int delayOrder = nodeCount - 1;
 		int connectionCount = 0;
 	
-		SDN::Point source = SDN::Point(2.5, 4.0, 1.5); // default source position
-		SDN::Point mic = SDN::Point(2.5, 0.5, 1.8); // default source position
+		SDN::Point source; // default source position
+		SDN::Point mic; // default source position
 	
 		SDN::Boundary bounds[nodeCount]; // walls
 		
@@ -78,7 +78,7 @@ namespace SDN
 		
 		Network(float sampleRate);
 		Network(float sampleRate, float width, float length, float height);
-		~Network();
+		~Network() {};
 	};
 }
 

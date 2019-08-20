@@ -11,8 +11,8 @@
 #pragma once
 #include "Delay.h"
 #include <cstdlib>
-#include "../JuceLibraryCode/JuceHeader.h"
 #include "Constants.h"
+#include <iostream>
 
 /*
  Modulated Delay line class. Read pointer fluctuates at random frequency 
@@ -26,15 +26,15 @@ namespace SDN
         private:
         float modFreq;
         float phase = 0.0;
-		float amount = 0.005;
+		float amount = 0.003;
 		
         public:
 		void incrementReadPointer() override;
 				
-		static ModulatingDelay* fromDistance(float sampleRate, float distance);
+		static ModulatingDelay* fromDistance(float sampleRate, float distance, float maxDistance);
         
         ModulatingDelay(){};
-		ModulatingDelay(float sampleRate, float delayInSamples);
+		ModulatingDelay(float sampleRate, float delayInSamples, int maxBuffer);
         ~ModulatingDelay() {};
 	};
 }

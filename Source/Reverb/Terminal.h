@@ -29,6 +29,8 @@ namespace SDN {
 		
 		Terminal() {};
 		Terminal(SDN::Delay* readDelay, SDN::Delay* writeDelay);
-		~Terminal() {};
+		~Terminal() {
+			
+		};
 	};
 }

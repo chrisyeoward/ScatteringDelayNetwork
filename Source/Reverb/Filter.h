@@ -17,7 +17,8 @@
 //#define FILTER_ORDER 2
 
 #define _USE_MATH_DEFINES
-#include "../JuceLibraryCode/JuceHeader.h"
+
+#include <cstring>
 
 class Filter
 {

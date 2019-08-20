@@ -35,6 +35,8 @@ namespace SDN {
 		float filterOutputForTerminal(float output, int terminal);
 		Filter* filters;
 		
+		float weightingFactor = 0.0;
+		
 	public:
 		void prepareInput(float* inputWaveVector, float sourceInput);
 		void distributeOutput(float* outputWaveVector);

@@ -9,6 +9,7 @@
 */
 
 #include "Point.h"
+#include <iostream>
 
 namespace SDN {
 	Point::Point(float x, float y) : Point(x,y,0) {}

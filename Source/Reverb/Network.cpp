@@ -14,7 +14,9 @@ namespace SDN
 {
 	Network::Network(float sampleRate) : Network(sampleRate, 5.0, 5.0, 3.0) {}
 	
-	Network::Network(float sampleRate, float width, float length, float height)
+	Network::Network(float sampleRate, float width, float length, float height) :
+	source(width/2, length/2, length/2),
+	mic(width/2, length/2, length/2)
 	{
 		// define wall positions
 		bounds[0] = SDN::Boundary(0.0, SDN::Plane::YZ);
@@ -33,13 +35,15 @@ namespace SDN
 		
 		connections = new SDN::Connection[connectionCount];
 		
+		float maxDistance = sqrt(width*width + length*length + height*height);
+
 		// initialise connections between nodes, defining lengths and providing terminals to the nodes to interact with
 		int connection = 0;
 		for(int node = 0; node < nodeCount - 1; node++)
 		{
 			for(int otherNode = node + 1; otherNode < nodeCount; otherNode++)
 			{
-				connections[connection] = SDN::Connection(nodes[node], nodes[otherNode], sampleRate);
+				connections[connection] = SDN::Connection(nodes[node], nodes[otherNode], sampleRate, maxDistance);
 				nodes[node].addTerminal(connections[connection].getStartTerminal());
 				nodes[otherNode].addTerminal(connections[connection].getEndTerminal());
 				connection++;
@@ -49,22 +53,21 @@ namespace SDN
 		// initialised the source to node and node to mic delay lines
 		for(int node = 0; node < nodeCount; node++)
 		{
-			sourceToNodeDelays[node] = *Delay::fromDistance(sampleRate, source.distanceTo(nodes[node].getPosition()));
-			nodeToMicDelays[node] = *Delay::fromDistance(sampleRate, mic.distanceTo(nodes[node].getPosition()));
+			sourceToNodeDelays[node] = *Delay::fromDistance(sampleRate, source.distanceTo(nodes[node].getPosition()), maxDistance);
+			nodeToMicDelays[node] = *Delay::fromDistance(sampleRate, mic.distanceTo(nodes[node].getPosition()), maxDistance);
 		}
 				
-		sourceMicDelay = Delay::fromDistance(sampleRate, source.distanceTo(mic));
+		sourceMicDelay = Delay::fromDistance(sampleRate, source.distanceTo(mic), maxDistance);
 		
-//		setAbsorptionAmount(0.01);
-		// small room
+		
+		// hard coded absorptino values for perceptual evaluation. TODO: extract into public method
 		nodes[0].setAbsorption(0.0343);
 		nodes[1].setAbsorption(0.0343);
 		nodes[2].setAbsorption(0.0343);
 		nodes[3].setAbsorption(0.0343);
 		
-		nodes[4].setAbsorption(0.4); //floor
-//		nodes[5].setAbsorption(0.7); // ceiling
-		nodes[5].setAbsorption(0.4); // ceiling
+		nodes[4].setAbsorption(0.18); //floor
+		nodes[5].setAbsorption(0.7); // ceiling
 	}
 	
 	// returns a stereo output of the direct line between the source and mic, based on their relative positions
@@ -120,11 +123,14 @@ namespace SDN
 	{
 		scatter(in);
 		
+//		float output[nodeCount];
+//		process(in, output);
+		
 		auto out = sourceMicDelay->readWithDistanceAttenuation(); // get value from delay line and attenuate by 1/r
 		
 		for(int node = 0; node < nodeCount; node++)
 		{
-			out += nodeToMicDelays[node].readWithDistanceAttenuation();
+			out += sourceToNodeDelays[node].getDelayDistance() * nodeToMicDelays[node].readWithDistanceAttenuation(sourceToNodeDelays[node].getDelayDistance());
 		}
 		return out;
 	}
@@ -192,6 +198,7 @@ namespace SDN
 		
 		for(int node = 0; node < nodeCount; node++)
 		{
+			std::cout << "position: " << nodes[node].getPosition().getX() << " " << nodes[node].getPosition().getY() << " " << nodes[node].getPosition().getZ() << " " << "\n";
 			sourceToNodeDelays[node].setDelayLengthFromDistance(source.distanceTo(nodes[node].getPosition()));
 			nodeToMicDelays[node].setDelayLengthFromDistance(mic.distanceTo(nodes[node].getPosition()));
 		}
@@ -218,6 +225,7 @@ namespace SDN
 		elevations[0] = getSourceElevation();
 		
 		for (int node = 0; node < nodeCount; node++) {
+			
 			elevations[node + 1] = getNodeElevation(node);
 		}
 	}
