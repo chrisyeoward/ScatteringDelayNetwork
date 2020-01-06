@@ -12,6 +12,8 @@
         <FILE id="dcgRWg" name="Constants.h" compile="0" resource="0" file="Source/Reverb/Constants.h"/>
         <FILE id="C0nFTl" name="Delay.cpp" compile="1" resource="0" file="Source/Reverb/Delay.cpp"/>
         <FILE id="b94Sqg" name="Delay.h" compile="0" resource="0" file="Source/Reverb/Delay.h"/>
+        <FILE id="LLbr44" name="Filter.cpp" compile="1" resource="0" file="Source/Reverb/Filter.cpp"/>
+        <FILE id="kHJtrK" name="Filter.h" compile="0" resource="0" file="Source/Reverb/Filter.h"/>
         <FILE id="hPUk2L" name="ModulatingDelay.cpp" compile="1" resource="0"
               file="Source/Reverb/ModulatingDelay.cpp"/>
         <FILE id="xjZ8Nq" name="ModulatingDelay.h" compile="0" resource="0"
@@ -44,8 +46,8 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" headerPath="/Users/chrisyeoward/Documents/Uni/MSc/DAFX/ScatteringDelayReverb/Source/Reverb"/>
-        <CONFIGURATION isDebug="0" name="Release" headerPath="/Users/chrisyeoward/Documents/Uni/MSc/DAFX/ScatteringDelayReverb/Source/Reverb"/>
+        <CONFIGURATION isDebug="1" name="Debug" headerPath="/Users/chrisyeoward/Documents/Uni/MSc/DAFX/ScatteringDelayReverb/Source/Reverb;"/>
+        <CONFIGURATION isDebug="0" name="Release" headerPath="/Users/chrisyeoward/Documents/Uni/MSc/DAFX/ScatteringDelayReverb/Source/Reverb;"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="../../../../../../../Applications/JUCE/modules"/>

@@ -28,13 +28,13 @@ ScatteringDelayReverbAudioProcessor::ScatteringDelayReverbAudioProcessor()
 	addParameter (roomSize = new AudioParameterFloat ("roomSize", // parameter ID
 															 "Room size", // parameter name
 															 NormalisableRange<float> (0.0f, 100.0f),
-															 5.0f)); // default value
+															 8.0f)); // default value
 	
 	
 	addParameter (absorption = new AudioParameterFloat ("absorption", // parameter ID
 														  "Wall Reflectivity", // parameter name
 														  NormalisableRange<float> (0.0f, 1.0),
-														  0.85)); // default value
+														  0.5f)); // default value
 	
 	addParameter (dryWet = new AudioParameterFloat ("dryWet", // parameter ID
 														"Dry/Wet", // parameter name
@@ -44,22 +44,22 @@ ScatteringDelayReverbAudioProcessor::ScatteringDelayReverbAudioProcessor()
 	addParameter (sourceXPosition = new AudioParameterFloat ("sourceXPosition", // parameter ID
 															   "Source X Position", // parameter name
 															   NormalisableRange<float> (0.0f, roomSize->get()),
-															   roomSize->get()*0.9)); // default value
+															   roomSize->get()/2.0)); // default value
 	
 	addParameter (sourceYPosition = new AudioParameterFloat ("sourceYPosition", // parameter ID
 															 "Source Y Position", // parameter name
 															 NormalisableRange<float> (0.0f, roomSize->get()),
-															 roomSize->get()/2)); // default value
+															 6.0)); // default value
 	
 	addParameter (micXPosition = new AudioParameterFloat ("micXPosition", // parameter ID
 															 "Mic X Position", // parameter name
 															 NormalisableRange<float> (0.0f, roomSize->get()),
-															 roomSize->get()/10)); // default value
+															 2.0)); // default value
 	
 	addParameter (micYPosition = new AudioParameterFloat ("micYPosition", // parameter ID
 															 "Mic Y Position", // parameter name
 															 NormalisableRange<float> (0.0f, roomSize->get()),
-															 roomSize->get()/2)); // default value
+															 roomSize->get()/2.0)); // default value
 }
 
 ScatteringDelayReverbAudioProcessor::~ScatteringDelayReverbAudioProcessor()
@@ -133,10 +133,15 @@ void ScatteringDelayReverbAudioProcessor::prepareToPlay (double sampleRate, int 
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-	network = new SDN::Network(sampleRate, roomSize->get(), roomSize->get(), 3.0);
-	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
-	network->setMicPosition(micXPosition->get(), micYPosition->get(), 1.8);
-	network->setAbsorptionAmount(absorption->get());
+	float width, length, height;
+	width = 8;
+	length = 8;
+	height = 8;
+	
+	network = new SDN::Network(sampleRate, width, length, height);
+	network->setSourcePosition(6.0, length/2, height/2);
+	network->setMicPosition(2.0, length/2, height/2);
+//	network->setAbsorptionAmount(absorption->get());
 	
 	DBG("azimuths");
 	DBG(network->getSourceAzimuth());
@@ -225,7 +230,7 @@ void ScatteringDelayReverbAudioProcessor::processBlock (AudioBuffer<float>& buff
 			// get struct of streams
 			// set source/mic position
 			
-			auto outMono = network->scatterMono(in);
+			auto outMono = network->scatterMono(in/3.0);
 		
 			buffer.getWritePointer (0)[i] = 0.0;
 			buffer.getWritePointer (1)[i] = 0.0;
@@ -282,7 +287,7 @@ void ScatteringDelayReverbAudioProcessor::updateSourcePosition(float x, float y,
 {
 	sourceXPosition->setValueNotifyingHost(x);
 	sourceYPosition->setValueNotifyingHost(y);
-	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), 1.5);
+//	network->setSourcePosition(sourceXPosition->get(), sourceYPosition->get(), roomSize->get()/2);
 	DBG("azimuths");
 	DBG(network->getSourceAzimuth());
 	for(int node = 0; node < 6; node++) {
@@ -298,7 +303,7 @@ void ScatteringDelayReverbAudioProcessor::updateSourcePosition(float x, float y,
 
 void ScatteringDelayReverbAudioProcessor::setAbsorption(const float amount) {
 	absorption->setValueNotifyingHost(amount);
-	network->setAbsorptionAmount(amount);
+//	network->setAbsorptionAmount(amount);
 }
 
 //==============================================================================
