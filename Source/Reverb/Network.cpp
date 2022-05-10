@@ -70,6 +70,12 @@ namespace SDN
 		nodes[5].setAbsorption(0.7); // ceiling
 	}
 	
+	Network::~Network()
+	{
+		delete[] connections;
+		delete[] sourceMicDelay;
+	}
+
 	// returns a stereo output of the direct line between the source and mic, based on their relative positions
 	StereoOutput Network::positionSource(float sourceInput)
 	{
@@ -148,8 +154,6 @@ namespace SDN
 	// main reverberation method
 	void Network::scatter(float in)
 	{
-		sourceMicDelay->write(in);
-		
 		// for each node, gather inputs
 		for(int node = 0; node < nodeCount; node++)
 		{

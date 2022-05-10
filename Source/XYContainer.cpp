@@ -11,6 +11,18 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "XYContainer.h"
 
+template <typename T>
+T clamp(T value, T min, T max)
+{
+	return std::max(std::min(value, max), min);
+}
+
+template <typename T>
+T square(T a, T b)
+{
+	return a * b;
+}
+
 //==============================================================================
 XYContainer::XYContainer(ScatteringDelayReverbAudioProcessor &p) :
 	roomSizeLabel("", "Room size"),
@@ -59,20 +71,18 @@ void XYContainer::paint (Graphics& g)
 	
 	String label;
 	label << processor.roomSize->get() << " x ";
-	label << processor.roomSize->get() << " x 3m";
+	label << processor.roomSize->get() << " x ";
+	label << processor.ROOM_HEIGHT << "m";
 	roomSizeLabel.setText(label, dontSendNotification);
 	
 	float pointSize = 0.05 * getWidth();
 	source.setSize(pointSize, pointSize); // set the size of the circle
-	
-	float x = processor.sourceXPosition->convertTo0to1(processor.sourceXPosition->get());
-	float y = 1 - processor.sourceYPosition->convertTo0to1(processor.sourceYPosition->get()); // flip so y = 0 is at bottom
-	source.setCentreRelative(x, y); // update sourceXY position based on processor
+	source.setCentrePosition(getSourceXCoordinate(), getSourceYCoordinate()); // update sourceXY position based on processor
 	
 	// draw mic as cross
 	 g.setColour (Colours::white);
-	float micX = processor.micXPosition->convertTo0to1(processor.micXPosition->get()) * getWidth();
-	float micY = (1 - processor.micYPosition->convertTo0to1(processor.micYPosition->get())) * getHeight();
+	float micX = getMicXCoordinate();
+	float micY = getMicYCoordinate();
 	g.drawLine(micX - pointSize/2, micY - pointSize/2, micX + pointSize/2, micY + pointSize/2);
 	g.drawLine(micX - pointSize/2, micY + pointSize/2, micX + pointSize/2, micY - pointSize/2);
 	
@@ -93,9 +103,41 @@ void XYContainer::timerCallback()
 
 void XYContainer::mouseDrag(const MouseEvent& event)
 {
-	
-		float x = (event.getMouseDownX() + event.getDistanceFromDragStartX()) / (float) getWidth();
-		float y = 1 - ((event.getMouseDownY() + event.getDistanceFromDragStartY()) / (float) getHeight());
-		
-		processor.updateSourcePosition(x, y, 1.5); // hard code z position to be 1.5 metres
+	const int xCoordinate = event.getMouseDownX() + event.getDistanceFromDragStartX();
+	const int yCoordinate = event.getMouseDownY() + event.getDistanceFromDragStartY();
+
+	const float xPosition = clamp(static_cast<float>(xCoordinate) / getWidth(), 0.f, 1.f) * processor.roomSize->get();
+	const float yPosition = clamp(1.f - static_cast<float>(yCoordinate) / getHeight(), 0.f, 1.f) * processor.roomSize->get();
+
+	const float distanceToSource = square(xCoordinate - getSourceXCoordinate()) + square(yCoordinate - getSourceYCoordinate());
+	const float distanceToMic = square(xCoordinate - getMicXCoordinate()) + square(yCoordinate - getMicYCoordinate());
+
+	if (distanceToSource < distanceToMic)
+	{
+		processor.updateSourcePosition(xPosition, yPosition, 1.5); // hard code z position to be 1.5 metres
+	}
+	else
+	{
+		processor.updateMicPosition(xPosition, yPosition, 1.5);
+	}
+}
+
+float XYContainer::getSourceXCoordinate()
+{
+	return clamp(processor.sourceXPosition->get() / processor.roomSize->get(), 0.f, 1.f) * getWidth();
+}
+
+float XYContainer::getSourceYCoordinate()
+{
+	return clamp(1.f - processor.sourceYPosition->get() / processor.roomSize->get(), 0.f, 1.f) * getWidth();
+}
+
+float XYContainer::getMicXCoordinate()
+{
+	return clamp(processor.micXPosition->get() / processor.roomSize->get(), 0.f, 1.f) * getWidth();
+}
+
+float XYContainer::getMicYCoordinate()
+{
+	return clamp(1.f - processor.micYPosition->get() / processor.roomSize->get(), 0.f, 1.f) * getWidth();
 }

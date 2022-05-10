@@ -78,7 +78,7 @@ namespace SDN {
 	
 	void Node::distributeOutput(float *outputWaveVector)
 	{
-		float outs[numberOfOtherNodes];
+		float* outs = (float*)alloca(numberOfOtherNodes * sizeof(float));
 		
 		output = 0.0;
 		for(int terminal = 0; terminal < numberOfOtherNodes; terminal++) {
@@ -96,7 +96,7 @@ namespace SDN {
 	
 	void Node::scatter(float sourceInput)
 	{
-		float inputWaveVector[numberOfOtherNodes]; // assign temporary vector for calculation
+		float* inputWaveVector = (float*)alloca(numberOfOtherNodes * sizeof(float)); // assign temporary vector for calculation
 		
 		prepareInput(inputWaveVector, sourceInput);
 		
@@ -106,7 +106,7 @@ namespace SDN {
 		}
 		sum *= weightingFactor;
 		
-		float outputWaveVector[numberOfOtherNodes]; // assign temporary vector for calculation
+		float* outputWaveVector = (float*)alloca(numberOfOtherNodes * sizeof(float)); // assign temporary vector for calculation
 		
 		for(int node = 0; node < numberOfOtherNodes; node++) {
 			outputWaveVector[node] = sum - inputWaveVector[node];

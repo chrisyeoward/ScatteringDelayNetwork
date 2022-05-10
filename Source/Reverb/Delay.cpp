@@ -38,6 +38,11 @@ namespace SDN {
 		setAirAbsorption();
 	}
 	
+	Delay::~Delay()
+	{
+		delete[] buffer;
+	}
+
 	Delay* Delay::fromDistance(float sampleRate, float distance, float maxDistance)
 	{
 		return new Delay(sampleRate, (sampleRate * distance) / SDN::c, (sampleRate * maxDistance) / SDN::c);
@@ -91,8 +96,10 @@ namespace SDN {
 	// reads next sample
 	float Delay::read() {
 		float out = 0.0;
+
+		const bool isReadPointerFractional = floor(readPointer) != readPointer;
 		
-//		if(fractional) {
+		if(isReadPointerFractional) {
 			// get high sample for linearly interpolation
 			int highPointer = floor(readPointer + 1.0);
 			if(highPointer >= bufferLength) highPointer -= bufferLength;
@@ -107,12 +114,14 @@ namespace SDN {
 				readPointer += bufferLength;
 			else if (readPointer >= bufferLength)
 				readPointer -= bufferLength;
-//		} else {
-//			out = buffer[readPointer];
-//			readPointer++;
-//
-//			readPointer = (readPointer + bufferLength) % bufferLength;
-//		}
+		}
+		else {
+			out = buffer[(int)readPointer];
+			incrementReadPointer();
+
+			if (readPointer >= bufferLength)
+				readPointer -= bufferLength;
+		}
 		
 		return out;
 	}

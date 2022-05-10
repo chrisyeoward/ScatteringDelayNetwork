@@ -17,6 +17,9 @@
  
  Simple circle class that is moved around the XY pad
 */
+
+using namespace juce;
+
 class XYPoint    : public Component
 {
 public:

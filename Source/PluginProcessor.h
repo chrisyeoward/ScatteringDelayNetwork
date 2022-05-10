@@ -11,8 +11,9 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include <Network.h>
+#include "Reverb/Network.h"
 
+using namespace juce;
 
 //==============================================================================
 /**
@@ -57,7 +58,9 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 	
+	void resetNetwork();
 	void updateSourcePosition(float x, float y, float z);
+	void updateMicPosition(float x, float y, float z);
 	void setAbsorption(const float amount);
 	
 	AudioParameterFloat* sourceXPosition;
@@ -69,6 +72,10 @@ public:
 	AudioParameterFloat* roomSize;
 	AudioParameterFloat* absorption;
 	AudioParameterFloat* dryWet;
+
+	static const float ROOM_HEIGHT;
+	static const float MAX_ROOM_SIZE;
+	float roomSizeLast;
 
 private:
 	SDN::Network *network;

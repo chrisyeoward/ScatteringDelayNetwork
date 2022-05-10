@@ -55,7 +55,7 @@ namespace SDN {
 		Delay() {};
 		Delay(float sampleRate, int delayInSamples, int maxBuffer);
 //		Delay(float sampleRate, float distance);
-		virtual ~Delay() {}
+		virtual ~Delay();
 	};
 }
 
