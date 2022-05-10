@@ -78,7 +78,7 @@ namespace SDN
 		
 		Network(float sampleRate);
 		Network(float sampleRate, float width, float length, float height);
-		~Network() {};
+		~Network();
 	};
 }
 

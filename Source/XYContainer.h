@@ -34,6 +34,11 @@ public:
 	
 	virtual void mouseDrag (const MouseEvent& event) override; // handle mousedrag
 
+	float getSourceXCoordinate();
+	float getSourceYCoordinate();
+	float getMicXCoordinate();
+	float getMicYCoordinate();
+
 private:
 	XYPoint source; 
 	
